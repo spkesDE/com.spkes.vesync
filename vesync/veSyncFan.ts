@@ -1,4 +1,4 @@
-import Helper from "./helper";
+import Helper from "./lib/helper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
 
 export default class VeSyncFan extends VeSyncDeviceBase {
@@ -87,28 +87,31 @@ export default class VeSyncFan extends VeSyncDeviceBase {
     //endregion
 
     public toggleSwitch(toggle: boolean) {
-
         let body = {
             ...Helper.bypassBodyV2(this.api),
             cid: this.cid,
             configModule: this.configModule,
             payload: {
                 data: {
-                    enabled: toggle,
+                    enabled: false,
                     id: 0
                 },
                 method: 'setSwitch',
                 source: 'APP'
             },
         }
-
         let result = Helper.callApi(this.api,
-            '/cloud/v2/deviceManaged/bypassV2',
-            'post',
-            body,
-            Helper.bypassHeader(),
-        )
+            ApiCalls.BYPASS_V2,
+            'post', body, Helper.bypassHeader(),);
         result.then(result => console.log(result));
         this.deviceStatus = toggle ? 'on' : "off";
+    }
+
+    public on(){
+        this.toggleSwitch(true);
+    }
+
+    public off(){
+        this.toggleSwitch(false);
     }
 }

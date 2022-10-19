@@ -1,12 +1,13 @@
 import * as crypto from "crypto";
-import Helper from "./helper";
+import Helper from "./lib/helper";
 import VeSyncFan from "./veSyncFan";
+import VeSyncDeviceBase from "./veSyncDeviceBase";
 
 export default class VeSync {
 
     token: string = "";
     account_id: number = 0;
-    private devices: any;
+    private devices: VeSyncDeviceBase[] = [];
 
     set api_rate_limit(value: number) {
         if (value > 0)
@@ -28,7 +29,7 @@ export default class VeSync {
     }
 
     public async login(): Promise<boolean> {
-        let response = await Helper.callApi(this, '/cloud/v1/user/login', 'post', Helper.requestBody(this, 'login'))
+        let response = await Helper.callApi(this, ApiCalls.LOGIN, 'post', Helper.requestBody(this, BodyTypes.LOGIN))
         if (this.debugMode) {
             console.debug(`Account ID: ${response.result.accountID}`);
             console.debug(`Token ${response.result.token}`);
@@ -44,20 +45,21 @@ export default class VeSync {
 
     public async getDevices() {
         if (this.token === "") return;
-        let response = await Helper.callApi(this, '/cloud/v1/deviceManaged/devices', 'post', Helper.requestBody(this, 'devicelist'));
+        let response = await Helper.callApi(this, ApiCalls.DEVICES, 'post', Helper.requestBody(this, BodyTypes.DEVICE_LIST));
         this.processDevices(response.result.list);
     }
 
     private processDevices(list: any) {
         for (let deviceRaw of list as any) {
             let device = new VeSyncFan(this, deviceRaw);
+            this.devices.push(device);
             console.log(device.toString())
             console.log(device.extension)
             console.log(deviceRaw)
 
             console.log("toggle on fan...")
-            device.toggleSwitch(true);
-
+            device.toggleSwitch(false);
+            this.devices.push(device);
         }
     }
 

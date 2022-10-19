@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import Helper from "./helper";
+import Helper from "./lib/helper";
 import VeSync from "./veSync";
 
 export default class VeSyncDeviceBase {
