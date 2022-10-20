@@ -4,7 +4,7 @@
   },
   "class": "fan",
   "capabilities": [
-    "fanCapability",
+    "core200sCapability",
     "onoff"
   ],
   "platforms": [

@@ -21,7 +21,7 @@ class Core200S extends Homey.Device {
       }
     });
 
-    this.registerCapabilityListener("fanCapability", async (value) => {
+    this.registerCapabilityListener("core200sCapability", async (value) => {
       if(value === "high") {
         await this.device?.setFanSpeed(3);
         this.log("Speed 3");
