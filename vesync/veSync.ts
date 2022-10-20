@@ -43,6 +43,7 @@ export default class VeSync {
 
     public async getDevices() : Promise<VeSyncDeviceBase[]> {
         if (this.token === "") return [];
+        this.devices = [];
         let response = await Helper.callApi(this, ApiCalls.DEVICES, 'post', Helper.requestBody(this, BodyTypes.DEVICE_LIST));
         await this.processDevices(response.result.list);
         return this.devices;
@@ -50,6 +51,7 @@ export default class VeSync {
 
     private processDevices(list: any) {
         for (let deviceRaw of list as any) {
+            //TODO Check if device is already known
             let device = this.getDeviceObject(deviceRaw);
             if(device === undefined) continue;
             this.devices.push(device);

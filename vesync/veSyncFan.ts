@@ -196,6 +196,7 @@ export default class VeSyncFan extends VeSyncDeviceBase {
             else
                 this.extension.fanSpeedLevel = level;
             this.deviceStatus = 'on';
+            this.mode = "manual";
         });
     }
 

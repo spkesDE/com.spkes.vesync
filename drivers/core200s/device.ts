@@ -22,35 +22,41 @@ class Core200S extends Homey.Device {
 
     this.registerCapabilityListener("onoff", async (value) => {
       await this.device?.toggleSwitch(value as boolean ?? false)
+      if(this.device?.mode === 'sleep' && value){
+        this.setCapabilityValue('fanCapability', "sleep").catch(this.error);
+      } if(!value){
+        this.setCapabilityValue('fanCapability', "off").catch(this.error);
+      } else {
+        this.setCapabilityValue('fanCapability', ["low", "medium", "high"][this.device?.extension.fanSpeedLevel -1 ?? 1] ?? "low").catch(this.error);
+      }
     });
 
-    this.registerCapabilityListener("dim", async (value) => {
-      if(value >= 0.75) {
+
+    this.registerCapabilityListener("fanCapability", async (value) => {
+      if(value === "high") {
         this.device?.setFanSpeed(3);
-        this.log("Speed 3 with " + value);
+        this.log("Speed 3");
         this.setCapabilityValue('onoff', true).catch(this.error);
-      } else if(value >= 0.50) {
+      } else if(value === "medium") {
         this.device?.setFanSpeed(2);
-        this.log("Speed 2 with " + value);
+        this.log("Speed 2");
         this.setCapabilityValue('onoff', true).catch(this.error);
-      } else if(value >= 0.25) {
+      } else if(value === "low") {
         this.device?.setFanSpeed(1);
-        this.log("Speed 1 with " + value);
+        this.log("Speed 1");
         this.setCapabilityValue('onoff', true).catch(this.error);
-      } else if(value > 0) {
+      } else if(value === "sleep") {
         if(this.device?.deviceStatus === 'off')
           this.device.on();
         this.device?.setMode('sleep');
-        this.log("Sleep mode with " + value);
+        this.log("Sleep");
         this.setCapabilityValue('onoff', true).catch(this.error);
-      } else if(value == 0) {
+      } else if(value === "off") {
         this.device?.off()
-        this.log("Off with " + value);
+        this.log("Off");
         this.setCapabilityValue('onoff', false).catch(this.error);
       }
-      //await this.device?.toggleSwitch(value as boolean ?? false)
     });
-
     this.log('Core200S has been initialized');
   }
 
