@@ -1,6 +1,8 @@
-import http, {IncomingMessage} from "http";
-import https, {RequestOptions} from "https";
 import VeSync from "../veSync";
+import {RequestOptions} from "https";
+import {IncomingMessage} from "http";
+import VeSyncDeviceBase from "../veSyncDeviceBase";
+import VeSyncFan from "../veSyncFan";
 
 export default class Helper {
     static API_BASE_URL = 'https://smartapi.vesync.com'
@@ -30,7 +32,6 @@ export default class Helper {
                     userType: this.USER_TYPE,
                     method: 'login'
                 }
-                break;
             case BodyTypes.ENERGY_YEAR:
                 return {
                     ...this.bodyBase(api),
@@ -176,6 +177,15 @@ export default class Helper {
             'phoneBrand': this.PHONE_BRAND,
             'phoneOS': this.PHONE_OS,
             'traceId': new Date().getTime().toString(),
+        }
+    }
+
+    public static createPayload(device: VeSyncDeviceBase, method: string, data: {}) {
+        if (!device.Device_Features[device.deviceType].method.includes(method) ?? false) throw Error(device.deviceType + ' don\'t accept method: ' + method)
+        return {
+            data: data,
+            method: method,
+            source: 'APP'
         }
     }
 }

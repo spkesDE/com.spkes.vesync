@@ -51,15 +51,33 @@ export default class VeSync {
 
     private processDevices(list: any) {
         for (let deviceRaw of list as any) {
-            let device = new VeSyncFan(this, deviceRaw);
+            let device = this.getDeviceObject(deviceRaw);
+            if(device === undefined) continue;
             this.devices.push(device);
-            console.log(device.toString())
-            console.log(device.extension)
-            console.log(deviceRaw)
 
-            console.log("toggle on fan...")
-            device.toggleSwitch(false);
-            this.devices.push(device);
+            /*
+            if(device instanceof VeSyncFan)
+            {
+                console.log("toggle on fan...");
+                device.setFanSpeed(3); // working
+                device.setMode('sleep'); // working
+                device.setChildLock(false); // working
+                device.setDisplay(true); // Working
+                device.setNightLight("dim");
+            }
+             */
+        }
+        console.log("Total Devices processed: " + this.devices.length)
+        return this.devices;
+    }
+
+    private getDeviceObject(deviceRaw: any) : VeSyncDeviceBase | undefined{
+        switch(deviceRaw.deviceType){
+            case 'Core200S':
+            case 'Core300S':
+                return new VeSyncFan(this, deviceRaw);
+            default:
+                break;
         }
     }
 
