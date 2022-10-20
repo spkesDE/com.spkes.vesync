@@ -24,7 +24,7 @@ export default class Helper {
             case BodyTypes.LOGIN:
                 return {
                     ...this.bodyBase(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     email: api.username,
                     password: api.password,
                     devToken: '',
@@ -35,7 +35,7 @@ export default class Helper {
                 return {
                     ...this.bodyBase(api),
                     ...this.bodyAuth(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     method: 'energyyear',
                     mobileId: this.MOBILE_ID
                 }
@@ -43,7 +43,7 @@ export default class Helper {
                 return {
                     ...this.bodyBase(api),
                     ...this.bodyAuth(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     method: 'energymonth',
                     mobileId: this.MOBILE_ID
                 }
@@ -51,7 +51,7 @@ export default class Helper {
                 return {
                     ...this.bodyBase(api),
                     ...this.bodyAuth(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     method: 'energyweek',
                     mobileId: this.MOBILE_ID
                 }
@@ -59,7 +59,7 @@ export default class Helper {
                 return {
                     ...this.bodyBase(api),
                     ...this.bodyAuth(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     method: 'devicedetail',
                     mobileId: this.MOBILE_ID
                 }
@@ -72,7 +72,7 @@ export default class Helper {
                 return {
                     ...this.bodyBase(api),
                     ...this.bodyAuth(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     method: 'devices',
                     pageNo: '1',
                     pageSize: '100',
@@ -81,14 +81,14 @@ export default class Helper {
                 return {
                     ...this.bodyBase(api),
                     ...this.bodyAuth(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     method: 'bypass',
                 }
             case BodyTypes.BYPASS_V2:
                 return {
                     ...this.bodyBase(api),
                     ...this.bodyAuth(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     deviceRegion: this.DEFAULT_REGION,
                     method: 'bypassV2',
                 }
@@ -96,7 +96,7 @@ export default class Helper {
                 return {
                     ...this.bodyBase(api),
                     ...this.bodyAuth(api),
-                    ...this.bodyDetails(api),
+                    ...this.bodyDetails(),
                     method: 'firmwareUpdateInfo',
                 }
         }
