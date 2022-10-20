@@ -112,7 +112,7 @@ export default class Helper {
             let postData = JSON.stringify(requestBody);
 
             let req = client.request(url, requestOptions, (res: IncomingMessage) => {
-                console.log(`STATUS of ${url}: ${res.statusCode}`);
+                if(res.statusCode != 200) console.log(`STATUS of ${url}: ${res.statusCode}`);
                 res.setEncoding('utf8');
                 res.on('data', (chunk) => {
                     resolve(JSON.parse(chunk));

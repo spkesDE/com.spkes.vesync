@@ -7,18 +7,11 @@ export default class VeSync {
 
     token: string = "";
     account_id: number = 0;
-    private devices: VeSyncDeviceBase[] = [];
-
-    set api_rate_limit(value: number) {
-        if (value > 0)
-            this._api_rate_limit = value;
-    }
-
+    devices: VeSyncDeviceBase[] = [];
     username: string;
     password: string;
     debugMode: boolean;
     time_zone: string;
-    private _api_rate_limit: number = 30;
 
 
     constructor(username: string, password: string, time_zone: string = 'America/New_York', debug: boolean = false) {
@@ -34,19 +27,25 @@ export default class VeSync {
             console.debug(`Account ID: ${response.result.accountID}`);
             console.debug(`Token ${response.result.token}`);
         }
-        this.account_id = response.result.accountID;
-        this.token = response.result.token;
-        return false;
+        try {
+            this.account_id = response.result.accountID;
+            this.token = response.result.token;
+            await this.getDevices();
+        } catch (e) {
+            return false;
+        }
+        return true;
     }
 
     private hashPassword(password: string) {
         return crypto.createHash('md5').update(password).digest('hex');
     }
 
-    public async getDevices() {
-        if (this.token === "") return;
+    public async getDevices() : Promise<VeSyncDeviceBase[]> {
+        if (this.token === "") return [];
         let response = await Helper.callApi(this, ApiCalls.DEVICES, 'post', Helper.requestBody(this, BodyTypes.DEVICE_LIST));
-        this.processDevices(response.result.list);
+        await this.processDevices(response.result.list);
+        return this.devices;
     }
 
     private processDevices(list: any) {
@@ -67,8 +66,7 @@ export default class VeSync {
             }
              */
         }
-        console.log("Total Devices processed: " + this.devices.length)
-        return this.devices;
+        if (this.debugMode) console.debug("Total Devices processed: " + this.devices.length)
     }
 
     private getDeviceObject(deviceRaw: any) : VeSyncDeviceBase | undefined{

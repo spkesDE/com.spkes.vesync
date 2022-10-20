@@ -137,8 +137,12 @@ export default class VeSyncFan extends VeSyncDeviceBase {
         let result = Helper.callApi(this.api,
             ApiCalls.BYPASS_V2,
             'post', body, Helper.bypassHeader(),);
-        result.then(result => console.log(result));
-        this.deviceStatus = toggle ? 'on' : "off";
+        result.then(result => {
+            if(result.msg !== 'request success')
+                console.log(result)
+            else
+                this.deviceStatus = toggle ? 'on' : "off";
+        });
     }
 
     public on() {
@@ -165,7 +169,12 @@ export default class VeSyncFan extends VeSyncDeviceBase {
         let result = Helper.callApi(this.api,
             ApiCalls.BYPASS_V2,
             'post', body, Helper.bypassHeader(),);
-        result.then(result => console.log(result));
+        result.then(result => {
+            if(result.msg !== 'request success')
+                console.log(result)
+            else
+                this.mode = mode;
+        });
     }
 
     /* Set fan speed. */
@@ -181,7 +190,13 @@ export default class VeSyncFan extends VeSyncDeviceBase {
         let result = Helper.callApi(this.api,
             ApiCalls.BYPASS_V2,
             'post', body, Helper.bypassHeader(),);
-        result.then(result => console.log(result));
+        result.then(result => {
+            if(result.msg !== 'request success')
+                console.log(result)
+            else
+                this.extension.fanSpeedLevel = level;
+            this.deviceStatus = 'on';
+        });
     }
 
     /* Set child lock */
@@ -195,7 +210,12 @@ export default class VeSyncFan extends VeSyncDeviceBase {
         let result = Helper.callApi(this.api,
             ApiCalls.BYPASS_V2,
             'post', body, Helper.bypassHeader(),);
-        result.then(result => console.log(result));
+        result.then(result => {
+            if(result.msg !== 'request success')
+                console.log(result)
+            else
+                this.child_lock = mode;
+        });
     }
 
     /* Getting Device Status */
@@ -232,7 +252,12 @@ export default class VeSyncFan extends VeSyncDeviceBase {
             payload: Helper.createPayload(this, 'setDisplay', {state : state}),
         }
         let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-        result.then(result => console.log(result));
+        result.then(result => {
+            if(result.msg !== 'request success')
+                console.log(result)
+            else
+                this.display = state;
+        });
     }
 
     /* Toggle display on/off. */
@@ -249,7 +274,12 @@ export default class VeSyncFan extends VeSyncDeviceBase {
             payload: Helper.createPayload(this, 'setNightLight', {night_light : mode.toLowerCase()}),
         }
         let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-        result.then(result => console.log(result));
+        result.then(result => {
+            if(result.msg !== 'request success')
+                console.log(result)
+            else
+                this.night_light = mode;
+        });
     }
 
 }

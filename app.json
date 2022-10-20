@@ -25,5 +25,40 @@
   "author": {
     "name": "Julian Suhl",
     "email": "julian@suhl.de"
-  }
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Core200S"
+      },
+      "class": "fan",
+      "capabilities": [
+        "dim",
+        "onoff"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [],
+      "images": {
+        "small": "/drivers/core200s/assets/images/small.png",
+        "large": "/drivers/core200s/assets/images/large.png",
+        "xlarge": "/drivers/core200s/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "core200s"
+    }
+  ]
 }
