@@ -4,14 +4,15 @@
   "version": "1.0.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
+  "brandColor": "#11c8bd",
   "platforms": [
     "local"
   ],
   "name": {
-    "en": "VeSync Smart Home Devices"
+    "en": "VeSync"
   },
   "description": {
-    "en": "Addes support for VeSync devices."
+    "en": "VeSync - Fresh air for your home."
   },
   "category": [
     "appliances"
@@ -26,6 +27,35 @@
     "name": "Julian Suhl",
     "email": "julian@suhl.de"
   },
+  "contributors": {
+    "developers": [
+      {
+        "name": "spkesDE",
+        "email": "spkes@spkes.de"
+      },
+      {
+        "name": "telegraf.js - v.4.8.5",
+        "email": ""
+      }
+    ],
+    "translators": [
+      {
+        "name": "spkesDE"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "spikes022"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/spkesDE/com.spkes.vesync/issues"
+  },
+  "source": "https://github.com/spkesDE/com.spkes.vesync",
+  "support": "https://github.com/spkesDE",
   "drivers": [
     {
       "name": {
@@ -39,7 +69,9 @@
       "platforms": [
         "local"
       ],
-      "connectivity": [],
+      "connectivity": [
+        "cloud"
+      ],
       "images": {
         "small": "/drivers/core200s/assets/images/small.png",
         "large": "/drivers/core200s/assets/images/large.png",

@@ -116,170 +116,202 @@ export default class VeSyncFan extends VeSyncDeviceBase {
     enabled: boolean = false;
     filter_life: number = 100;
     mode: string = "off";
-    level: number =  1;
+    level: number = 1;
     display: boolean = true;
     child_lock: boolean = false;
     night_light: string = 'off';
 
     constructor(api: VeSync, device: any) {
         super(api, device);
-        this.getStatus();
+        this.getStatus().catch(console.log);
     }
 
     /* turn on or off the device */
-    public toggleSwitch(toggle: boolean) {
-        let body = {
-            ...Helper.bypassBodyV2(this.api),
-            cid: this.cid,
-            configModule: this.configModule,
-            payload: Helper.createPayload(this, 'setSwitch', {enabled: toggle, id: 0}),
-        }
-        let result = Helper.callApi(this.api,
-            ApiCalls.BYPASS_V2,
-            'post', body, Helper.bypassHeader(),);
-        result.then(result => {
-            if(result.msg !== 'request success')
-                console.log(result)
-            else
-                this.deviceStatus = toggle ? 'on' : "off";
+    public async toggleSwitch(toggle: boolean): Promise<string> {
+        return new Promise((resolve, reject) => {
+            let body = {
+                ...Helper.bypassBodyV2(this.api),
+                cid: this.cid,
+                configModule: this.configModule,
+                payload: Helper.createPayload(this, 'setSwitch', {enabled: toggle, id: 0}),
+            }
+            let result = Helper.callApi(this.api,
+                ApiCalls.BYPASS_V2,
+                'post', body, Helper.bypassHeader());
+            result.then(result => {
+                if (result.msg !== 'request success') {
+                    console.log(result)
+                    reject(result.msg)
+                } else {
+                    this.deviceStatus = toggle ? 'on' : "off";
+                    resolve(this.deviceStatus);
+                }
+            });
         });
     }
 
-    public on() {
-        this.toggleSwitch(true);
+    public async on() {
+        return await this.toggleSwitch(true);
     }
 
-    public off() {
-        this.toggleSwitch(false);
+    public async off() {
+        return await this.toggleSwitch(false);
     }
 
     /* Set mode to manual or sleep. */
-    public setMode(mode: string) {
-        if (!this.Device_Features[this.deviceType].modes.includes(mode) ?? false) throw Error(this.deviceType + ' don\'t accept mode: ' + mode);
-        if (this.extension.mode === mode) return;
-        let payload = Helper.createPayload(this, 'setPurifierMode', {mode: mode})
-        if (mode === "manual")
-            payload = Helper.createPayload(this, 'setLevel', {level: 1, id: 0, type: 'wind'});
-        let body = {
-            ...Helper.bypassBodyV2(this.api),
-            cid: this.cid,
-            configModule: this.configModule,
-            payload: payload,
-        }
-        let result = Helper.callApi(this.api,
-            ApiCalls.BYPASS_V2,
-            'post', body, Helper.bypassHeader(),);
-        result.then(result => {
-            if(result.msg !== 'request success')
-                console.log(result)
-            else
-                this.mode = mode;
+    public async setMode(mode: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            if (!this.Device_Features[this.deviceType].modes.includes(mode) ?? false) reject(this.deviceType + ' don\'t accept mode: ' + mode);
+            if (this.extension.mode === mode) return;
+            let payload = Helper.createPayload(this, 'setPurifierMode', {mode: mode})
+            if (mode === "manual")
+                payload = Helper.createPayload(this, 'setLevel', {level: 1, id: 0, type: 'wind'});
+            let body = {
+                ...Helper.bypassBodyV2(this.api),
+                cid: this.cid,
+                configModule: this.configModule,
+                payload: payload,
+            }
+            let result = Helper.callApi(this.api,
+                ApiCalls.BYPASS_V2,
+                'post', body, Helper.bypassHeader());
+            result.then(result => {
+                if (result.msg !== 'request success') {
+                    console.log(result)
+                    reject(result.msg)
+                } else {
+                    this.mode = mode;
+                    resolve(mode);
+                }
+            });
         });
     }
 
     /* Set fan speed. */
-    public setFanSpeed(level: number) {
-        if (!this.Device_Features[this.deviceType].levels.includes(level) ?? false) throw Error(this.deviceType + ' don\'t accept level: ' + level);
-        if (this.extension.fanSpeedLevel === level) return;
-        let body = {
-            ...Helper.bypassBodyV2(this.api),
-            cid: this.cid,
-            configModule: this.configModule,
-            payload: Helper.createPayload(this, 'setLevel', {level: level, id: 0, type: 'wind'}),
-        }
-        let result = Helper.callApi(this.api,
-            ApiCalls.BYPASS_V2,
-            'post', body, Helper.bypassHeader(),);
-        result.then(result => {
-            if(result.msg !== 'request success')
-                console.log(result)
-            else
-                this.extension.fanSpeedLevel = level;
-            this.deviceStatus = 'on';
-            this.mode = "manual";
+    public setFanSpeed(level: number): Promise<string | number> {
+        return new Promise((resolve, reject) => {
+            if (!this.Device_Features[this.deviceType].levels.includes(level) ?? false) reject(this.deviceType + ' don\'t accept level: ' + level);
+            if (this.extension.fanSpeedLevel === level) return;
+            let body = {
+                ...Helper.bypassBodyV2(this.api),
+                cid: this.cid,
+                configModule: this.configModule,
+                payload: Helper.createPayload(this, 'setLevel', {level: level, id: 0, type: 'wind'}),
+            }
+            let result = Helper.callApi(this.api,
+                ApiCalls.BYPASS_V2,
+                'post', body, Helper.bypassHeader());
+            result.then(result => {
+                if (result.msg !== 'request success') {
+                    console.log(result)
+                    reject(result.msg)
+                } else {
+                    this.extension.fanSpeedLevel = level;
+                    this.deviceStatus = 'on';
+                    this.mode = "manual";
+                    resolve(level);
+                }
+            });
         });
     }
 
     /* Set child lock */
-    public setChildLock(mode: boolean) {
-        let body = {
-            ...Helper.bypassBodyV2(this.api),
-            cid: this.cid,
-            configModule: this.configModule,
-            payload: Helper.createPayload(this, 'setChildLock', {child_lock: mode}),
-        }
-        let result = Helper.callApi(this.api,
-            ApiCalls.BYPASS_V2,
-            'post', body, Helper.bypassHeader(),);
-        result.then(result => {
-            if(result.msg !== 'request success')
-                console.log(result)
-            else
-                this.child_lock = mode;
+    public setChildLock(mode: boolean): Promise<string | boolean> {
+        return new Promise((resolve, reject) => {
+            let body = {
+                ...Helper.bypassBodyV2(this.api),
+                cid: this.cid,
+                configModule: this.configModule,
+                payload: Helper.createPayload(this, 'setChildLock', {child_lock: mode}),
+            }
+            let result = Helper.callApi(this.api,
+                ApiCalls.BYPASS_V2,
+                'post', body, Helper.bypassHeader());
+            result.then(result => {
+                if (result.msg !== 'request success') {
+                    console.log(result)
+                    reject(result.msg)
+                } else {
+                    this.child_lock = mode;
+                    resolve(mode);
+                }
+            });
         });
     }
 
     /* Getting Device Status */
-    public getStatus(){
-        let body = {
-            ...Helper.bypassBodyV2(this.api),
-            cid: this.cid,
-            configModule: this.configModule,
-            payload: Helper.createPayload(this, 'getPurifierStatus', {}),
-        }
-        let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-        result.then(result => {
-            try {
-                this.enabled = result.result.result.enabled
-                this.filter_life = result.result.result.filter_life;
-                this.mode = result.result.result.mode;
-                this.level = result.result.result.level;
-                this.display = result.result.result.display;
-                this.child_lock = result.result.result.child_lock;
-                this.night_light = result.result.result.night_light;
-            } catch (e: any) {
-                console.log("Failed to setStatus: " + e);
-                console.log(result);
+    public getStatus(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let body = {
+                ...Helper.bypassBodyV2(this.api),
+                cid: this.cid,
+                configModule: this.configModule,
+                payload: Helper.createPayload(this, 'getPurifierStatus', {}),
             }
+            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
+            result.then(result => {
+                try {
+                    this.enabled = result.result.result.enabled
+                    this.filter_life = result.result.result.filter_life;
+                    this.mode = result.result.result.mode;
+                    this.level = result.result.result.level;
+                    this.display = result.result.result.display;
+                    this.child_lock = result.result.result.child_lock;
+                    this.night_light = result.result.result.night_light;
+                    resolve(true)
+                } catch (e: any) {
+                    reject(result);
+                }
+            });
         });
     }
 
     /* Toggle display on/off. */
-    public setDisplay(state: boolean){
-        let body = {
-            ...Helper.bypassBodyV2(this.api),
-            cid: this.cid,
-            configModule: this.configModule,
-            payload: Helper.createPayload(this, 'setDisplay', {state : state}),
-        }
-        let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-        result.then(result => {
-            if(result.msg !== 'request success')
-                console.log(result)
-            else
-                this.display = state;
+    public setDisplay(state: boolean): Promise<boolean | string> {
+        return new Promise((resolve, reject) => {
+            let body = {
+                ...Helper.bypassBodyV2(this.api),
+                cid: this.cid,
+                configModule: this.configModule,
+                payload: Helper.createPayload(this, 'setDisplay', {state: state}),
+            }
+            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
+            result.then(result => {
+                if (result.msg !== 'request success') {
+                    console.log(result)
+                    reject(result.msg)
+                } else {
+                    this.display = state;
+                    resolve(state);
+                }
+            });
         });
     }
 
     /* Toggle display on/off. */
-    public setNightLight(mode: string){
-        if(mode.toLowerCase() !== 'on'
-            && mode.toLowerCase()  !== 'off'
-            && mode.toLowerCase()  !== 'dim')
-            throw Error(this.deviceType + ' don\'t accept setNightLight: ' + mode);
+    public setNightLight(mode: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            if (mode.toLowerCase() !== 'on'
+                && mode.toLowerCase() !== 'off'
+                && mode.toLowerCase() !== 'dim')
+                throw Error(this.deviceType + ' don\'t accept setNightLight: ' + mode);
 
-        let body = {
-            ...Helper.bypassBodyV2(this.api),
-            cid: this.cid,
-            configModule: this.configModule,
-            payload: Helper.createPayload(this, 'setNightLight', {night_light : mode.toLowerCase()}),
-        }
-        let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-        result.then(result => {
-            if(result.msg !== 'request success')
-                console.log(result)
-            else
-                this.night_light = mode;
+            let body = {
+                ...Helper.bypassBodyV2(this.api),
+                cid: this.cid,
+                configModule: this.configModule,
+                payload: Helper.createPayload(this, 'setNightLight', {night_light: mode.toLowerCase()}),
+            }
+            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
+            result.then(result => {
+                if (result.msg !== 'request success') {
+                    console.log(result)
+                    reject(result.msg)
+                } else {
+                    this.night_light = mode;
+                    resolve(mode);
+                }
+            });
         });
     }
 
