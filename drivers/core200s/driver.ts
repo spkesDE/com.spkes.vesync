@@ -1,6 +1,6 @@
 import Homey from 'homey';
 import VeSync from "../../vesync/veSync";
-import VeSyncFan from "../../vesync/veSyncFan";
+import VeSyncPurifier from "../../vesync/veSyncPurifier";
 
 class Core200SDriver extends Homey.Driver {
 
@@ -23,7 +23,7 @@ class Core200SDriver extends Homey.Driver {
     devices.filter(d => d.deviceType === 'Core200S');
     let devicesList: any = [];
     devices.forEach((d) => {
-      if(d instanceof VeSyncFan)
+      if(d instanceof VeSyncPurifier)
         devicesList.push({
           name: d.deviceName,
           data: {

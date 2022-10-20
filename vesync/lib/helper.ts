@@ -2,7 +2,6 @@ import VeSync from "../veSync";
 import {RequestOptions} from "https";
 import {IncomingMessage} from "http";
 import VeSyncDeviceBase from "../veSyncDeviceBase";
-import VeSyncFan from "../veSyncFan";
 
 export default class Helper {
     static API_BASE_URL = 'https://smartapi.vesync.com'
@@ -120,6 +119,7 @@ export default class Helper {
             })
             req.on('error', (e: Error) => {
                 console.error(e);
+                reject();
             });
             req.write(postData);
             req.end();
@@ -171,7 +171,7 @@ export default class Helper {
     }
 
     //Header Details to fake a phone
-    private static bodyDetails(api: VeSync): {} {
+    private static bodyDetails(): {} {
         return {
             'appVersion': this.APP_VERSION,
             'phoneBrand': this.PHONE_BRAND,

@@ -1,9 +1,9 @@
 import Homey from 'homey';
 import VeSync from "../../vesync/veSync";
-import VeSyncFan from "../../vesync/veSyncFan";
+import VeSyncPurifier from "../../vesync/veSyncPurifier";
 
 class Core200S extends Homey.Device {
-  private device: VeSyncFan | undefined;
+  private device: VeSyncPurifier | undefined;
 
   /**
    * onInit is called when the device is initialized.
@@ -58,12 +58,12 @@ class Core200S extends Homey.Device {
       return;
     }
     let device = veSync.devices.find(d => d.uuid === this.getData().id);
-    if(device === undefined || !(device instanceof VeSyncFan)){
+    if(device === undefined || !(device instanceof VeSyncPurifier)){
       this.error("Device is undefined or is not a Core200S");
       this.setUnavailable("Device is undefined or is not a Core200S. Re-add this device.").then();
       return;
     }
-    this.device = device as VeSyncFan;
+    this.device = device as VeSyncPurifier;
   }
 
   /**

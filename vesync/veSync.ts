@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import Helper from "./lib/helper";
-import VeSyncFan from "./veSyncFan";
+import VeSyncPurifier from "./veSyncPurifier";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
 
 export default class VeSync {
@@ -61,7 +61,7 @@ export default class VeSync {
             this.devices.push(device);
 
             /*
-            if(device instanceof VeSyncFan)
+            if(device instanceof VeSyncPurifier)
             {
                 console.log("toggle on fan...");
                 device.setFanSpeed(3); // working
@@ -79,7 +79,7 @@ export default class VeSync {
         switch (deviceRaw.deviceType) {
             case 'Core200S':
             case 'Core300S':
-                return new VeSyncFan(this, deviceRaw);
+                return new VeSyncPurifier(this, deviceRaw);
             default:
                 break;
         }

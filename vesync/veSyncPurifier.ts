@@ -2,60 +2,10 @@ import Helper from "./lib/helper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
 import VeSync from "./veSync";
 
-export default class VeSyncFan extends VeSyncDeviceBase {
+export default class VeSyncPurifier extends VeSyncDeviceBase {
 
     //region Device Features
     Device_Features: { [key: string]: any } = {
-        'Classic300S': {
-            module: 'VeSyncHumid200300S',
-            models: ['Classic300S', 'LUH-A601S-WUSB'],
-            features: ['nightlight'],
-            mist_modes: ['auto', 'sleep', 'manual'],
-            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            method: ['getHumidifierStatus', 'setAutomaticStop',
-                'setSwitch', 'setNightLightBrightness',
-                'setVirtualLevel', 'setTargetHumidity',
-                'setHumidityMode', 'setDisplay', 'setLevel']
-        },
-        'Classic200S': {
-            module: 'VeSyncHumid200S',
-            models: ['Classic200S'],
-            features: [],
-            mist_modes: ['auto', 'manual'],
-            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            method: ['getHumidifierStatus', 'setAutomaticStop',
-                'setSwitch', 'setVirtualLevel', 'setTargetHumidity',
-                'setHumidityMode', 'setIndicatorLightSwitch']
-        },
-        'Dual200S': {
-            module: 'VeSyncHumid200300S',
-            models: ['Dual200S',
-                'LUH-D301S-WUSR',
-                'LUH-D301S-WJP',
-                'LUH-D301S-WEU'],
-            features: [],
-            mist_modes: ['auto', 'manual'],
-            mist_levels: [1, 2, 3],
-            method: ['getHumidifierStatus', 'setAutomaticStop',
-                'setSwitch', 'setNightLightBrightness',
-                'setVirtualLevel', 'setTargetHumidity',
-                'setHumidityMode', 'setDisplay', 'setLevel']
-        },
-        'LV600S': {
-            module: 'VeSyncHumid200300S',
-            models: ['LUH-A602S-WUSR',
-                'LUH-A602S-WUS',
-                'LUH-A602S-WEUR',
-                'LUH-A602S-WEU',
-                'LUH-A602S-WJP'],
-            features: ['warm_mist', 'nightlight'],
-            mist_modes: ['humidity', 'sleep', 'manual'],
-            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            warm_mist_levels: [0, 1, 2, 3],
-            method: ['getHumidifierStatus', 'setSwitch', 'setNightLight',
-                'setLevel', 'setHumidityMode', 'setDisplay',
-                'setChildLock', 'setIndicatorLight']
-        },
         'Core200S': {
             module: 'VeSyncAirBypass',
             models: ['Core200S', 'LAP-C201S-AUSR', 'LAP-C202S-WUSR'],
