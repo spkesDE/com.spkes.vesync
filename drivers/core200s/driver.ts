@@ -25,10 +25,12 @@ class Core200SDriver extends Homey.Driver {
             }
         });
 
+        //Handle Login
         session.setHandler("login", async (data:any) => {
             return await Utils.handleLogin(this, data);
         });
 
+        //Get devices
         session.setHandler("list_devices", async () => {
             // @ts-ignore
             let veSync: VeSync = this.homey.app.veSync;
@@ -55,6 +57,7 @@ class Core200SDriver extends Homey.Driver {
         });
     }
 
+    // noinspection JSUnusedGlobalSymbols
     async onRepair(session: any, device: any) {
         session.setHandler("login", async (data:any) => {
             let result = await Utils.handleLogin(this, data);
