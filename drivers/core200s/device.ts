@@ -9,7 +9,7 @@ class Core200S extends Homey.Device {
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    this.getDevice();
+    await this.getDevice();
     this.registerCapabilityListener("onoff", async (value) => {
       await this.device?.toggleSwitch(value as boolean ?? false)
       if(this.device?.mode === 'sleep' && value){
@@ -50,20 +50,21 @@ class Core200S extends Homey.Device {
     this.log('Core200S has been initialized');
   }
 
-  public getDevice(){
+  public async getDevice() {
     // @ts-ignore
     let veSync: VeSync = this.homey.app.veSync;
-    if(veSync === null || !veSync.loggedIn){
+    if (veSync === null || !veSync.isLoggedIn()) {
       this.setUnavailable("Failed to login. Please re-enter the login data and restart the app.").then();
       return;
     }
-    let device = veSync.devices.find(d => d.uuid === this.getData().id);
-    if(device === undefined || !(device instanceof VeSyncPurifier)){
+    let device = veSync.getStoredDevice().find(d => d.uuid === this.getData().id);
+    if (device === undefined || !(device instanceof VeSyncPurifier)) {
       this.error("Device is undefined or is not a Core200S");
       this.setUnavailable("Device is undefined or is not a Core200S. Re-add this device.").then();
       return;
     }
     this.device = device as VeSyncPurifier;
+    await this.setAvailable();
   }
 
   /**

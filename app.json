@@ -63,7 +63,7 @@
       },
       "class": "fan",
       "capabilities": [
-        "fanCapability",
+        "core200sCapability",
         "onoff"
       ],
       "platforms": [
@@ -77,7 +77,47 @@
         "large": "/drivers/core200s/assets/images/large.png",
         "xlarge": "/drivers/core200s/assets/images/xlarge.png"
       },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        }
+      ],
       "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "logo.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
         {
           "id": "list_my_devices",
           "template": "list_devices",
@@ -94,7 +134,7 @@
     }
   ],
   "capabilities": {
-    "fanCapability": {
+    "core200sCapability": {
       "type": "enum",
       "title": {
         "en": "Mode",

@@ -152,22 +152,22 @@ export default class Helper {
     private static buildHeaders(api: VeSync): {} {
         return {
             'accept-language': 'en',
-            'accountId': api.account_id,
+            'accountId': api.getAccountID(),
             'appVersion': this.APP_VERSION,
             'content-type': 'application/json',
-            'tk': api.token,
-            'tz': api.time_zone,
+            'tk': api.getToken(),
+            'tz': api.getTimeZone(),
         }
     }
 
     //Base of nearly every request
     private static bodyBase(api: VeSync): {} {
-        return {'timeZone': api.time_zone, 'acceptLanguage': 'en'}
+        return {'timeZone': api.getTimeZone(), 'acceptLanguage': 'en'}
     }
 
     //Header with Login data
     private static bodyAuth(api: VeSync): {} {
-        return {'accountID': api.account_id, 'token': api.token}
+        return {'accountID': api.getAccountID(), 'token': api.getToken()}
     }
 
     //Header Details to fake a phone

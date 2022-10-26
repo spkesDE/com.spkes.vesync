@@ -5,14 +5,14 @@ import VeSyncDeviceBase from "./veSyncDeviceBase";
 
 export default class VeSync {
 
-    token: string = "";
-    account_id: number = 0;
-    devices: VeSyncDeviceBase[] = [];
-    username: string;
-    password: string;
-    debugMode: boolean;
-    time_zone: string = 'America/New_York';
-    loggedIn: Boolean = false;
+    private token: string = "";
+    private account_id: number = 0;
+    private devices: VeSyncDeviceBase[] = [];
+    readonly username: string;
+    readonly password: string;
+    readonly debugMode: boolean;
+    private time_zone: string = 'America/New_York';
+    private loggedIn: boolean = false;
 
 
     constructor(username: string, password: string, isRawPassword: boolean = false, debug: boolean = false) {
@@ -85,4 +85,24 @@ export default class VeSync {
         }
     }
 
+    public isLoggedIn(): boolean {
+        return this.loggedIn;
+    }
+
+
+    public getAccountID(): number {
+        return this.account_id;
+    }
+
+    public getToken(): string {
+        return this.token;
+    }
+
+    public getTimeZone(): string {
+        return this.time_zone;
+    }
+
+    public getStoredDevice() {
+        return this.devices
+    }
 }
