@@ -1,0 +1,14 @@
+{
+  "0.0.1": {
+    "en": "First Test version for Core200S"
+  },
+  "0.0.2": {
+    "en": "Changed login"
+  },
+  "0.0.3": {
+    "en": "Core200S device Flows"
+  },
+  "0.0.4": {
+    "en": "Fixed Capability"
+  }
+}

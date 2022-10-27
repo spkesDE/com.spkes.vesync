@@ -1,0 +1,49 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Mode",
+    "de": "Modus"
+  },
+  "values": [
+    {
+      "id": "off",
+      "title": {
+        "en": "Off",
+        "de": "Aus"
+      }
+    },
+    {
+      "id": "sleep",
+      "title": {
+        "en": "Sleep Mode",
+        "de": "Schlaf Modus"
+      }
+    },
+    {
+      "id": "low",
+      "title": {
+        "en": "Low",
+        "de": "Niedrig"
+      }
+    },
+    {
+      "id": "medium",
+      "title": {
+        "en": "Medium",
+        "de": "Mittel"
+      }
+    },
+    {
+      "id": "high",
+      "title": {
+        "en": "High",
+        "de": "Hoch"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "uiQuickAction": true,
+  "icon": "/assets/icon.svg"
+}

@@ -1,0 +1,9 @@
+{
+  "settings": {
+    "settings": "Settings",
+    "password": "Password",
+    "username": "Username",
+    "save": "Save Settings",
+    "reset": "Reset Settings"
+  }
+}

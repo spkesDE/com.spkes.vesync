@@ -1,0 +1,253 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.spkes.vesync",
+  "version": "0.0.4",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "brandColor": "#11c8bd",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "VeSync"
+  },
+  "description": {
+    "en": "VeSync - Fresh air for your home."
+  },
+  "category": [
+    "appliances"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Julian Suhl",
+    "email": "julian@suhl.de"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "spkesDE",
+        "email": "spkes@spkes.de"
+      }
+    ],
+    "translators": [
+      {
+        "name": "spkesDE"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "spikes022"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/spkesDE/com.spkes.vesync/issues"
+  },
+  "source": "https://github.com/spkesDE/com.spkes.vesync",
+  "support": "https://github.com/spkesDE",
+  "flow": {
+    "actions": [
+      {
+        "id": "setModeCore200s",
+        "title": {
+          "en": "Set device to mode...",
+          "de": "Setzte das Gerät auf modus..."
+        },
+        "titleFormatted": {
+          "en": "Set device to [[mode]]",
+          "de": "Setzte das Gerät auf [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "low",
+                "label": {
+                  "en": "Low Mode",
+                  "de": "Niedrig"
+                }
+              },
+              {
+                "id": "medium",
+                "label": {
+                  "en": "Medium Mode",
+                  "de": "Mittel"
+                }
+              },
+              {
+                "id": "high",
+                "label": {
+                  "en": "High Mode",
+                  "de": "Hoch"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Core200S"
+      },
+      "class": "fan",
+      "capabilities": [
+        "core200sCapability",
+        "onoff"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/core200s/assets/images/small.png",
+        "large": "/drivers/core200s/assets/images/large.png",
+        "xlarge": "/drivers/core200s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "core200s"
+    }
+  ],
+  "capabilities": {
+    "core200sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "low",
+          "title": {
+            "en": "Low",
+            "de": "Niedrig"
+          }
+        },
+        {
+          "id": "medium",
+          "title": {
+            "en": "Medium",
+            "de": "Mittel"
+          }
+        },
+        {
+          "id": "high",
+          "title": {
+            "en": "High",
+            "de": "Hoch"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    }
+  }
+}
