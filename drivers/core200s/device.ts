@@ -25,9 +25,11 @@ class Core200S extends Homey.Device {
         }
         if(value === "on" || value === "manual") {
             await this.device?.toggleSwitch(true);
+            this.setCapabilityValue('onoff', true).catch(this.error);
             this.setCapabilityValue('core200sCapability', ["low", "medium", "high"][this.device?.extension.fanSpeedLevel - 1 ?? 1] ?? "low").catch(this.error);
         } else if(value === "off"){
             await this.device?.toggleSwitch(false);
+            this.setCapabilityValue('onoff', false).catch(this.error);
             this.setCapabilityValue('core200sCapability', "off").catch(this.error);
         } else if (value === "high") {
             await this.device?.setFanSpeed(3);
