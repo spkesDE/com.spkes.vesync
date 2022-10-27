@@ -25,16 +25,20 @@
       "options": {
         "logo": "icon.svg",
         "usernameLabel": {
-          "en": "E-mail address"
+          "en": "E-mail address",
+          "de": "E-Mail adresse"
         },
         "usernamePlaceholder": {
-          "en": "john@doe.com"
+          "en": "john@doe.com",
+          "de": "max@mueller.de"
         },
         "passwordLabel": {
-          "en": "Password"
+          "en": "Password",
+          "de": "Passwort"
         },
         "passwordPlaceholder": {
-          "en": "Password"
+          "en": "Password",
+          "de": "Passwort"
         }
       }
     }

@@ -1,1 +1,3 @@
-Addes support for VeSync devices.
+Adds support for VeSync devices.
+
+Pair a device. Follow the instructions.

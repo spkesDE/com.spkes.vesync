@@ -32,10 +32,6 @@
       {
         "name": "spkesDE",
         "email": "spkes@spkes.de"
-      },
-      {
-        "name": "telegraf.js - v.4.8.5",
-        "email": ""
       }
     ],
     "translators": [
@@ -56,6 +52,72 @@
   },
   "source": "https://github.com/spkesDE/com.spkes.vesync",
   "support": "https://github.com/spkesDE",
+  "flow": {
+    "actions": [
+      {
+        "id": "setModeCore200s",
+        "title": {
+          "en": "Set device to mode...",
+          "de": "Setzte das Gerät auf modus..."
+        },
+        "titleFormatted": {
+          "en": "Set device to [[mode]]",
+          "de": "Setzte das Gerät auf [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "low",
+                "label": {
+                  "en": "Low Mode",
+                  "de": "Niedrig"
+                }
+              },
+              {
+                "id": "medium",
+                "label": {
+                  "en": "Medium Mode",
+                  "de": "Mittel"
+                }
+              },
+              {
+                "id": "high",
+                "label": {
+                  "en": "High Mode",
+                  "de": "Hoch"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "drivers": [
     {
       "name": {
@@ -84,16 +146,20 @@
           "options": {
             "logo": "icon.svg",
             "usernameLabel": {
-              "en": "E-mail address"
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
             },
             "usernamePlaceholder": {
-              "en": "john@doe.com"
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
             },
             "passwordLabel": {
-              "en": "Password"
+              "en": "Password",
+              "de": "Passwort"
             },
             "passwordPlaceholder": {
-              "en": "Password"
+              "en": "Password",
+              "de": "Passwort"
             }
           }
         }

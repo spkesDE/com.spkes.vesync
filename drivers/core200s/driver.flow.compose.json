@@ -1,0 +1,61 @@
+{
+  "actions": [
+    {
+      "id": "setModeCore200s",
+      "title": {
+        "en": "Set device to mode...",
+        "de": "Setzte das Gerät auf modus..."
+      },
+      "titleFormatted": {
+        "en": "Set device to [[mode]]",
+        "de": "Setzte das Gerät auf [[mode]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "mode",
+          "title": {
+            "en": "Mode"
+          },
+          "values": [
+            {
+              "id": "off",
+              "label": {
+                "en": "Off",
+                "de": "Aus"
+              }
+            },
+            {
+              "id": "sleep",
+              "label": {
+                "en": "Sleep Mode",
+                "de": "Schlaf Modus"
+              }
+            },
+            {
+              "id": "low",
+              "label": {
+                "en": "Low Mode",
+                "de": "Niedrig"
+              }
+            },
+            {
+              "id": "medium",
+              "label": {
+                "en": "Medium Mode",
+                "de": "Mittel"
+              }
+            },
+            {
+              "id": "high",
+              "label": {
+                "en": "High Mode",
+                "de": "Hoch"
+              }
+            }
+              ]
+            }
+          ]
+        }
+      ]
+    }

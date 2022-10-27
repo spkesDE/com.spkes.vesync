@@ -15,7 +15,7 @@ export default class VeSync {
     private loggedIn: boolean = false;
 
 
-    constructor(username: string, password: string, isRawPassword: boolean = false, debug: boolean = false) {
+    constructor(username: string, password: string, isRawPassword: boolean = false, debug: boolean = true) {
         this.username = username;
         if (isRawPassword)
             this.password = this.hashPassword(password);
