@@ -62,7 +62,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
         },
     }
     //endregion
-
+    debugMode: boolean = true
     enabled: boolean = false;
     filter_life: number = 100;
     mode: string = "off";
@@ -89,9 +89,10 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg)
+                    console.error(result)
+                    reject(result.msg ?? result)
                 } else {
                     this.deviceStatus = toggle ? 'on' : "off";
                     resolve(this.deviceStatus);
@@ -126,9 +127,10 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg)
+                    console.error(result)
+                    reject(result.msg ?? result)
                 } else {
                     this.mode = mode;
                     resolve(mode);
@@ -152,9 +154,10 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg)
+                    console.error(result)
+                    reject(result.msg ?? result)
                 } else {
                     this.extension.fanSpeedLevel = level;
                     this.deviceStatus = 'on';
@@ -178,9 +181,10 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg)
+                    console.error(result)
+                    reject(result.msg ?? result)
                 } else {
                     this.child_lock = mode;
                     resolve(mode);
@@ -227,9 +231,10 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             }
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg)
+                    console.error(result)
+                    reject(result.msg ?? result)
                 } else {
                     this.display = state;
                     resolve(state);
@@ -254,9 +259,10 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             }
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg)
+                    console.error(result)
+                    reject(result.msg ?? result)
                 } else {
                     this.night_light = mode;
                     resolve(mode);

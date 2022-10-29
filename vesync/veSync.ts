@@ -10,18 +10,17 @@ export default class VeSync {
     private devices: VeSyncDeviceBase[] = [];
     readonly username: string;
     readonly password: string;
-    readonly debugMode: boolean;
     private time_zone: string = 'America/New_York';
     private loggedIn: boolean = false;
+    static debugMode: boolean = true;
 
 
-    constructor(username: string, password: string, isRawPassword: boolean = false, debug: boolean = true) {
+    constructor(username: string, password: string, isRawPassword: boolean = false) {
         this.username = username;
         if (isRawPassword)
             this.password = this.hashPassword(password);
         else
             this.password = password;
-        this.debugMode = debug;
     }
 
     public async login(): Promise<boolean> {
@@ -30,9 +29,8 @@ export default class VeSync {
             this.account_id = response.result.accountID;
             this.token = response.result.token;
             this.loggedIn = true;
-            if (this.debugMode) {
+            if (VeSync.debugMode) {
                 console.debug(`Account ID: ${response.result.accountID}`);
-                console.debug(`Token ${response.result.token}`);
             }
             await this.getDevices();
         } catch (e) {
@@ -72,7 +70,7 @@ export default class VeSync {
             }
              */
         }
-        if (this.debugMode) console.debug("Total Devices processed: " + this.devices.length)
+        if (VeSync.debugMode) console.debug("Total Devices processed: " + this.devices.length)
     }
 
     private getDeviceObject(deviceRaw: any): VeSyncDeviceBase | undefined {

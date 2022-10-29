@@ -92,9 +92,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
                     console.log(result)
-                    reject(result.msg)
+                    reject(result.msg ?? result)
                 } else {
                     this.deviceStatus = toggle ? 'on' : "off";
                     resolve(this.deviceStatus);
@@ -126,9 +127,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
                     console.log(result)
-                    reject(result.msg)
+                    reject(result.msg ?? result)
                 } else {
                     this.mode = mode;
                     resolve(mode);
@@ -152,9 +154,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
                     console.log(result)
-                    reject(result.msg)
+                    reject(result.msg ?? result)
                 } else {
                     resolve(true);
                 }
@@ -176,9 +179,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
                     console.log(result)
-                    reject(result.msg)
+                    reject(result.msg ?? result)
                 } else {
                     resolve(true);
                 }
@@ -235,9 +239,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             }
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
                     console.log(result)
-                    reject(result.msg)
+                    reject(result.msg ?? result)
                 } else {
                     this.display = state;
                     resolve(state);
@@ -257,9 +262,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             }
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
                     console.log(result)
-                    reject(result.msg)
+                    reject(result.msg ?? result)
                 } else {
                     this.automatic_stop_reach_target = mode;
                     resolve(mode);
@@ -287,9 +293,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
                     console.log(result)
-                    reject(result.msg)
+                    reject(result.msg ?? result)
                 } else {
                     this.warm_mist_level = level;
                     this.warm_mist_enabled = true;
@@ -315,7 +322,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     public async setMistLevel(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
             if (!this.Device_Features[this.deviceType].mist_level.includes(level) ?? false) reject(this.deviceType + ' don\'t support mist level ' + level);
-             let body = {
+            let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
@@ -329,9 +336,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
             result.then(result => {
+                if (VeSync.debugMode) console.log(result)
                 if (result.msg !== 'request success') {
                     console.log(result)
-                    reject(result.msg)
+                    reject(result.msg ?? result)
                 } else {
                     this.mist_level = level;
                     resolve(level);

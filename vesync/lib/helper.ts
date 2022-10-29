@@ -15,7 +15,6 @@ export default class Helper {
     static APP_VERSION = '2.8.6'
     static PHONE_BRAND = 'SM N9005'
     static PHONE_OS = 'Android'
-    static MOBILE_ID = '1234567890123456'
     static USER_TYPE = '1'
     static BYPASS_APP_V = "VeSync 3.0.51"
 
@@ -37,7 +36,7 @@ export default class Helper {
                     ...this.bodyAuth(api),
                     ...this.bodyDetails(),
                     method: 'energyyear',
-                    mobileId: this.MOBILE_ID
+                    mobileId: this.getRandomToken(16)
                 }
             case BodyTypes.ENERGY_MONTH:
                 return {
@@ -45,7 +44,7 @@ export default class Helper {
                     ...this.bodyAuth(api),
                     ...this.bodyDetails(),
                     method: 'energymonth',
-                    mobileId: this.MOBILE_ID
+                    mobileId: this.getRandomToken(16)
                 }
             case BodyTypes.ENERGY_WEEK:
                 return {
@@ -53,7 +52,7 @@ export default class Helper {
                     ...this.bodyAuth(api),
                     ...this.bodyDetails(),
                     method: 'energyweek',
-                    mobileId: this.MOBILE_ID
+                    mobileId: this.getRandomToken(16)
                 }
             case BodyTypes.DEVICE_DETAIL:
                 return {
@@ -61,7 +60,7 @@ export default class Helper {
                     ...this.bodyAuth(api),
                     ...this.bodyDetails(),
                     method: 'devicedetail',
-                    mobileId: this.MOBILE_ID
+                    mobileId: this.getRandomToken(16)
                 }
             case BodyTypes.DEVICE_STATUS:
                 return {
@@ -103,6 +102,10 @@ export default class Helper {
         return {};
     }
 
+    static getRandomToken(len: number): string {
+        return Math.random().toString(36).substring(2, len);
+    }
+
 
     //HTTP Client for requests
     private static async makeRequest(url: string, requestOptions: RequestOptions, requestBody: {}): Promise<any> {
@@ -117,9 +120,11 @@ export default class Helper {
                     resolve(JSON.parse(chunk));
                 });
             })
+            req.setTimeout(this.API_TIMEOUT*1000, () => {
+                reject((`Timeout for ${url}`));
+            });
             req.on('error', (e: Error) => {
-                console.error(e);
-                reject();
+                reject(e);
             });
             req.write(postData);
             req.end();
