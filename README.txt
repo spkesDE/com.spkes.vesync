@@ -1,3 +1,8 @@
-Adds support for VeSync devices.
+Increase the potential of your Homey pro! Purify your home’s air or add the ideal amount of humidity!
 
-Pair a device. Follow the instructions.
+Supported Devices
+Core 200s Air Purifier
+
+Upcoming
+Humidifier Classic 300s
+Humidifier Dual 200s
