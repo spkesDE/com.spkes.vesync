@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.spkes.vesync",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
@@ -52,6 +52,7 @@
   },
   "source": "https://github.com/spkesDE/com.spkes.vesync",
   "support": "https://github.com/spkesDE",
+  "homeyCommunityTopicId": 71369,
   "flow": {
     "actions": [
       {
