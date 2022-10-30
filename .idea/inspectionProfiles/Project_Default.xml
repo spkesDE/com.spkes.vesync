@@ -6,5 +6,6 @@
         <language minSize="84" name="TypeScript" />
       </Languages>
     </inspection_tool>
+    <inspection_tool class="JsonSchemaCompliance" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>
