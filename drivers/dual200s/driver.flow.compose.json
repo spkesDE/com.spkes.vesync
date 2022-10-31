@@ -1,0 +1,61 @@
+{
+  "actions": [
+    {
+      "id": "setModeDual200s",
+      "title": {
+        "en": "Set mode",
+        "de": "Setzte modus"
+      },
+      "titleFormatted": {
+        "en": "Set mode [[mode]]",
+        "de": "Setzte modus [[mode]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "mode",
+          "title": {
+            "en": "Mode"
+          },
+          "values": [
+            {
+              "id": "off",
+              "label": {
+                "en": "Off",
+                "de": "Aus"
+              }
+            },
+            {
+              "id": "auto",
+              "label": {
+                "en": "Auto Mode",
+                "de": "Auto Modus"
+              }
+            },
+            {
+              "id": "low",
+              "label": {
+                "en": "Low Mode",
+                "de": "Niedrig"
+              }
+            },
+            {
+              "id": "medium",
+              "label": {
+                "en": "Medium Mode",
+                "de": "Mittel"
+              }
+            },
+            {
+              "id": "high",
+              "label": {
+                "en": "High Mode",
+                "de": "Hoch"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
