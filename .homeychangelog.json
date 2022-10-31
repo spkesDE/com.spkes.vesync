@@ -19,5 +19,8 @@
   },
   "0.0.7": {
     "en": "Updated app.json"
+  },
+  "0.0.8": {
+    "en": "Support for Classic300s and Dual200S (Testing)"
   }
 }
