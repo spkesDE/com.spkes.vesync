@@ -13,7 +13,7 @@ class Core200S extends Homey.Device {
         this.registerCapabilityListener("onoff", async (value) => await this.setMode(value ? "on" : "off"));
         this.registerCapabilityListener("core200sCapability", async (value) => await this.setMode(value));
         this.log("Setting old mode...")
-        await this.setMode(this.device?.mode ?? "off");
+        await this.setMode(this.device?.mode ?? "off")
         this.registerFlows()
         this.log('Core200S has been initialized');
     }
@@ -23,30 +23,30 @@ class Core200S extends Homey.Device {
             await this.getDevice();
             this.log(`Device was undefined and now is ` + this.device === undefined ? "undefined" : "defined");
         }
+        this.log(value);
         if(value === "on" || value === "manual") {
-            await this.device?.toggleSwitch(true);
+            this.device?.toggleSwitch(true).catch(this.error);;
             this.setCapabilityValue('onoff', true).catch(this.error);
             this.setCapabilityValue('core200sCapability', ["low", "medium", "high"][this.device?.extension.fanSpeedLevel - 1 ?? 1] ?? "low").catch(this.error);
         } else if(value === "off"){
-            await this.device?.toggleSwitch(false);
+            this.device?.toggleSwitch(false).catch(this.error);;
             this.setCapabilityValue('onoff', false).catch(this.error);
             this.setCapabilityValue('core200sCapability', "off").catch(this.error);
         } else if (value === "high") {
-            await this.device?.setFanSpeed(3);
+            this.device?.setFanSpeed(3).catch(this.error);;
             this.setCapabilityValue('onoff', true).catch(this.error);
         } else if (value === "medium") {
-            await this.device?.setFanSpeed(2);
+            this.device?.setFanSpeed(2).catch(this.error);;
             this.setCapabilityValue('onoff', true).catch(this.error);
         } else if (value === "low") {
-            await this.device?.setFanSpeed(1);
+            this.device?.setFanSpeed(1).catch(this.error);;
             this.setCapabilityValue('onoff', true).catch(this.error);
         } else if (value === "sleep") {
             if (this.device?.deviceStatus === 'off')
-                await this.device.on();
-            await this.device?.setMode('sleep');
+                this.device?.on().catch(this.error);
+            this.device?.setMode('sleep').catch(this.error);;
             this.setCapabilityValue('onoff', true).catch(this.error);
         }
-        this.log(value);
     }
 
     public async getDevice() {

@@ -120,8 +120,8 @@ export default class Helper {
                     resolve(JSON.parse(chunk));
                 });
             })
-            req.setTimeout(this.API_TIMEOUT*1000, () => {
-                reject((`Timeout for ${url}`));
+            req.setTimeout(this.API_TIMEOUT * 1000, () => {
+                reject(`Timeout for ${url}`);
             });
             req.on('error', (e: Error) => {
                 reject(e);
@@ -136,7 +136,7 @@ export default class Helper {
             method: method.toUpperCase(),
             headers: header
         };
-        return await Helper.makeRequest(this.API_BASE_URL + path, options, requestBody);
+        return Helper.makeRequest(this.API_BASE_URL + path, options, requestBody);
     }
 
     static bypassHeader() {

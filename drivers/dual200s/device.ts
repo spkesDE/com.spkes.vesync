@@ -24,26 +24,31 @@ class Dual200s extends Homey.Device {
             this.log(`Device was undefined and now is ` + this.device === undefined ? "undefined" : "defined");
         }
         if(value === "on" || value === "manual") {
-            await this.device?.toggleSwitch(true);
+            this.device?.toggleSwitch(true).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
             this.setCapabilityValue('dual200sCapability', ["low", "medium", "high"][this.device?.extension.mist_level - 1 ?? 1] ?? "low").catch(this.error);
         } else if(value === "off"){
-            await this.device?.toggleSwitch(false);
+            this.device?.toggleSwitch(false).catch(this.error);
             this.setCapabilityValue('onoff', false).catch(this.error);
             this.setCapabilityValue('dual200sCapability', "off").catch(this.error);
         } else if (value === "high") {
-            await this.device?.setMistLevel(3);
+            this.device?.setMistLevel(3).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
         } else if (value === "medium") {
-            await this.device?.setMistLevel(2);
+            this.device?.setMistLevel(2).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
         } else if (value === "low") {
-            await this.device?.setMistLevel(1);
+            this.device?.setMistLevel(1).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
         } else if (value === "auto") {
             if (this.device?.deviceStatus === 'off')
-                await this.device.on();
-            await this.device?.setAutoMode();
+                this.device.on().catch(this.error);
+            this.device?.setAutoMode().catch(this.error);
+            this.setCapabilityValue('onoff', true).catch(this.error);
+        } else if (value === "sleep") {
+            if (this.device?.deviceStatus === 'off')
+                this.device.on().catch(this.error);
+            this.device?.setHumidityMode('sleep').catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
         }
         this.log(value);

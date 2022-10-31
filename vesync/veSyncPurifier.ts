@@ -102,11 +102,11 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     }
 
     public async on() {
-        return await this.toggleSwitch(true);
+        return this.toggleSwitch(true);
     }
 
     public async off() {
-        return await this.toggleSwitch(false);
+        return this.toggleSwitch(false);
     }
 
     /* Set mode to manual or sleep. */
