@@ -3,12 +3,12 @@
     {
       "id": "setModeCore200s",
       "title": {
-        "en": "Set device to mode...",
-        "de": "Setzte das Gerät auf modus..."
+        "en": "Set mode",
+        "de": "Setzte modus"
       },
       "titleFormatted": {
-        "en": "Set device to [[mode]]",
-        "de": "Setzte das Gerät auf [[mode]]"
+        "en": "Set mode [[mode]]",
+        "de": "Setzte modus [[mode]]"
       },
       "args": [
         {
