@@ -40,5 +40,8 @@
   },
   "0.0.14": {
     "en": "fixed Dual200s"
+  },
+  "0.0.15": {
+    "en": "Disabeld faulty if check."
   }
 }
