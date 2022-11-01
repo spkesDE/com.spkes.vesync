@@ -77,6 +77,14 @@ export default class VeSync {
         switch (deviceRaw.deviceType) {
             case 'Core200S':
             case 'Core300S':
+            case 'Core400S':
+            case 'Core600S':
+            case 'PUR131S':
+                return new VeSyncPurifier(this, deviceRaw);
+            case 'Classic300S':
+            case 'Classic200S':
+            case 'Dual200S':
+            case 'LV600S':
                 return new VeSyncPurifier(this, deviceRaw);
             default:
                 break;
