@@ -186,7 +186,7 @@ export default class Helper {
     }
 
     public static createPayload(device: VeSyncDeviceBase, method: string, data: {}) {
-        if (!device.Device_Features[device.deviceType].method.includes(method) ?? false) throw Error(device.deviceType + ' don\'t accept method: ' + method)
+        //if (!device.Device_Features[device.deviceType].method.includes(method) ?? false) throw Error(device.deviceType + ' don\'t accept method: ' + method)
         return {
             data: data,
             method: method,
