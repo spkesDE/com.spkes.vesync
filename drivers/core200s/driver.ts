@@ -35,7 +35,7 @@ class Core200SDriver extends Homey.Driver {
             // @ts-ignore
             let veSync: VeSync = this.homey.app.veSync;
             let devices = await veSync.getDevices();
-            devices.filter(d => d.deviceType === 'Core200S');
+            devices.filter(d => d.Device_Features.Core200S.models.includes(d.deviceType));
             let devicesList: any = [];
             devices.forEach((d) => {
                 if (d instanceof VeSyncPurifier) {

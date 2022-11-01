@@ -1,6 +1,5 @@
 import Homey from 'homey';
 import VeSync from "../../vesync/veSync";
-import VeSyncPurifier from "../../vesync/veSyncPurifier";
 import {Utils} from "../../utils";
 import VeSyncHumidifier from "../../vesync/veSyncHumidifier";
 
@@ -36,7 +35,7 @@ class Dual200sDriver extends Homey.Driver {
             // @ts-ignore
             let veSync: VeSync = this.homey.app.veSync;
             let devices = await veSync.getDevices();
-            devices.filter(d => d.deviceType === 'Dual200S' || d.Device_Features.Dual200S.models.contains(d.deviceType));
+            devices.filter(d => d.Device_Features.Dual200S.models.includes(d.deviceType));
             let devicesList: any = [];
             devices.forEach((d) => {
                 if (d instanceof VeSyncHumidifier) {
