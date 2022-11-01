@@ -71,6 +71,7 @@ export default class VeSync {
              */
         }
         if (VeSync.debugMode) console.debug("Total Devices processed: " + this.devices.length)
+        if (VeSync.debugMode) console.debug(this.devices)
     }
 
     private getDeviceObject(deviceRaw: any): VeSyncDeviceBase | undefined {
