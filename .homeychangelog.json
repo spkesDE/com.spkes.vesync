@@ -42,6 +42,9 @@
     "en": "fixed Dual200s"
   },
   "0.0.15": {
-    "en": "Disabeld faulty if check."
+    "en": "Temp fix for issue"
+  },
+  "0.0.16": {
+    "en": "Temp fix for issue 2"
   }
 }
