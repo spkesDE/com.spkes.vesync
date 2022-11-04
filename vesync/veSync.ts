@@ -13,7 +13,7 @@ export default class VeSync {
     readonly password: string;
     private time_zone: string = 'America/New_York';
     private loggedIn: boolean = false;
-    static debugMode: boolean = false;
+    static debugMode: boolean = true;
 
 
     constructor(username: string, password: string, isRawPassword: boolean = false) {
