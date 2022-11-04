@@ -1,5 +1,3 @@
-import * as crypto from "crypto";
-import Helper from "./lib/helper";
 import VeSync from "./veSync";
 
 export default class VeSyncDeviceBase {
@@ -64,6 +62,21 @@ export default class VeSyncDeviceBase {
 
     public isConnected(): boolean {
         return this.connectionStatus === "online";
+    }
+
+    public validResponse(result: any) : boolean {
+        if (!result.msg) return false;
+        switch (result.msg.toLowerCase()) {
+            case 'request success':
+                if(this.connectionStatus == "offline")
+                    this.connectionStatus = "online";
+                return true;
+            case 'device offline':
+            case 'device timeout':
+                this.connectionStatus = "offline";
+                return false;
+        }
+        return false;
     }
 
 }

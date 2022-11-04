@@ -73,7 +73,8 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
 
     constructor(api: VeSync, device: any) {
         super(api, device);
-        this.getStatus().catch(console.log);
+        this.getStatus().catch(() => {
+        });
     }
 
     /* turn on or off the device */
@@ -90,13 +91,9 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.error(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.deviceStatus = toggle ? 'on' : "off";
-                    resolve(this.deviceStatus);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.deviceStatus = toggle ? 'on' : "off";
+                return resolve(this.deviceStatus);
             });
         });
     }
@@ -112,7 +109,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     /* Set mode to manual or sleep. */
     public async setMode(mode: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].modes.includes(mode) ?? false) reject(this.deviceType + ' don\'t accept mode: ' + mode);
+            if (!this.Device_Features[this.deviceType].modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mode: ' + mode);
             if (this.extension.mode === mode) return;
             let payload = Helper.createPayload(this, 'setPurifierMode', {mode: mode})
             if (mode === "manual")
@@ -126,15 +123,11 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             let result = Helper.callApi(this.api,
                 ApiCalls.BYPASS_V2,
                 'post', body, Helper.bypassHeader());
-            result.then(result => {
+            return result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.error(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.mode = mode;
-                    resolve(mode);
-                }
+                if (!this.validResponse(result)) reject(new Error(result.msg ?? result))
+                this.mode = mode;
+                return resolve(mode);
             });
         });
     }
@@ -142,7 +135,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     /* Set fan speed. */
     public setFanSpeed(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].levels.includes(level) ?? false) reject(this.deviceType + ' don\'t accept level: ' + level);
+            if (!this.Device_Features[this.deviceType].levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t accept level: ' + level);
             if (this.extension.fanSpeedLevel === level) return;
             let body = {
                 ...Helper.bypassBodyV2(this.api),
@@ -155,15 +148,11 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.error(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.extension.fanSpeedLevel = level;
-                    this.deviceStatus = 'on';
-                    this.mode = "manual";
-                    resolve(level);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.extension.fanSpeedLevel = level;
+                this.deviceStatus = 'on';
+                this.mode = "manual";
+                return resolve(level);
             });
         });
     }
@@ -182,13 +171,9 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.error(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.child_lock = mode;
-                    resolve(mode);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.child_lock = mode;
+                return resolve(mode);
             });
         });
     }
@@ -204,19 +189,17 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             }
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
-                try {
-                    this.enabled = result.result.result.enabled
-                    this.filter_life = result.result.result.filter_life;
-                    this.mode = result.result.result.mode;
-                    this.level = result.result.result.level;
-                    this.display = result.result.result.display;
-                    this.child_lock = result.result.result.child_lock;
-                    this.night_light = result.result.result.night_light;
-                    resolve(true)
-                } catch (e: any) {
-                    reject(result);
-                }
-            });
+                if (VeSync.debugMode) console.log(result);
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
+                this.enabled = result.result.result.enabled ?? false;
+                this.filter_life = result.result.result.filter_life ?? 0;
+                this.mode = result.result.result.mode ?? "off";
+                this.level = result.result.result.level ?? "0";
+                this.display = result.result.result.display ?? false;
+                this.child_lock = result.result.result.child_lock ?? false;
+                this.night_light = result.result.result.night_light ?? false;
+                return resolve(true);
+            })
         });
     }
 
@@ -232,13 +215,9 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.error(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.display = state;
-                    resolve(state);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.display = state;
+                return resolve(state);
             });
         });
     }
@@ -249,7 +228,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             if (mode.toLowerCase() !== 'on'
                 && mode.toLowerCase() !== 'off'
                 && mode.toLowerCase() !== 'dim')
-                throw Error(this.deviceType + ' don\'t accept setNightLight: ' + mode);
+                return reject(Error(this.deviceType + ' don\'t accept setNightLight: ' + mode));
 
             let body = {
                 ...Helper.bypassBodyV2(this.api),
@@ -260,15 +239,10 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.error(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.night_light = mode;
-                    resolve(mode);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.night_light = mode;
+                return resolve(mode);
             });
         });
     }
-
 }

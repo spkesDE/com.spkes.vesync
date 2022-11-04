@@ -76,7 +76,8 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
 
     constructor(api: VeSync, device: any) {
         super(api, device);
-        this.getStatus().catch(console.log);
+        this.getStatus().catch(() => {
+        });
     }
 
     /* turn on or off the device */
@@ -93,13 +94,9 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.deviceStatus = toggle ? 'on' : "off";
-                    resolve(this.deviceStatus);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.deviceStatus = toggle ? 'on' : "off";
+                return resolve(this.deviceStatus);
             });
         });
     }
@@ -115,7 +112,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set mode to manual or sleep or auto */
     public async setHumidityMode(mode: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].mist_modes.includes(mode) ?? false) reject(this.deviceType + ' don\'t accept mist modes: ' + mode);
+            if (!this.Device_Features[this.deviceType].mist_modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mist modes: ' + mode);
             if (this.mode === mode) return;
             let body = {
                 ...Helper.bypassBodyV2(this.api),
@@ -128,13 +125,9 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.mode = mode;
-                    resolve(mode);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.mode = mode;
+                return resolve(mode);
             });
         });
     }
@@ -142,8 +135,8 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set setNightLightBrightness. */
     public setNightLightBrightness(brightness: number): Promise<string | boolean> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].features.includes('nightlight') ?? false) reject(this.deviceType + ' don\'t accept nightlight');
-            if (brightness > 0 || brightness < 100) reject("Brightness value must be set between 0 and 100");
+            if (!this.Device_Features[this.deviceType].features.includes('nightlight') ?? false) return reject(this.deviceType + ' don\'t accept nightlight');
+            if (brightness > 0 || brightness < 100) return reject("Brightness value must be set between 0 and 100");
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -155,12 +148,8 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg ?? result)
-                } else {
-                    resolve(true);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                return resolve(true);
             });
         });
     }
@@ -168,7 +157,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set Humidity */
     public setHumidity(humidity: number): Promise<string | boolean> {
         return new Promise((resolve, reject) => {
-            if (humidity > 80 || humidity < 30) reject("Humidity value must be set between 30 and 80");
+            if (humidity > 80 || humidity < 30) return reject("Humidity value must be set between 30 and 80");
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -180,12 +169,8 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg ?? result)
-                } else {
-                    resolve(true);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                return resolve(true);
             });
         });
     }
@@ -215,9 +200,9 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                     this.warm_mist_level = result.result.result.warm_mist_level;
                     this.warm_mist_enabled = result.result.result.warm_mist_enabled;
                     this.display = result.result.result.display ?? result.result.result.indicator_light_switch;
-                    resolve(true)
+                    return resolve(true)
                 } catch (e: any) {
-                    reject(result);
+                    return reject(result);
                 }
             });
         });
@@ -240,13 +225,9 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.display = state;
-                    resolve(state);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.display = state;
+                return resolve(state);
             });
         });
     }
@@ -263,13 +244,9 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.automatic_stop_reach_target = mode;
-                    resolve(mode);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.automatic_stop_reach_target = mode;
+                return resolve(mode);
             });
         });
     }
@@ -277,8 +254,8 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set mode to manual or sleep or auto */
     public async setWarmLevel(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].features.includes('warm_mist') ?? false) reject(this.deviceType + ' don\'t support warm_mist');
-            if (!this.Device_Features[this.deviceType].warm_mist_levels.includes(level) ?? false) reject(this.deviceType + ' don\'t support warm_mist_levels ' + level);
+            if (!this.Device_Features[this.deviceType].features.includes('warm_mist') ?? false) return reject(this.deviceType + ' don\'t support warm_mist');
+            if (!this.Device_Features[this.deviceType].warm_mist_levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support warm_mist_levels ' + level);
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -294,14 +271,10 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.warm_mist_level = level;
-                    this.warm_mist_enabled = true;
-                    resolve(level);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.warm_mist_level = level;
+                this.warm_mist_enabled = true;
+                return resolve(level);
             });
         });
     }
@@ -321,7 +294,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set humidifier mist level with int between 0 - 9. */
     public async setMistLevel(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].mist_level.includes(level) ?? false) reject(this.deviceType + ' don\'t support mist level ' + level);
+            if (!this.Device_Features[this.deviceType].mist_level.includes(level) ?? false) return reject(this.deviceType + ' don\'t support mist level ' + level);
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -337,13 +310,9 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (result.msg !== 'request success') {
-                    console.log(result)
-                    reject(result.msg ?? result)
-                } else {
-                    this.mist_level = level;
-                    resolve(level);
-                }
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.mist_level = level;
+                return resolve(level);
             });
         });
     }

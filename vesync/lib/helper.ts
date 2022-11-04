@@ -7,7 +7,7 @@ export default class Helper {
     static API_BASE_URL = 'https://smartapi.vesync.com'
     static API_BASE_PORT = 443;
     static API_RATE_LIMIT = 30
-    static API_TIMEOUT = 5
+    static API_TIMEOUT = 15
 
     static DEFAULT_TZ = 'America/New_York'
     static DEFAULT_REGION = 'US'
