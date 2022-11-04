@@ -22,7 +22,7 @@ class Core200S extends Homey.Device {
             await this.getDevice().catch();
             this.log(`Device was undefined and now is ` + this.device === undefined ? "undefined" : "defined");
         }
-        if (this.device?.connectionStatus == "offline") return;
+        if (!this.device?.isConnected()) return;
         this.log("Mode: " + value);
         if (value === "on" || value === "manual") {
             this.device?.toggleSwitch(true).catch(this.handleError.bind(this));
