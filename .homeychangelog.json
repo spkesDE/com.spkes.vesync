@@ -49,5 +49,8 @@
   },
   "0.0.17": {
     "en": "Handle offline devices (e.g. no wifi or no power)"
+  },
+  "0.0.18": {
+    "en": "Classic300s icon"
   }
 }
