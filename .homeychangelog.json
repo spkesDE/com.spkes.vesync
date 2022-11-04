@@ -46,5 +46,8 @@
   },
   "0.0.16": {
     "en": "Temp fix for issue 2"
+  },
+  "0.0.17": {
+    "en": "Handle offline devices (e.g. no wifi or no power)"
   }
 }
