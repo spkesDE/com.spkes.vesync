@@ -35,19 +35,19 @@ class Classic300sDriver extends Homey.Driver {
             // @ts-ignore
             let veSync: VeSync = this.homey.app.veSync;
             let devices = await veSync.getDevices();
-            devices.filter(d => d.Device_Features.Classic300S.models.includes(d.deviceType));
             let devicesList: any = [];
-            devices.forEach((d) => {
-                if (d instanceof VeSyncHumidifier) {
-                    devicesList.push({
-                        name: d.deviceName,
-                        data: {
-                            id: d.uuid,
-                            cid: d.cid,
-                            macID: d.macID
-                        },
-                        store: {
-                            fanSpeedLevel: d.mist_level,
+            devices.filter(d => d.Device_Features.Classic300S.models.includes(d.deviceType))
+                .forEach((d) => {
+                    if (d instanceof VeSyncHumidifier) {
+                        devicesList.push({
+                            name: d.deviceName,
+                            data: {
+                                id: d.uuid,
+                                cid: d.cid,
+                                macID: d.macID
+                            },
+                            store: {
+                                fanSpeedLevel: d.mist_level,
                             mode: d.mode,
                         }
                     });

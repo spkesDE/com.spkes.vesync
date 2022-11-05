@@ -35,24 +35,24 @@ class Core200SDriver extends Homey.Driver {
             // @ts-ignore
             let veSync: VeSync = this.homey.app.veSync;
             let devices = await veSync.getDevices();
-            devices.filter(d => d.Device_Features.Core200S.models.includes(d.deviceType));
             let devicesList: any = [];
-            devices.forEach((d) => {
-                if (d instanceof VeSyncPurifier) {
-                    devicesList.push({
-                        name: d.deviceName,
-                        data: {
-                            id: d.uuid,
-                            cid: d.cid,
-                            macID: d.macID
-                        },
-                        store: {
-                            fanSpeedLevel: d.level,
-                            mode: d.mode,
-                        }
-                    });
-                }
-            })
+            devices.filter(d => d.Device_Features.Core200S.models.includes(d.deviceType))
+                .forEach((d) => {
+                    if (d instanceof VeSyncPurifier) {
+                        devicesList.push({
+                            name: d.deviceName,
+                            data: {
+                                id: d.uuid,
+                                cid: d.cid,
+                                macID: d.macID
+                            },
+                            store: {
+                                fanSpeedLevel: d.level,
+                                mode: d.mode,
+                            }
+                        });
+                    }
+                });
             return devicesList;
         });
     }

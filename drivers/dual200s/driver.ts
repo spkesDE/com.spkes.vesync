@@ -18,7 +18,7 @@ class Dual200sDriver extends Homey.Driver {
      */
     async onPair(session: any) {
         //Skip login if there is valid session
-        session.setHandler('showView', async (data :any) => {
+        session.setHandler('showView', async (data: any) => {
             if (data === 'login') {
                 // @ts-ignore
                 if (this.homey.app.veSync.isLoggedIn()) await session.nextView();
@@ -26,7 +26,7 @@ class Dual200sDriver extends Homey.Driver {
         });
 
         //Handle Login
-        session.setHandler("login", async (data:any) => {
+        session.setHandler("login", async (data: any) => {
             return await Utils.handleLogin(this, data);
         });
 
@@ -35,33 +35,33 @@ class Dual200sDriver extends Homey.Driver {
             // @ts-ignore
             let veSync: VeSync = this.homey.app.veSync;
             let devices = await veSync.getDevices();
-            devices.filter(d => d.Device_Features.Dual200S.models.includes(d.deviceType));
             let devicesList: any = [];
-            devices.forEach((d) => {
-                if (d instanceof VeSyncHumidifier) {
-                    devicesList.push({
-                        name: d.deviceName,
-                        data: {
-                            id: d.uuid,
-                            cid: d.cid,
-                            macID: d.macID
-                        },
-                        store: {
-                            fanSpeedLevel: d.mist_level,
-                            mode: d.mode,
-                        }
-                    });
-                }
-            })
+            devices.filter(d => d.Device_Features.Dual200S.models.includes(d.deviceType))
+                .forEach((d) => {
+                    if (d instanceof VeSyncHumidifier) {
+                        devicesList.push({
+                            name: d.deviceName,
+                            data: {
+                                id: d.uuid,
+                                cid: d.cid,
+                                macID: d.macID
+                            },
+                            store: {
+                                fanSpeedLevel: d.mist_level,
+                                mode: d.mode,
+                            }
+                        });
+                    }
+                })
             return devicesList;
         });
     }
 
     // noinspection JSUnusedGlobalSymbols
     async onRepair(session: any, device: any) {
-        session.setHandler("login", async (data:any) => {
+        session.setHandler("login", async (data: any) => {
             let result = await Utils.handleLogin(this, data);
-            if(result) await device.getDevice();
+            if (result) await device.getDevice();
             return result;
         });
 
