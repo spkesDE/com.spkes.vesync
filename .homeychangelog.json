@@ -55,5 +55,8 @@
   },
   "0.0.19": {
     "en": "Updated icons"
+  },
+  "0.0.20": {
+    "en": "Fixed logic in api"
   }
 }
