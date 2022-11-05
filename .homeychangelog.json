@@ -67,5 +67,8 @@
   },
   "0.0.23": {
     "en": "Fixed Issue with Classic300S pairing"
+  },
+  "0.0.24": {
+    "en": "Fixed filter for pairing"
   }
 }
