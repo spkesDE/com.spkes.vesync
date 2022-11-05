@@ -64,5 +64,8 @@
   },
   "0.0.22": {
     "en": "Bug Fixes & Neue Icons"
+  },
+  "0.0.23": {
+    "en": "Fixed Issue with Classic300S pairing"
   }
 }
