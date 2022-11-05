@@ -109,7 +109,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     /* Set mode to manual or sleep. */
     public async setMode(mode: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mode: ' + mode);
+            if (!this.getDeviceFeatures()?.modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mode: ' + mode);
             if (this.extension.mode === mode) return;
             let payload = Helper.createPayload(this, 'setPurifierMode', {mode: mode})
             if (mode === "manual")
@@ -135,7 +135,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     /* Set fan speed. */
     public setFanSpeed(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t accept level: ' + level);
+            if (!this.getDeviceFeatures()?.levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t accept level: ' + level);
             if (this.extension.fanSpeedLevel === level) return;
             let body = {
                 ...Helper.bypassBodyV2(this.api),

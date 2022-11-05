@@ -112,7 +112,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set mode to manual or sleep or auto */
     public async setHumidityMode(mode: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].mist_modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mist modes: ' + mode);
+            if (!this.getDeviceFeatures()?.mist_modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mist modes: ' + mode);
             if (this.mode === mode) return;
             let body = {
                 ...Helper.bypassBodyV2(this.api),
@@ -135,7 +135,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set setNightLightBrightness. */
     public setNightLightBrightness(brightness: number): Promise<string | boolean> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].features.includes('nightlight') ?? false) return reject(this.deviceType + ' don\'t accept nightlight');
+            if (!this.getDeviceFeatures()?.features.includes('nightlight') ?? false) return reject(this.deviceType + ' don\'t accept nightlight');
             if (brightness > 0 || brightness < 100) return reject("Brightness value must be set between 0 and 100");
             let body = {
                 ...Helper.bypassBodyV2(this.api),
@@ -254,8 +254,8 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set mode to manual or sleep or auto */
     public async setWarmLevel(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].features.includes('warm_mist') ?? false) return reject(this.deviceType + ' don\'t support warm_mist');
-            if (!this.Device_Features[this.deviceType].warm_mist_levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support warm_mist_levels ' + level);
+            if (!this.getDeviceFeatures()?.features.includes('warm_mist') ?? false) return reject(this.deviceType + ' don\'t support warm_mist');
+            if (!this.getDeviceFeatures()?.warm_mist_levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support warm_mist_levels ' + level);
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -282,9 +282,9 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set auto mode for humidifiers. */
     public async setAutoMode() {
         let mode = "";
-        if (this.Device_Features[this.deviceType].mist_modes.includes('auto'))
+        if (this.getDeviceFeatures()?.mist_modes.includes('auto'))
             mode = 'auto';
-        else if (this.Device_Features[this.deviceType].mist_modes.includes('humidity'))
+        else if (this.getDeviceFeatures()?.mist_modes.includes('humidity'))
             mode = 'humidity';
         else
             throw Error(this.deviceType + ' don\'t support mist_modes auto|humidity');
@@ -294,7 +294,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set humidifier mist level with int between 0 - 9. */
     public async setMistLevel(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
-            if (!this.Device_Features[this.deviceType].mist_level.includes(level) ?? false) return reject(this.deviceType + ' don\'t support mist level ' + level);
+            if (!this.getDeviceFeatures()?.mist_level.includes(level) ?? false) return reject(this.deviceType + ' don\'t support mist level ' + level);
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,

@@ -19,8 +19,8 @@ export default class VeSyncDeviceBase {
     extension: any = {};
     currentFirmVersion:string = "";
     subDeviceNo:number = 0
-    deviceFirstSetupTime:string = "";
-    Device_Features:{[key: string]: any} = {};
+    deviceFirstSetupTime: string = "";
+    Device_Features: any = {};
     protected api: VeSync;
 
     constructor(api: VeSync, device: any) {
@@ -68,7 +68,7 @@ export default class VeSyncDeviceBase {
         if (!result.msg) return false;
         switch (result.msg.toLowerCase()) {
             case 'request success':
-                if(this.connectionStatus == "offline")
+                if (this.connectionStatus == "offline")
                     this.connectionStatus = "online";
                 return true;
             case 'device offline':
@@ -77,6 +77,17 @@ export default class VeSyncDeviceBase {
                 return false;
         }
         return false;
+    }
+
+    public getDeviceFeatures(): any {
+        for (let device in this.Device_Features) {
+            let newDevice: any = this.Device_Features[device];
+            if (newDevice.models.includes(this.deviceType)) {
+                return newDevice
+            }
+        }
+        new Error("Device not found for type " + this.deviceType)
+        return undefined;
     }
 
 }
