@@ -58,5 +58,8 @@
   },
   "0.0.20": {
     "en": "Fixed logic in api"
+  },
+  "0.0.21": {
+    "en": "Fixed undefined error"
   }
 }
