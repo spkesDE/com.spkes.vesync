@@ -20,7 +20,7 @@ export default class VeSyncDeviceBase {
     currentFirmVersion:string = "";
     subDeviceNo:number = 0
     deviceFirstSetupTime: string = "";
-    Device_Features: any = {};
+    Device_Features: { [key: string]: any } = {};
     protected api: VeSync;
 
     constructor(api: VeSync, device: any) {
@@ -79,7 +79,7 @@ export default class VeSyncDeviceBase {
         return false;
     }
 
-    public getDeviceFeatures(): any {
+    public getDeviceFeatures(): { [p: string]: any } {
         for (let device in this.Device_Features) {
             let newDevice: any = this.Device_Features[device];
             if (newDevice.models.includes(this.deviceType)) {
@@ -87,7 +87,7 @@ export default class VeSyncDeviceBase {
             }
         }
         new Error("Device not found for type " + this.deviceType)
-        return undefined;
+        return {};
     }
 
 }

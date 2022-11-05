@@ -65,7 +65,6 @@ class Core200S extends Homey.Device {
             }
             this.device = device as VeSyncPurifier;
             if (this.device.isConnected()) {
-                await this.device.getStatus().catch(this.handleError.bind(this));
                 await this.setAvailable();
                 return resolve();
             }

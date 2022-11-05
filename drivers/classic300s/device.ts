@@ -33,7 +33,6 @@ class Classic300s extends Homey.Device {
             }
             this.device = device as VeSyncHumidifier;
             if (this.device.isConnected()) {
-                await this.device.getStatus().catch(this.handleError.bind(this));
                 await this.setAvailable();
                 return resolve();
             }
@@ -51,11 +50,11 @@ class Classic300s extends Homey.Device {
         if (value === "on" || value === "manual") {
             this.device?.toggleSwitch(true).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
-            this.setCapabilityValue('dual200sCapability', ["low", "medium", "high"][this.device?.extension.mist_level - 1 ?? 1] ?? "low").catch(this.error);
+            this.setCapabilityValue('classic300sCapability', ["low", "medium", "high"][this.device?.extension.mist_level - 1 ?? 1] ?? "low").catch(this.error);
         } else if (value === "off") {
             this.device?.toggleSwitch(false).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', false).catch(this.error);
-            this.setCapabilityValue('dual200sCapability', "off").catch(this.error);
+            this.setCapabilityValue('classic300sCapability', "off").catch(this.error);
         } else if (value === "high") {
             this.device?.setMistLevel(3).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
