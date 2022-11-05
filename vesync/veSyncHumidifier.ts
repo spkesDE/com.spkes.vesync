@@ -294,7 +294,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set humidifier mist level with int between 0 - 9. */
     public async setMistLevel(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
-            if (!this.getDeviceFeatures()?.mist_level.includes(level) ?? false) return reject(this.deviceType + ' don\'t support mist level ' + level);
+            if (!this.getDeviceFeatures()?.mist_levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support mist level ' + level);
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
