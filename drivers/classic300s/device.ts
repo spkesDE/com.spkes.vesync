@@ -1,9 +1,11 @@
 import Homey from 'homey';
 import VeSync from "../../vesync/veSync";
 import VeSyncHumidifier from "../../vesync/veSyncHumidifier";
+import VeSyncDeviceInterface from "../../lib/VeSyncDeviceInterface";
+import VeSyncApp from "../../app";
 
-class Classic300s extends Homey.Device {
-    private device: VeSyncHumidifier | undefined;
+class Classic300s extends Homey.Device implements VeSyncDeviceInterface {
+    device!: VeSyncHumidifier;
     private checkInterval: NodeJS.Timer | undefined;
 
     /**
@@ -17,10 +19,9 @@ class Classic300s extends Homey.Device {
         this.log('Classic300s has been initialized');
     }
 
-    public async getDevice(): Promise<void> {
+    async getDevice(): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            // @ts-ignore
-            let veSync: VeSync = this.homey.app.veSync;
+            let veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
             if (veSync === null || !veSync.isLoggedIn()) {
                 await this.setUnavailable("Failed to login. Please use the repair function.");
                 return reject("Failed to login. Please use the repair function.");
@@ -41,35 +42,47 @@ class Classic300s extends Homey.Device {
         })
     }
 
-    private async setMode(value: string) {
-        if (this.device == undefined) {
-            await this.getDevice();
-            this.log(`Device was undefined and now is ` + this.device === undefined ? "undefined" : "defined");
+    async setMode(value: string) {
+        if (!this.device.isConnected()) {
+            this.handleError("Classic300s is not connected");
+            return;
         }
         if (!this.device?.isConnected()) return;
         if (value === "on" || value === "manual") {
             this.device?.toggleSwitch(true).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
             this.setCapabilityValue('classic300sCapability', ["low", "medium", "high"][this.device?.extension.mist_level - 1 ?? 1] ?? "low").catch(this.error);
-        } else if (value === "off") {
+            return;
+        }
+        if (value === "off") {
             this.device?.toggleSwitch(false).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', false).catch(this.error);
             this.setCapabilityValue('classic300sCapability', "off").catch(this.error);
-        } else if (value === "high") {
+            return;
+        }
+        if (value === "high") {
             this.device?.setMistLevel(3).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
-        } else if (value === "medium") {
+            return;
+        }
+        if (value === "medium") {
             this.device?.setMistLevel(2).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
-        } else if (value === "low") {
+            return;
+        }
+        if (value === "low") {
             this.device?.setMistLevel(1).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
-        } else if (value === "auto") {
+            return;
+        }
+        if (value === "auto") {
             if (this.device?.deviceStatus === 'off')
                 this.device.on().catch(this.handleError.bind(this));
             this.device?.setAutoMode().catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
-        } else if (value === "sleep") {
+            return;
+        }
+        if (value === "sleep") {
             if (this.device?.deviceStatus === 'off')
                 this.device.on().catch(this.handleError.bind(this));
             this.device?.setHumidityMode('sleep').catch(this.handleError.bind(this));

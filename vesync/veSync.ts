@@ -9,22 +9,19 @@ export default class VeSync {
     private token: string = "";
     private account_id: number = 0;
     private devices: VeSyncDeviceBase[] = [];
-    readonly username: string;
-    readonly password: string;
+    username: string = "";
+    password: string = "";
     private time_zone: string = 'America/New_York';
     private loggedIn: boolean = false;
     static debugMode: boolean = true;
 
 
-    constructor(username: string, password: string, isRawPassword: boolean = false) {
-        this.username = username;
-        if (isRawPassword)
-            this.password = this.hashPassword(password);
-        else
-            this.password = password;
+    constructor() {
     }
 
-    public async login(): Promise<boolean> {
+    public async login(username: string, password: string, isRawPassword: boolean = false): Promise<boolean> {
+        this.username = username;
+        this.password = isRawPassword ? this.hashPassword(password) : password;
         let response = await Helper.callApi(this, ApiCalls.LOGIN, 'post', Helper.requestBody(this, BodyTypes.LOGIN))
         try {
             this.account_id = response.result.accountID;

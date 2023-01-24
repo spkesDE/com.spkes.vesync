@@ -56,8 +56,6 @@ class Core200SDriver extends Homey.Driver {
             return devicesList;
         });
     }
-
-    // noinspection JSUnusedGlobalSymbols
     async onRepair(session: any, device: any) {
         session.setHandler("login", async (data:any) => {
             let result = await Utils.handleLogin(this, data);
