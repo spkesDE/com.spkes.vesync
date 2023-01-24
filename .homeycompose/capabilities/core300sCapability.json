@@ -1,0 +1,70 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Mode",
+    "de": "Modus"
+  },
+  "values": [
+    {
+      "id": "off",
+      "title": {
+        "en": "Off",
+        "de": "Aus"
+      }
+    },
+    {
+      "id": "auto",
+      "label": {
+        "en": "Auto Mode",
+        "de": "Auto Modus"
+      }
+    },
+    {
+      "id": "sleep",
+      "title": {
+        "en": "Sleep Mode",
+        "de": "Schlaf Modus"
+      }
+    },
+    {
+      "id": "fan_speed_1",
+      "label": {
+        "en": "Fan Speed 1",
+        "de": "Geschwindigkeit 1"
+      }
+    },
+    {
+      "id": "fan_speed_2",
+      "label": {
+        "en": "Fan Speed 2",
+        "de": "Geschwindigkeit 2"
+      }
+    },
+    {
+      "id": "fan_speed_3",
+      "label": {
+        "en": "Fan Speed 3",
+        "de": "Geschwindigkeit 3"
+      }
+    },
+    {
+      "id": "fan_speed_4",
+      "label": {
+        "en": "Fan Speed 4",
+        "de": "Geschwindigkeit 4"
+      }
+    },
+    {
+      "id": "fan_speed_5",
+      "label": {
+        "en": "Fan Speed 5",
+        "de": "Geschwindigkeit 5"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "uiQuickAction": true,
+  "icon": "/assets/icon.svg"
+}
