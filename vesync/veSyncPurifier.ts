@@ -18,7 +18,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
         },
         'Core300S': {
             module: 'VeSyncAirBypass',
-            models: ['Core300S', 'LAP-C301S-WJP'],
+            models: ['Core300S', 'LAP-C301S-WJP', 'LAP-C302S-WUSB'],
             modes: ['sleep', 'off', 'auto', 'manual'],
             features: ['air_quality'],
             levels: [1, 2, 3, 4, 5],
@@ -70,6 +70,8 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     display: boolean = true;
     child_lock: boolean = false;
     night_light: string = 'off';
+    air_quality: number = 0;
+    air_quality_value: number = 0;
 
     constructor(api: VeSync, device: any) {
         super(api, device);
@@ -198,6 +200,10 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 this.display = result.result.result.display ?? false;
                 this.child_lock = result.result.result.child_lock ?? false;
                 this.night_light = result.result.result.night_light ?? false;
+                if (this.getDeviceFeatures().features.includes('air_quality')) {
+                    this.air_quality = result.result.result.air_quality ?? 0;
+                    this.air_quality_value = result.result.result.air_quality_value ?? 0;
+                }
                 return resolve(true);
             })
         });
@@ -229,7 +235,6 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 && mode.toLowerCase() !== 'off'
                 && mode.toLowerCase() !== 'dim')
                 return reject(Error(this.deviceType + ' don\'t accept setNightLight: ' + mode));
-
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,

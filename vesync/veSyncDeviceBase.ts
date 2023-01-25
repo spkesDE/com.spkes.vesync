@@ -79,7 +79,7 @@ export default class VeSyncDeviceBase {
         return false;
     }
 
-    public getDeviceFeatures(): { [p: string]: any } {
+    public getDeviceFeatures(): { [key: string]: any } {
         for (let device in this.Device_Features) {
             let newDevice: any = this.Device_Features[device];
             if (newDevice.models.includes(this.deviceType)) {

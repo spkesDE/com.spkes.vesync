@@ -5,7 +5,8 @@
   "class": "fan",
   "capabilities": [
     "core300sCapability",
-    "onoff"
+    "onoff",
+    "measure_pm25"
   ],
   "platforms": [
     "local"
