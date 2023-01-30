@@ -1,8 +1,8 @@
 import Homey from 'homey';
-import VeSync from "../../vesync/veSync";
-import VeSyncPurifier from "../../vesync/veSyncPurifier";
 import VeSyncDeviceInterface from "../../lib/VeSyncDeviceInterface";
 import VeSyncApp from "../../app";
+import VeSyncPurifier from 'tsvesync/veSyncPurifier';
+import VeSync from 'tsvesync';
 
 class Core300S extends Homey.Device implements VeSyncDeviceInterface {
     device!: VeSyncPurifier;
@@ -77,13 +77,13 @@ class Core300S extends Homey.Device implements VeSyncDeviceInterface {
         return new Promise(async (resolve, reject) => {
             let veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
             if (veSync === null || !veSync.isLoggedIn()) {
-                await this.setUnavailable("Failed to login. Please use the repair function.");
+                await this.setUnavailable(this.homey.__("devices.failed_login"));
                 return reject("Failed to login. Please use the repair function.");
             }
             let device = veSync.getStoredDevice().find(d => d.uuid === this.getData().id);
             if (device === undefined || !(device instanceof VeSyncPurifier)) {
                 this.error("Device is undefined or is not a Core300S");
-                await this.setUnavailable("Device is undefined or is not a Core300S. Re-add this device.");
+                await this.setUnavailable(this.homey.__("devices.not_found"));
                 return reject("Device is undefined or is not a Core300S");
             }
             this.device = device as VeSyncPurifier;
@@ -135,8 +135,18 @@ class Core300S extends Homey.Device implements VeSyncDeviceInterface {
         this.log('Core300S has been deleted');
     }
 
+    updateDevice(): void {
+    }
+
+    private handleError(error: any) {
+        if (!this.device?.isConnected())
+            this.setDeviceOffline().catch(this.error);
+        else
+            this.error(error)
+    }
+
     private async setDeviceOffline() {
-        await this.setUnavailable("Device is offline. Checking every 60 seconds for device availability.").catch(this.error);
+        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
         await this.setCapabilityValue('onoff', false).catch(this.error);
         if (this.checkInterval === undefined)
             this.checkInterval = setInterval(async () => {
@@ -147,17 +157,10 @@ class Core300S extends Homey.Device implements VeSyncDeviceInterface {
                     if (this.checkInterval !== undefined)
                         clearInterval(this.checkInterval)
                 } else if (this.getAvailable()) {
-                    await this.setUnavailable("Device is offline. Checking every 60 seconds for device availability.").catch(this.error);
+                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
                     await this.setCapabilityValue('onoff', false).catch(this.error);
                 }
             }, 60 * 1000)
-    }
-
-    private handleError(error: any) {
-        if (!this.device?.isConnected())
-            this.setDeviceOffline().catch(this.error);
-        else
-            this.error(error)
     }
 
 }

@@ -1,0 +1,14 @@
+{
+  "devices": {
+    "failed_login": "Anmeldung fehlgeschlagen. Bitte verwende die Reparaturfunktion.",
+    "not_found": "Device not found. Please re-add the device.",
+    "offline": "Gerät nicht gefunden. Bitte füge das Gerät erneut hinzu."
+  },
+  "settings": {
+    "password": "Kennwort",
+    "reset": "Einstellungen zurücksetzen",
+    "save": "Einstellungen speichern",
+    "settings": "Einstellungen",
+    "username": "Benutzername"
+  }
+}

@@ -1,6 +1,6 @@
 import Homey from 'homey';
-import VeSync from "../../vesync/veSync";
-import VeSyncPurifier from "../../vesync/veSyncPurifier";
+import VeSyncPurifier from 'tsvesync/veSyncPurifier';
+import VeSync from 'tsvesync';
 import {Utils} from "../../utils";
 
 class Core300SDriver extends Homey.Driver {

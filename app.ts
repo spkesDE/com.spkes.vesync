@@ -1,5 +1,5 @@
 import Homey from 'homey';
-import VeSync from "./vesync/veSync";
+import VeSync from 'tsvesync';
 
 export default class VeSyncApp extends Homey.App {
   veSync: VeSync = new VeSync();
@@ -23,7 +23,7 @@ export default class VeSyncApp extends Homey.App {
       this.log('No username or password set');
       return;
     }
-    await this.veSync.login(this.username, this.password);
+    await this.veSync.login(this.username, this.password, true);
     this.log('VeSync has been initialized');
   }
 }

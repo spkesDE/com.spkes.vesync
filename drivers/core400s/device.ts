@@ -1,6 +1,6 @@
 import Homey from 'homey';
-import VeSync from "../../vesync/veSync";
-import VeSyncPurifier from "../../vesync/veSyncPurifier";
+import VeSyncPurifier from 'tsvesync/veSyncPurifier';
+import VeSync from 'tsvesync';
 import VeSyncDeviceInterface from "../../lib/VeSyncDeviceInterface";
 import VeSyncApp from "../../app";
 
@@ -81,13 +81,13 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
         return new Promise(async (resolve, reject) => {
             let veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
             if (veSync === null || !veSync.isLoggedIn()) {
-                await this.setUnavailable("Failed to login. Please use the repair function.");
+                await this.setUnavailable(this.homey.__("devices.failed_login"));
                 return reject("Failed to login. Please use the repair function.");
             }
             let device = veSync.getStoredDevice().find(d => d.uuid === this.getData().id);
             if (device === undefined || !(device instanceof VeSyncPurifier)) {
                 this.error("Device is undefined or is not a Core400s");
-                await this.setUnavailable("Device is undefined or is not a Core400s. Re-add this device.");
+                await this.setUnavailable(this.homey.__("devices.not_found"));
                 return reject("Device is undefined or is not a Core400s");
             }
             this.device = device as VeSyncPurifier;
@@ -140,8 +140,29 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
         this.log('Core400s has been deleted');
     }
 
+    updateDevice(): void {
+        this.updateInterval = setInterval(async () => {
+            //filter_life, mode, level, night_light, child_lock, display
+            //Also updates air_quality if device has this feature
+            await this.device.getStatus();
+            //TODO: include custom sensor capabilities for filter_life
+
+            if (this.device.getDeviceFeatures().features.includes('air_quality'))
+                await this.setCapabilityValue('measure_pm25', this.device.air_quality)
+            this.log("Updating device status!");
+        }, 1000 * 60 * 5) //Every 5min
+        this.log("Update Interval has be started!")
+    }
+
+    private handleError(error: any) {
+        if (!this.device?.isConnected())
+            this.setDeviceOffline().catch(this.error);
+        else
+            this.error(error)
+    }
+
     private async setDeviceOffline() {
-        await this.setUnavailable("Device is offline. Checking every 60 seconds for device availability.").catch(this.error);
+        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
         await this.setCapabilityValue('onoff', false).catch(this.error);
         if (this.checkInterval === undefined)
             this.checkInterval = setInterval(async () => {
@@ -152,31 +173,10 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
                     if (this.checkInterval !== undefined)
                         clearInterval(this.checkInterval)
                 } else if (this.getAvailable()) {
-                    await this.setUnavailable("Device is offline. Checking every 60 seconds for device availability.").catch(this.error);
+                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
                     await this.setCapabilityValue('onoff', false).catch(this.error);
                 }
             }, 60 * 1000)
-    }
-
-    private handleError(error: any) {
-        if (!this.device?.isConnected())
-            this.setDeviceOffline().catch(this.error);
-        else
-            this.error(error)
-    }
-
-    updateDevice(): void {
-        this.updateInterval = setInterval(async () => {
-            //filter_life, mode, level, night_light, child_lock, display
-            //Also updates air_quality if device has this feature
-            await this.device.getStatus();
-            //TODO: include custom sensor capabilities
-
-            if (this.device.getDeviceFeatures().features.includes('air_quality'))
-                await this.setCapabilityValue('measure_pm25', this.device.air_quality)
-            this.log("Updating device status!");
-        }, 1000 * 60 * 5) //Every 5min
-        this.log("Update Interval has be started!")
     }
 
 }

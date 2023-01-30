@@ -1,7 +1,7 @@
 import Homey from 'homey';
-import VeSync from "../../vesync/veSync";
 import {Utils} from "../../utils";
-import VeSyncHumidifier from "../../vesync/veSyncHumidifier";
+import VeSync from 'tsvesync';
+import VeSyncHumidifier from 'tsvesync/veSyncHumidifier';
 
 class Dual200sDriver extends Homey.Driver {
 

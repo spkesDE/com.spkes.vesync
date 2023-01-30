@@ -1,9 +1,14 @@
 {
+  "devices": {
+    "failed_login": "Failed to login. Please use the repair function.",
+    "not_found": "Device not found. Please re-add the device.",
+    "offline": "Device is offline. Checking every 60 seconds for device availability."
+  },
   "settings": {
-    "settings": "Settings",
     "password": "Password",
-    "username": "Username",
+    "reset": "Reset Settings",
     "save": "Save Settings",
-    "reset": "Reset Settings"
+    "settings": "Settings",
+    "username": "Username"
   }
 }

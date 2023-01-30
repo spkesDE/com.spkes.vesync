@@ -1,8 +1,9 @@
 import Homey from 'homey';
-import VeSync from "../../vesync/veSync";
-import VeSyncHumidifier from "../../vesync/veSyncHumidifier";
+import VeSync from 'tsvesync';
+import VeSyncHumidifier from 'tsvesync/veSyncHumidifier';
 import VeSyncDeviceInterface from "../../lib/VeSyncDeviceInterface";
 import VeSyncApp from "../../app";
+
 
 class Classic300s extends Homey.Device implements VeSyncDeviceInterface {
     device!: VeSyncHumidifier;
@@ -23,13 +24,13 @@ class Classic300s extends Homey.Device implements VeSyncDeviceInterface {
         return new Promise(async (resolve, reject) => {
             let veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
             if (veSync === null || !veSync.isLoggedIn()) {
-                await this.setUnavailable("Failed to login. Please use the repair function.");
+                await this.setUnavailable(this.homey.__("devices.failed_login"));
                 return reject("Failed to login. Please use the repair function.");
             }
             let device = veSync.getStoredDevice().find(d => d.uuid === this.getData().id);
             if (device === undefined || !(device instanceof VeSyncHumidifier)) {
                 this.error("Device is undefined or is not a Classic300s");
-                await this.setUnavailable("Device is undefined or is not a Classic300s. Re-add this device.");
+                await this.setUnavailable(this.homey.__("devices.not_found"));
                 return reject("Device is undefined or is not a Classic300s");
             }
             this.device = device as VeSyncHumidifier;
@@ -91,22 +92,7 @@ class Classic300s extends Homey.Device implements VeSyncDeviceInterface {
         this.log(value);
     }
 
-    private async deviceOffline() {
-        await this.setUnavailable("Device is offline. Checking every 60 seconds for device availability.").catch(this.error);
-        await this.setCapabilityValue('onoff', false).catch(this.error);
-        if (this.checkInterval === undefined)
-            this.checkInterval = setInterval(async () => {
-                await this.device?.getStatus().catch(() => this.log("Still offline...."));
-                if (this.device?.isConnected()) {
-                    await this.setAvailable().catch(this.error);
-                    this.log("Device is online.");
-                    if (this.checkInterval !== undefined)
-                        clearInterval(this.checkInterval)
-                } else if (this.getAvailable()) {
-                    await this.setUnavailable("Device is offline. Checking every 60 seconds for device availability.").catch(this.error);
-                    await this.setCapabilityValue('onoff', false).catch(this.error);
-                }
-            }, 60 * 1000)
+    updateDevice(): void {
     }
 
     private handleError(error: any) {
@@ -153,6 +139,24 @@ class Classic300s extends Homey.Device implements VeSyncDeviceInterface {
      */
     async onDeleted() {
         this.log('Classic300s has been deleted');
+    }
+
+    private async deviceOffline() {
+        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+        await this.setCapabilityValue('onoff', false).catch(this.error);
+        if (this.checkInterval === undefined)
+            this.checkInterval = setInterval(async () => {
+                await this.device?.getStatus().catch(() => this.log("Still offline...."));
+                if (this.device?.isConnected()) {
+                    await this.setAvailable().catch(this.error);
+                    this.log("Device is online.");
+                    if (this.checkInterval !== undefined)
+                        clearInterval(this.checkInterval)
+                } else if (this.getAvailable()) {
+                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                    await this.setCapabilityValue('onoff', false).catch(this.error);
+                }
+            }, 60 * 1000)
     }
 
 }
