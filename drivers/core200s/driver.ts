@@ -1,7 +1,7 @@
 import Homey from 'homey';
-import VeSync from 'tsvesync';
+import VeSync from '../../tsvesync/veSync';
 import {Utils} from "../../utils";
-import VeSyncPurifier from "tsvesync/veSyncPurifier";
+import VeSyncPurifier from "../../tsvesync/veSyncPurifier";
 
 class Core200SDriver extends Homey.Driver {
 
@@ -36,7 +36,10 @@ class Core200SDriver extends Homey.Driver {
             let veSync: VeSync = this.homey.app.veSync;
             let devices = await veSync.getDevices();
             let devicesList: any = [];
-            devices.filter(d => d.Device_Features.Core200S.models.includes(d.deviceType))
+            devices.filter(d => {
+                return d instanceof VeSyncPurifier &&
+                    (d as VeSyncPurifier).Device_Features.Core200S.models.includes(d.deviceType)
+            })
                 .forEach((d) => {
                     if (d instanceof VeSyncPurifier) {
                         devicesList.push({

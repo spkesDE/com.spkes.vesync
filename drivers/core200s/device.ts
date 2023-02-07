@@ -1,6 +1,6 @@
 import Homey from 'homey';
-import VeSyncPurifier from 'tsvesync/veSyncPurifier';
-import VeSync from 'tsvesync';
+import VeSyncPurifier from '../../tsvesync/veSyncPurifier';
+import VeSync from '../../tsvesync/veSync';
 import VeSyncDeviceInterface from "../../lib/VeSyncDeviceInterface";
 import VeSyncApp from "../../app";
 

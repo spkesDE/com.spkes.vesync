@@ -1,12 +1,13 @@
 import Homey from 'homey';
 import VeSyncDeviceInterface from "../../lib/VeSyncDeviceInterface";
 import VeSyncApp from "../../app";
-import VeSyncPurifier from 'tsvesync/veSyncPurifier';
-import VeSync from 'tsvesync';
+import VeSyncPurifier from '../../tsvesync/veSyncPurifier';
+import VeSync from '../../tsvesync/veSync';
 
 class Core300S extends Homey.Device implements VeSyncDeviceInterface {
     device!: VeSyncPurifier;
     checkInterval: NodeJS.Timeout | undefined;
+    private updateInterval!: NodeJS.Timer;
 
     /**
      * onInit is called when the device is initialized.
@@ -16,6 +17,7 @@ class Core300S extends Homey.Device implements VeSyncDeviceInterface {
         this.registerCapabilityListener("onoff", async (value) => await this.setMode(value ? "on" : "off"));
         this.registerCapabilityListener("core300SCapability", async (value) => await this.setMode(value));
         this.registerFlows();
+        this.updateDevice();
         this.log('Core300S has been initialized');
     }
 
@@ -136,8 +138,18 @@ class Core300S extends Homey.Device implements VeSyncDeviceInterface {
     }
 
     updateDevice(): void {
-    }
+        this.updateInterval = setInterval(async () => {
+            //filter_life, mode, level, night_light, child_lock, display
+            //Also updates air_quality if device has this feature
+            await this.device.getStatus();
+            //TODO: include custom sensor capabilities for filter_life
 
+            if (this.device.getDeviceFeatures().features.includes('air_quality'))
+                await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
+            this.log("Updating device status!");
+        }, 1000 * 60) //Every 5min
+        this.log("Update Interval has be started!")
+    }
     private handleError(error: any) {
         if (!this.device?.isConnected())
             this.setDeviceOffline().catch(this.error);

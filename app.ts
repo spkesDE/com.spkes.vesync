@@ -1,5 +1,5 @@
 import Homey from 'homey';
-import VeSync from 'tsvesync';
+import VeSync from './tsvesync/veSync';
 
 export default class VeSyncApp extends Homey.App {
   veSync: VeSync = new VeSync();

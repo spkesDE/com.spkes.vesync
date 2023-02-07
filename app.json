@@ -187,6 +187,172 @@
         ]
       },
       {
+        "id": "setModeCore300s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core300s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "fan_speed_1",
+                "label": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "fan_speed_2",
+                "label": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "fan_speed_3",
+                "label": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "fan_speed_4",
+                "label": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              },
+              {
+                "id": "fan_speed_5",
+                "label": {
+                  "en": "Fan Speed 5",
+                  "de": "Geschwindigkeit 5"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeCore400s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core400s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "fan_speed_1",
+                "label": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "fan_speed_2",
+                "label": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "fan_speed_3",
+                "label": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "fan_speed_4",
+                "label": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              },
+              {
+                "id": "fan_speed_5",
+                "label": {
+                  "en": "Fan Speed 5",
+                  "de": "Geschwindigkeit 5"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
         "id": "setModeDual200s",
         "title": {
           "en": "Set mode",
@@ -242,6 +408,54 @@
                 "label": {
                   "en": "High Mode",
                   "de": "Hoch"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeLV600S",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
                 }
               }
             ]
@@ -411,6 +625,165 @@
     },
     {
       "name": {
+        "en": "Core300s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "core300sCapability",
+        "onoff"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/core300s/assets/images/small.png",
+        "large": "/drivers/core300s/assets/images/large.png",
+        "xlarge": "/drivers/core300s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "core300s"
+    },
+    {
+      "name": {
+        "en": "Core400s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "core400sCapability",
+        "onoff",
+        "measure_pm25"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/core400s/assets/images/small.png",
+        "large": "/drivers/core400s/assets/images/large.png",
+        "xlarge": "/drivers/core400s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "core400s"
+    },
+    {
+      "name": {
         "en": "Dual200S"
       },
       "class": "fan",
@@ -487,6 +860,85 @@
         }
       ],
       "id": "dual200s"
+    },
+    {
+      "name": {
+        "en": "LV600"
+      },
+      "class": "fan",
+      "capabilities": [
+        "lv600sCapability",
+        "onoff"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/lv600s/assets/images/small.png",
+        "large": "/drivers/lv600s/assets/images/large.png",
+        "xlarge": "/drivers/lv600s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "lv600s"
     }
   ],
   "capabilities": {
@@ -595,6 +1047,139 @@
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
     },
+    "core300sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "fan_speed_1",
+          "title": {
+            "en": "Fan Speed 1",
+            "de": "Geschwindigkeit 1"
+          }
+        },
+        {
+          "id": "fan_speed_2",
+          "title": {
+            "en": "Fan Speed 2",
+            "de": "Geschwindigkeit 2"
+          }
+        },
+        {
+          "id": "fan_speed_3",
+          "title": {
+            "en": "Fan Speed 3",
+            "de": "Geschwindigkeit 3"
+          }
+        },
+        {
+          "id": "fan_speed_4",
+          "title": {
+            "en": "Fan Speed 4",
+            "de": "Geschwindigkeit 4"
+          }
+        },
+        {
+          "id": "fan_speed_5",
+          "title": {
+            "en": "Fan Speed 5",
+            "de": "Geschwindigkeit 5"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "core400sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "fan_speed_1",
+          "title": {
+            "en": "Fan Speed 1",
+            "de": "Geschwindigkeit 1"
+          }
+        },
+        {
+          "id": "fan_speed_2",
+          "title": {
+            "en": "Fan Speed 2",
+            "de": "Geschwindigkeit 2"
+          }
+        },
+        {
+          "id": "fan_speed_3",
+          "title": {
+            "en": "Fan Speed 3",
+            "de": "Geschwindigkeit 3"
+          }
+        },
+        {
+          "id": "fan_speed_4",
+          "title": {
+            "en": "Fan Speed 4",
+            "de": "Geschwindigkeit 4"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
     "dual200sCapability": {
       "type": "enum",
       "title": {
@@ -635,6 +1220,125 @@
           "title": {
             "en": "High",
             "de": "Hoch"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "lv600sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "warm_fan_speed_0",
+          "title": {
+            "en": "Heating level 0",
+            "de": "Heizstufe 0"
+          }
+        },
+        {
+          "id": "warm_fan_speed_1",
+          "title": {
+            "en": "Heating level 1",
+            "de": "Heizstufe 1"
+          }
+        },
+        {
+          "id": "warm_fan_speed_2",
+          "title": {
+            "en": "Heating level 2",
+            "de": "Heizstufe 2"
+          }
+        },
+        {
+          "id": "warm_fan_speed_3",
+          "title": {
+            "en": "Heating level 3",
+            "de": "Heizstufe 3"
+          }
+        },
+        {
+          "id": "fan_speed_1",
+          "title": {
+            "en": "Fan Speed 1",
+            "de": "Geschwindigkeit 1"
+          }
+        },
+        {
+          "id": "fan_speed_2",
+          "title": {
+            "en": "Fan Speed 2",
+            "de": "Geschwindigkeit 2"
+          }
+        },
+        {
+          "id": "fan_speed_3",
+          "title": {
+            "en": "Fan Speed 3",
+            "de": "Geschwindigkeit 3"
+          }
+        },
+        {
+          "id": "fan_speed_4",
+          "title": {
+            "en": "Fan Speed 4",
+            "de": "Geschwindigkeit 4"
+          }
+        },
+        {
+          "id": "fan_speed_5",
+          "title": {
+            "en": "Fan Speed 5",
+            "de": "Geschwindigkeit 5"
+          }
+        },
+        {
+          "id": "fan_speed_6",
+          "title": {
+            "en": "Fan Speed 6",
+            "de": "Geschwindigkeit 6"
+          }
+        },
+        {
+          "id": "fan_speed_7",
+          "title": {
+            "en": "Fan Speed 7",
+            "de": "Geschwindigkeit 7"
+          }
+        },
+        {
+          "id": "fan_speed_8",
+          "title": {
+            "en": "Fan Speed 8",
+            "de": "Geschwindigkeit 8"
+          }
+        },
+        {
+          "id": "fan_speed_9",
+          "title": {
+            "en": "Fan Speed 9",
+            "de": "Geschwindigkeit 9"
           }
         }
       ],

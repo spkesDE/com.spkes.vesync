@@ -1,6 +1,6 @@
 import Homey from 'homey';
-import VeSyncPurifier from 'tsvesync/veSyncPurifier';
-import VeSync from 'tsvesync';
+import VeSyncPurifier from '../../tsvesync/veSyncPurifier';
+import VeSync from '../../tsvesync/veSync';
 import VeSyncDeviceInterface from "../../lib/VeSyncDeviceInterface";
 import VeSyncApp from "../../app";
 
@@ -17,7 +17,7 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
     async onInit() {
         await this.getDevice().catch(this.log);
         this.registerCapabilityListener("onoff", async (value) => await this.setMode(value ? "on" : "off"));
-        this.registerCapabilityListener("core300sCapability", async (value) => await this.setMode(value));
+        this.registerCapabilityListener("core400sCapability", async (value) => await this.setMode(value));
         this.registerFlows();
         this.updateDevice();
         this.log('Core400s has been initialized');
@@ -32,15 +32,15 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
         if (value === "on" || value === "manual") {
             this.device?.toggleSwitch(true).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
-            this.setCapabilityValue('core300sCapability',
-                ["fan_speed_1", "fan_speed_2", "fan_speed_3", "fan_speed_4", "fan_speed_5"]
+            this.setCapabilityValue('core400sCapability',
+                ["fan_speed_1", "fan_speed_2", "fan_speed_3", "fan_speed_4"]
                     [this.device.extension.fanSpeedLevel - 1 ?? 1] ?? "fan_speed_1").catch(this.error);
             return;
         }
         if (value === "off") {
             this.device?.toggleSwitch(false).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', false).catch(this.error);
-            this.setCapabilityValue('core300sCapability', "off").catch(this.error);
+            this.setCapabilityValue('core400sCapability', "off").catch(this.error);
             return;
         }
         if (value === "fan_speed_1") {
@@ -63,15 +63,17 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
             this.setCapabilityValue('onoff', true).catch(this.error);
             return;
         }
-        if (value === "fan_speed_5") {
-            this.device?.setFanSpeed(5).catch(this.handleError.bind(this));
-            this.setCapabilityValue('onoff', true).catch(this.error);
-            return;
-        }
         if (value === "sleep") {
             if (this.device?.deviceStatus === 'off')
                 this.device?.on().catch(this.handleError.bind(this));
             this.device?.setMode('sleep').catch(this.handleError.bind(this));
+            this.setCapabilityValue('onoff', true).catch(this.error);
+            return;
+        }
+        if (value === "auto") {
+            if (this.device?.deviceStatus === 'off')
+                this.device?.on().catch(this.handleError.bind(this));
+            this.device?.setMode('auto').catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
             return;
         }
@@ -93,6 +95,9 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
             this.device = device as VeSyncPurifier;
             if (this.device.isConnected()) {
                 await this.setAvailable();
+                await this.device.getStatus();
+                if (this.device.getDeviceFeatures().features.includes('air_quality'))
+                    await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
                 return resolve();
             }
             await this.setDeviceOffline();
@@ -148,9 +153,9 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
             //TODO: include custom sensor capabilities for filter_life
 
             if (this.device.getDeviceFeatures().features.includes('air_quality'))
-                await this.setCapabilityValue('measure_pm25', this.device.air_quality)
+                await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
             this.log("Updating device status!");
-        }, 1000 * 60 * 5) //Every 5min
+        }, 1000 * 60) //Every 5min
         this.log("Update Interval has be started!")
     }
 

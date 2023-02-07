@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/com.spkes.vesync.iml" filepath="$PROJECT_DIR$/.idea/com.spkes.vesync.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pyvesync/.idea/pyvesync.iml" filepath="$PROJECT_DIR$/../pyvesync/.idea/pyvesync.iml" />
     </modules>
   </component>
 </project>

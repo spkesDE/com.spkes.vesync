@@ -1,6 +1,6 @@
 import Homey from 'homey';
-import VeSyncPurifier from 'tsvesync/veSyncPurifier';
-import VeSync from 'tsvesync';
+import VeSyncPurifier from '../../tsvesync/veSyncPurifier';
+import VeSync from '../../tsvesync/veSync';
 import {Utils} from "../../utils";
 
 class Core400SDriver extends Homey.Driver {
@@ -36,23 +36,27 @@ class Core400SDriver extends Homey.Driver {
             let veSync: VeSync = this.homey.app.veSync;
             let devices = await veSync.getDevices();
             let devicesList: any = [];
-            devices.filter(d => d.Device_Features.Core400S.models.includes(d.deviceType))
-                .forEach((d) => {
-                    if (d instanceof VeSyncPurifier) {
-                        devicesList.push({
-                            name: d.deviceName,
-                            data: {
-                                id: d.uuid,
-                                cid: d.cid,
-                                macID: d.macID
-                            },
-                            store: {
-                                fanSpeedLevel: d.level,
-                                mode: d.mode,
-                            }
-                        });
-                    }
-                });
+            devices.filter(d => {
+                return d instanceof VeSyncPurifier &&
+                    (d as VeSyncPurifier).Device_Features.Core400S.models.includes(d.deviceType)
+            }).forEach((d) => {
+                console.log(d);
+                if (d instanceof VeSyncPurifier) {
+                    devicesList.push({
+                        name: d.deviceName,
+                        data: {
+                            id: d.uuid,
+                            cid: d.cid,
+                            macID: d.macID
+                        },
+                        store: {
+                            fanSpeedLevel: d.level,
+                            mode: d.mode,
+                        }
+                    });
+                }
+            });
+            console.log(devicesList);
             return devicesList;
         });
     }

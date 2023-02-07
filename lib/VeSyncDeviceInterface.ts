@@ -1,6 +1,6 @@
-import VeSyncDeviceBase from 'tsvesync/veSyncDeviceBase';
-import VeSyncHumidifier from 'tsvesync/veSyncHumidifier';
-import VeSyncPurifier from 'tsvesync/veSyncPurifier';
+import VeSyncDeviceBase from '../tsvesync/veSyncDeviceBase';
+import VeSyncHumidifier from '../tsvesync/veSyncHumidifier';
+import VeSyncPurifier from '../tsvesync/veSyncPurifier';
 
 export default interface VeSyncDeviceInterface {
     device: VeSyncDeviceBase | VeSyncPurifier | VeSyncHumidifier | undefined;

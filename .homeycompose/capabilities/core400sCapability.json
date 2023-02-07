@@ -53,13 +53,6 @@
         "en": "Fan Speed 4",
         "de": "Geschwindigkeit 4"
       }
-    },
-    {
-      "id": "fan_speed_5",
-      "title": {
-        "en": "Fan Speed 5",
-        "de": "Geschwindigkeit 5"
-      }
     }
   ],
   "getable": true,
