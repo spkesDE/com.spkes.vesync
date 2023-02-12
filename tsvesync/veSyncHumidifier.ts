@@ -190,7 +190,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             result.then(result => {
                 try {
                     this.enabled = result.result.result.enabled;
-                    this.humidity = result.result.result.filter_life;
+                    this.humidity = result.result.result.humidity;
                     this.mist_virtual_level = result.result.result.mode;
                     this.mist_level = result.result.result.level;
                     this.mode = result.result.result.mode;

@@ -1,0 +1,42 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Heating Level",
+    "de": "Heizstufe"
+  },
+  "values": [
+    {
+      "id": "warm_fan_speed_0",
+      "title": {
+        "en": "Heating level 0",
+        "de": "Heizstufe 0"
+      }
+    },
+    {
+      "id": "warm_fan_speed_1",
+      "title": {
+        "en": "Heating level 1",
+        "de": "Heizstufe 1"
+      }
+    },
+    {
+      "id": "warm_fan_speed_2",
+      "title": {
+        "en": "Heating level 2",
+        "de": "Heizstufe 2"
+      }
+    },
+    {
+      "id": "warm_fan_speed_3",
+      "title": {
+        "en": "Heating level 3",
+        "de": "Heizstufe 3"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "uiQuickAction": true,
+  "icon": "/assets/capability_icons/heating_level.svg"
+}

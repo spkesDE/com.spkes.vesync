@@ -40,7 +40,6 @@ class Core400SDriver extends Homey.Driver {
                 return d instanceof VeSyncPurifier &&
                     (d as VeSyncPurifier).Device_Features.Core400S.models.includes(d.deviceType)
             }).forEach((d) => {
-                console.log(d);
                 if (d instanceof VeSyncPurifier) {
                     devicesList.push({
                         name: d.deviceName,
@@ -56,7 +55,6 @@ class Core400SDriver extends Homey.Driver {
                     });
                 }
             });
-            console.log(devicesList);
             return devicesList;
         });
     }

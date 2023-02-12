@@ -7,6 +7,7 @@ import VeSyncApp from "../../app";
 class Core200S extends Homey.Device implements VeSyncDeviceInterface {
     device!: VeSyncPurifier;
     checkInterval: NodeJS.Timeout | undefined;
+    private updateInterval!: NodeJS.Timer;
 
     /**
      * onInit is called when the device is initialized.
@@ -16,6 +17,9 @@ class Core200S extends Homey.Device implements VeSyncDeviceInterface {
         this.registerCapabilityListener("onoff", async (value) => await this.setMode(value ? "on" : "off"));
         this.registerCapabilityListener("core200sCapability", async (value) => await this.setMode(value));
         this.registerFlows();
+        this.updateDevice();
+        if (!this.hasCapability("measure_filter_life"))
+            await this.addCapability("measure_filter_life");
         this.log('Core200S has been initialized');
     }
 
@@ -28,7 +32,7 @@ class Core200S extends Homey.Device implements VeSyncDeviceInterface {
         if (value === "on" || value === "manual") {
             this.device?.toggleSwitch(true).catch(this.handleError.bind(this));
             this.setCapabilityValue('onoff', true).catch(this.error);
-            this.setCapabilityValue('core200sCapability', ["low", "medium", "high"][this.device.extension.fanSpeedLevel - 1 ?? 1] ?? "low").catch(this.error);
+            this.setCapabilityValue('core200sCapability', ["low", "medium", "high"][this.device.level - 1 ?? 1] ?? "low").catch(this.error);
             return;
         }
         if (value === "off") {
@@ -85,6 +89,28 @@ class Core200S extends Homey.Device implements VeSyncDeviceInterface {
     }
 
     updateDevice(): void {
+        this.updateInterval = setInterval(async () => {
+            //night_light, child_lock, display
+            await this.device.getStatus().catch(this.error);
+            this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
+            if (this.hasCapability("core200sCapability") && this.device.deviceStatus === "on") {
+                if (this.device.mode === "manual") {
+                    this.setCapabilityValue('core200sCapability',
+                        ["low", "medium", "high"][this.device.level - 1 ?? 1] ?? "low").catch(this.error);
+                } else if (this.device.mode === "sleep")
+                    this.setCapabilityValue('core200sCapability', "sleep").catch(this.error);
+                else if (this.device.mode === "auto")
+                    this.setCapabilityValue('core200sCapability', "auto").catch(this.error);
+            }
+
+            if (this.hasCapability("measure_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
+                await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
+            if (this.hasCapability("measure_filter_life"))
+                this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+
+            this.log("Updating device status!");
+        }, 1000 * 60) //Every 5min
+        this.log("Update Interval has be started!")
     }
 
     private handleError(error: any) {

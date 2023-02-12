@@ -34,7 +34,7 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
             this.setCapabilityValue('onoff', true).catch(this.error);
             this.setCapabilityValue('core400sCapability',
                 ["fan_speed_1", "fan_speed_2", "fan_speed_3", "fan_speed_4"]
-                    [this.device.extension.fanSpeedLevel - 1 ?? 1] ?? "fan_speed_1").catch(this.error);
+                    [this.device.level - 1 ?? 1] ?? "fan_speed_1").catch(this.error);
             return;
         }
         if (value === "off") {
@@ -96,7 +96,7 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
             if (this.device.isConnected()) {
                 await this.setAvailable();
                 await this.device.getStatus();
-                if (this.device.getDeviceFeatures().features.includes('air_quality'))
+                if (this.hasCapability("measure_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
                     await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
                 return resolve();
             }
@@ -147,13 +147,25 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
 
     updateDevice(): void {
         this.updateInterval = setInterval(async () => {
-            //filter_life, mode, level, night_light, child_lock, display
-            //Also updates air_quality if device has this feature
-            await this.device.getStatus();
-            //TODO: include custom sensor capabilities for filter_life
+            //night_light, child_lock, display
+            await this.device.getStatus().catch(this.error);
+            this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
+            if (this.hasCapability("core400sCapability") && this.device.deviceStatus === "on") {
+                if (this.device.mode === "manual") {
+                    this.setCapabilityValue('core400sCapability',
+                        ["fan_speed_1", "fan_speed_2", "fan_speed_3", "fan_speed_4"]
+                            [this.device.level - 1 ?? 1] ?? "fan_speed_1").catch(this.error);
+                } else if (this.device.mode === "sleep")
+                    this.setCapabilityValue('core400sCapability', "sleep").catch(this.error);
+                else if (this.device.mode === "auto")
+                    this.setCapabilityValue('core400sCapability', "auto").catch(this.error);
+            }
 
-            if (this.device.getDeviceFeatures().features.includes('air_quality'))
+            if (this.hasCapability("measure_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
                 await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
+            if (this.hasCapability("measure_filter_life"))
+                this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+
             this.log("Updating device status!");
         }, 1000 * 60) //Every 5min
         this.log("Update Interval has be started!")

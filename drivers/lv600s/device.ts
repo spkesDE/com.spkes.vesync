@@ -16,8 +16,9 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
         await this.getDevice().catch(this.log);
         this.registerCapabilityListener("onoff", async (value) => await this.setMode(value ? "on" : "off"));
         this.registerCapabilityListener("lv600sCapability", async (value) => await this.setMode(value));
-        this.registerFlows()
-        this.updateDevice()
+        this.registerCapabilityListener("lv600sWarmCapability", async (value) => await this.setMode(value));
+        this.registerFlows();
+        this.updateDevice();
         this.log('LV600S has been initialized');
     }
 
@@ -123,7 +124,28 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
     }
 
     updateDevice(): void {
+        this.updateInterval = setInterval(async () => {
+            //night_light, child_lock, display
+            await this.device.getStatus().catch(this.error);
+            this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
+            if (this.hasCapability("lv600sCapability") && this.device.deviceStatus === "on") {
+                if (this.device.mode === "manual") {
+                    this.setCapabilityValue('lv600sCapability', "fan_speed_" + this.device.mist_level).catch(this.error);
+                } else if (this.device.mode === "sleep")
+                    this.setCapabilityValue('lv600sCapability', "sleep").catch(this.error);
+                else if (this.device.mode === "auto")
+                    this.setCapabilityValue('lv600sCapability', "auto").catch(this.error);
+            }
+            if (this.hasCapability("lv600sWarmCapability") && this.device.deviceStatus === "on") {
+                this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
+            }
 
+            if (this.hasCapability("measure_humidity"))
+                this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
+
+            this.log("Updating device status!");
+        }, 1000 * 60) //Every 5min
+        this.log("Update Interval has be started!")
     }
 
     private async setDeviceOffline() {

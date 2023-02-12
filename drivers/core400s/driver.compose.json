@@ -6,7 +6,8 @@
   "capabilities": [
     "core400sCapability",
     "onoff",
-    "measure_pm25"
+    "measure_pm25",
+    "measure_filter_life"
   ],
   "platforms": [
     "local"

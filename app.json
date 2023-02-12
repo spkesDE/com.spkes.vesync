@@ -551,7 +551,8 @@
       "class": "fan",
       "capabilities": [
         "core200sCapability",
-        "onoff"
+        "onoff",
+        "measure_filter_life"
       ],
       "platforms": [
         "local"
@@ -630,7 +631,8 @@
       "class": "fan",
       "capabilities": [
         "core300sCapability",
-        "onoff"
+        "onoff",
+        "measure_filter_life"
       ],
       "platforms": [
         "local"
@@ -710,7 +712,8 @@
       "capabilities": [
         "core400sCapability",
         "onoff",
-        "measure_pm25"
+        "measure_pm25",
+        "measure_filter_life"
       ],
       "platforms": [
         "local"
@@ -868,7 +871,9 @@
       "class": "fan",
       "capabilities": [
         "lv600sCapability",
-        "onoff"
+        "lv600sWarmCapability",
+        "onoff",
+        "measure_humidity"
       ],
       "platforms": [
         "local"
@@ -1251,34 +1256,6 @@
           }
         },
         {
-          "id": "warm_fan_speed_0",
-          "title": {
-            "en": "Heating level 0",
-            "de": "Heizstufe 0"
-          }
-        },
-        {
-          "id": "warm_fan_speed_1",
-          "title": {
-            "en": "Heating level 1",
-            "de": "Heizstufe 1"
-          }
-        },
-        {
-          "id": "warm_fan_speed_2",
-          "title": {
-            "en": "Heating level 2",
-            "de": "Heizstufe 2"
-          }
-        },
-        {
-          "id": "warm_fan_speed_3",
-          "title": {
-            "en": "Heating level 3",
-            "de": "Heizstufe 3"
-          }
-        },
-        {
           "id": "fan_speed_1",
           "title": {
             "en": "Fan Speed 1",
@@ -1347,6 +1324,73 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
+    },
+    "lv600sCapabilityTest": {
+      "type": "boolean",
+      "title": {
+        "en": "Unjoin group",
+        "de": "Gruppe verlassen",
+        "nl": "Deelnemen aan groep"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/icon.svg"
+    },
+    "lv600sWarmCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Heating Level",
+        "de": "Heizstufe"
+      },
+      "values": [
+        {
+          "id": "warm_fan_speed_0",
+          "title": {
+            "en": "Heating level 0",
+            "de": "Heizstufe 0"
+          }
+        },
+        {
+          "id": "warm_fan_speed_1",
+          "title": {
+            "en": "Heating level 1",
+            "de": "Heizstufe 1"
+          }
+        },
+        {
+          "id": "warm_fan_speed_2",
+          "title": {
+            "en": "Heating level 2",
+            "de": "Heizstufe 2"
+          }
+        },
+        {
+          "id": "warm_fan_speed_3",
+          "title": {
+            "en": "Heating level 3",
+            "de": "Heizstufe 3"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "measure_filter_life": {
+      "type": "number",
+      "title": {
+        "en": "Filter life",
+        "de": "Filterlebensdauer"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "%",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/filter_life.svg"
     }
   }
 }

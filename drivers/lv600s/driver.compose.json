@@ -5,7 +5,9 @@
   "class": "fan",
   "capabilities": [
     "lv600sCapability",
-    "onoff"
+    "lv600sWarmCapability",
+    "onoff",
+    "measure_humidity"
   ],
   "platforms": [
     "local"
