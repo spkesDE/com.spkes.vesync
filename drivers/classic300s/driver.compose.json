@@ -5,7 +5,8 @@
   "class": "fan",
   "capabilities": [
     "classic300sCapability",
-    "onoff"
+    "onoff",
+    "measure_humidity"
   ],
   "platforms": [
     "local"

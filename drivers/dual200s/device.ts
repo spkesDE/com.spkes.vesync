@@ -7,6 +7,7 @@ import VeSyncApp from "../../app";
 class Dual200s extends Homey.Device implements VeSyncDeviceInterface {
     device!: VeSyncHumidifier;
     checkInterval: NodeJS.Timer | undefined;
+    private updateInterval!: NodeJS.Timer;
 
     /**
      * onInit is called when the device is initialized.
@@ -16,6 +17,8 @@ class Dual200s extends Homey.Device implements VeSyncDeviceInterface {
         this.registerCapabilityListener("onoff", async (value) => await this.setMode(value ? "on" : "off"));
         this.registerCapabilityListener("dual200sCapability", async (value) => await this.setMode(value));
         this.registerFlows()
+        await this.updateDevice();
+        this.updateInterval = setInterval(async () => this.updateDevice(), 1000 * 60);
         this.log('Dual200s has been initialized');
     }
 
@@ -84,8 +87,34 @@ class Dual200s extends Homey.Device implements VeSyncDeviceInterface {
         this.log(value);
     }
 
-    updateDevice(): void {
+    async updateDevice(): Promise<void> {
+        //Getting latest device status
+        await this.device.getStatus().catch(this.error);
+        if (this.device.isConnected()) {
+            if (!this.getAvailable()) {
+                await this.setAvailable().catch(this.error);
+            }
+            this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
+            if (this.hasCapability("core200sCapability") && this.device.deviceStatus === "on") {
+                if (this.device.mode === "manual") {
+                    this.setCapabilityValue('dual200sCapability',
+                        ["low", "medium", "high"][this.device.mist_level - 1 ?? 1] ?? "low").catch(this.error);
+                } else if (this.device.mode === "sleep")
+                    this.setCapabilityValue('dual200sCapability', "sleep").catch(this.error);
+                else if (this.device.mode === "auto")
+                    this.setCapabilityValue('dual200sCapability', "auto").catch(this.error);
+            }
 
+            if (this.hasCapability("measure_humidity"))
+                this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
+            if (this.hasCapability("measure_filter_life"))
+                this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+        } else if (this.getAvailable()) {
+            await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            await this.setCapabilityValue('onoff', false).catch(this.error);
+        }
+
+        this.log("Updating device status!");
     }
 
     private handleError(error: any) {

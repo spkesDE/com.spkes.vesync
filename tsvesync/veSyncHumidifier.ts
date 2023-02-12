@@ -69,6 +69,9 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     humidity: number = 0;
     mist_virtual_level: number = 0;
     mist_level: number = 0;
+    /**
+     * Water_lacks is true when the water level is too low
+     */
     water_lacks: boolean = false;
     humidity_high: boolean = false;
     water_tank_lifted: boolean = false;
@@ -189,6 +192,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
                 try {
+                    if (VeSync.debugMode) console.log(result.result.result)
                     this.enabled = result.result.result.enabled;
                     this.humidity = result.result.result.humidity;
                     this.mist_virtual_level = result.result.result.mode;

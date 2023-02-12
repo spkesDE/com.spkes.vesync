@@ -7,7 +7,6 @@ import VeSyncApp from "../../app";
 class LV600S extends Homey.Device implements VeSyncDeviceInterface {
     device!: VeSyncHumidifier;
     updateInterval!: NodeJS.Timer;
-    private checkInterval: NodeJS.Timer | undefined;
 
     /**
      * onInit is called when the device is initialized.
@@ -18,7 +17,10 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
         this.registerCapabilityListener("lv600sCapability", async (value) => await this.setMode(value));
         this.registerCapabilityListener("lv600sWarmCapability", async (value) => await this.setMode(value));
         this.registerFlows();
-        this.updateDevice();
+
+        await this.updateDevice();
+        this.updateInterval = setInterval(async () => this.updateDevice(), 1000 * 60);
+
         this.log('LV600S has been initialized');
     }
 
@@ -59,18 +61,18 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
 
     async setMode(value: string) {
         if (!this.device.isConnected()) {
-            this.handleError("LV600S is not connected");
+            this.error("LV600S is not connected");
             return;
         }
         this.log("Mode: " + value);
         if (value === "on" || value === "manual") {
-            this.device?.toggleSwitch(true).catch(this.handleError.bind(this));
+            this.device?.toggleSwitch(true).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
             this.setCapabilityValue('lv600sCapability', "fan_speed_" + this.device.extension.fanSpeedLevel ?? "1").catch(this.error);
             return;
         }
         if (value === "off") {
-            this.device?.toggleSwitch(false).catch(this.handleError.bind(this));
+            this.device?.toggleSwitch(false).catch(this.error);
             this.setCapabilityValue('onoff', false).catch(this.error);
             this.setCapabilityValue('lv600sCapability', "off").catch(this.error);
             return;
@@ -79,18 +81,18 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
             let level = Number(value.replace("fan_speed_", ""));
             if (this.device.mode == "sleep")
                 await this.device.setHumidityMode("humidity");
-            this.device?.setMistLevel(level).catch(this.handleError.bind(this));
+            this.device?.setMistLevel(level).catch(this.error);
             return;
         }
         if (value.startsWith("warm_fan_speed_")) {
             let level = Number(value.replace("warm_fan_speed_", ""));
-            this.device?.setWarmLevel(level).catch(this.handleError.bind(this));
+            this.device?.setWarmLevel(level).catch(this.error);
             return;
         }
         if (value === "sleep") {
             if (this.device?.deviceStatus === 'off')
-                this.device?.on().catch(this.handleError.bind(this));
-            this.device?.setHumidityMode('sleep').catch(this.handleError.bind(this));
+                this.device?.on().catch(this.error);
+            this.device?.setHumidityMode('sleep').catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
             return;
         }
@@ -114,7 +116,7 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
                 await this.setAvailable();
                 return resolve();
             }
-            await this.setDeviceOffline();
+            await this.setUnavailable(this.homey.__("devices.offline"));
             return reject("Cannot get device status. Device is " + this.device.connectionStatus);
         })
     }
@@ -123,10 +125,13 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
         this.homey.flow.getActionCard("setModeLV600S").registerRunListener(async (args) => await this.setMode(args.mode));
     }
 
-    updateDevice(): void {
-        this.updateInterval = setInterval(async () => {
-            //night_light, child_lock, display
-            await this.device.getStatus().catch(this.error);
+    async updateDevice(): Promise<void> {
+        //Getting latest device status
+        await this.device.getStatus().catch(this.error);
+        if (this.device.isConnected()) {
+            if (!this.getAvailable()) {
+                await this.setAvailable().catch(this.error);
+            }
             this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
             if (this.hasCapability("lv600sCapability") && this.device.deviceStatus === "on") {
                 if (this.device.mode === "manual") {
@@ -136,41 +141,25 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
                 else if (this.device.mode === "auto")
                     this.setCapabilityValue('lv600sCapability', "auto").catch(this.error);
             }
+
+            if (this.device.water_lacks) {
+                await this.setUnavailable(this.homey.__("devices.water_lacks")).catch(this.error);
+            } else {
+                await this.setUnavailable().catch(this.error);
+            }
+
             if (this.hasCapability("lv600sWarmCapability") && this.device.deviceStatus === "on") {
                 this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
             }
 
             if (this.hasCapability("measure_humidity"))
                 this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
+        } else if (this.getAvailable()) {
+            await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            await this.setCapabilityValue('onoff', false).catch(this.error);
+        }
 
-            this.log("Updating device status!");
-        }, 1000 * 60) //Every 5min
-        this.log("Update Interval has be started!")
-    }
-
-    private async setDeviceOffline() {
-        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-        await this.setCapabilityValue('onoff', false).catch(this.error);
-        if (this.checkInterval === undefined)
-            this.checkInterval = setInterval(async () => {
-                await this.device?.getStatus().catch(() => this.log("Still offline...."));
-                if (this.device?.isConnected()) {
-                    await this.setAvailable().catch(this.error);
-                    this.log("Device is online.");
-                    if (this.checkInterval !== undefined)
-                        clearInterval(this.checkInterval)
-                } else if (this.getAvailable()) {
-                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-                    await this.setCapabilityValue('onoff', false).catch(this.error);
-                }
-            }, 60 * 1000)
-    }
-
-    private handleError(error: any) {
-        if (!this.device?.isConnected())
-            this.setDeviceOffline().catch(this.error);
-        else
-            this.error(error)
+        this.log("Updating device status!");
     }
 
 

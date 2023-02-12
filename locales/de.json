@@ -2,7 +2,8 @@
   "devices": {
     "failed_login": "Anmeldung fehlgeschlagen. Bitte verwende die Reparaturfunktion.",
     "not_found": "Device not found. Please re-add the device.",
-    "offline": "Gerät nicht gefunden. Bitte füge das Gerät erneut hinzu."
+    "offline": "Gerät nicht gefunden. Bitte füge das Gerät erneut hinzu.",
+    "water_lacks": "Wassertank zu leer!"
   },
   "settings": {
     "password": "Kennwort",

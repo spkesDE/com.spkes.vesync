@@ -6,8 +6,8 @@ import VeSyncApp from "../../app";
 
 class Core200S extends Homey.Device implements VeSyncDeviceInterface {
     device!: VeSyncPurifier;
-    checkInterval: NodeJS.Timeout | undefined;
     private updateInterval!: NodeJS.Timer;
+
 
     /**
      * onInit is called when the device is initialized.
@@ -17,7 +17,10 @@ class Core200S extends Homey.Device implements VeSyncDeviceInterface {
         this.registerCapabilityListener("onoff", async (value) => await this.setMode(value ? "on" : "off"));
         this.registerCapabilityListener("core200sCapability", async (value) => await this.setMode(value));
         this.registerFlows();
-        this.updateDevice();
+
+        await this.updateDevice();
+        this.updateInterval = setInterval(async () => this.updateDevice(), 1000 * 60);
+
         if (!this.hasCapability("measure_filter_life"))
             await this.addCapability("measure_filter_life");
         this.log('Core200S has been initialized');
@@ -25,41 +28,41 @@ class Core200S extends Homey.Device implements VeSyncDeviceInterface {
 
     async setMode(value: string) {
         if (!this.device.isConnected()) {
-            this.handleError("Core200S is not connected");
+            this.error("Core200S is not connected");
             return;
         }
         this.log("Mode: " + value);
         if (value === "on" || value === "manual") {
-            this.device?.toggleSwitch(true).catch(this.handleError.bind(this));
+            this.device?.toggleSwitch(true).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
             this.setCapabilityValue('core200sCapability', ["low", "medium", "high"][this.device.level - 1 ?? 1] ?? "low").catch(this.error);
             return;
         }
         if (value === "off") {
-            this.device?.toggleSwitch(false).catch(this.handleError.bind(this));
+            this.device?.toggleSwitch(false).catch(this.error);
             this.setCapabilityValue('onoff', false).catch(this.error);
             this.setCapabilityValue('core200sCapability', "off").catch(this.error);
             return;
         }
         if (value === "high") {
-            this.device?.setFanSpeed(3).catch(this.handleError.bind(this));
+            this.device?.setFanSpeed(3).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
             return;
         }
         if (value === "medium") {
-            this.device?.setFanSpeed(2).catch(this.handleError.bind(this));
+            this.device?.setFanSpeed(2).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
             return;
         }
         if (value === "low") {
-            this.device?.setFanSpeed(1).catch(this.handleError.bind(this));
+            this.device?.setFanSpeed(1).catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
             return;
         }
         if (value === "sleep") {
             if (this.device?.deviceStatus === 'off')
-                this.device?.on().catch(this.handleError.bind(this));
-            this.device?.setMode('sleep').catch(this.handleError.bind(this));
+                this.device?.on().catch(this.error);
+            this.device?.setMode('sleep').catch(this.error);
             this.setCapabilityValue('onoff', true).catch(this.error);
             return;
         }
@@ -83,15 +86,18 @@ class Core200S extends Homey.Device implements VeSyncDeviceInterface {
                 await this.setAvailable();
                 return resolve();
             }
-            await this.setDeviceOffline();
+            await this.setUnavailable(this.homey.__("devices.offline"))
             return reject("Cannot get device status. Device is " + this.device.connectionStatus);
         })
     }
 
-    updateDevice(): void {
-        this.updateInterval = setInterval(async () => {
-            //night_light, child_lock, display
-            await this.device.getStatus().catch(this.error);
+    async updateDevice(): Promise<void> {
+        //Getting latest device status
+        await this.device.getStatus().catch(this.error);
+        if (this.device.isConnected()) {
+            if (!this.getAvailable()) {
+                await this.setAvailable().catch(this.error);
+            }
             this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
             if (this.hasCapability("core200sCapability") && this.device.deviceStatus === "on") {
                 if (this.device.mode === "manual") {
@@ -107,17 +113,12 @@ class Core200S extends Homey.Device implements VeSyncDeviceInterface {
                 await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
             if (this.hasCapability("measure_filter_life"))
                 this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+        } else if (this.getAvailable()) {
+            await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            await this.setCapabilityValue('onoff', false).catch(this.error);
+        }
 
-            this.log("Updating device status!");
-        }, 1000 * 60) //Every 5min
-        this.log("Update Interval has be started!")
-    }
-
-    private handleError(error: any) {
-        if (!this.device?.isConnected())
-            this.setDeviceOffline().catch(this.error);
-        else
-            this.error(error)
+        this.log("Updating device status!");
     }
 
     public registerFlows(): void {
@@ -157,24 +158,6 @@ class Core200S extends Homey.Device implements VeSyncDeviceInterface {
      */
     async onDeleted() {
         this.log('Core200S has been deleted');
-    }
-
-    private async setDeviceOffline() {
-        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-        await this.setCapabilityValue('onoff', false).catch(this.error);
-        if (this.checkInterval === undefined)
-            this.checkInterval = setInterval(async () => {
-                await this.device?.getStatus().catch(() => this.log("Still offline...."));
-                if (this.device?.isConnected()) {
-                    await this.setAvailable().catch(this.error);
-                    this.log("Device is online.");
-                    if (this.checkInterval !== undefined)
-                        clearInterval(this.checkInterval)
-                } else if (this.getAvailable()) {
-                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-                    await this.setCapabilityValue('onoff', false).catch(this.error);
-                }
-            }, 60 * 1000)
     }
 
 }

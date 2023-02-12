@@ -9,5 +9,5 @@ export default interface VeSyncDeviceInterface {
 
     getDevice(): Promise<void>;
 
-    updateDevice(): void;
+    updateDevice(): Promise<void>;
 }

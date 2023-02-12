@@ -5,7 +5,8 @@
   "class": "fan",
   "capabilities": [
     "dual200sCapability",
-    "onoff"
+    "onoff",
+    "measure_humidity"
   ],
   "platforms": [
     "local"
