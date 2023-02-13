@@ -69,7 +69,7 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
     public async setMode(mode: string): Promise<string> {
         return new Promise((resolve, reject) => {
             if (!this.getDeviceFeatures()?.modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mode: ' + mode);
-            if (this.extension.mode === mode) return;
+            if (this.mode === mode) return;
             let body: any = {
                 ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
                 uuid: this.uuid,

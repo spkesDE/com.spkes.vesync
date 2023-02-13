@@ -105,7 +105,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     public async setMode(mode: string): Promise<string> {
         return new Promise((resolve, reject) => {
             if (!this.getDeviceFeatures()?.modes.includes(mode) ?? false) reject(new Error(this.deviceType + ' don\'t accept mode: ' + mode));
-            if (this.extension.mode === mode) return;
+            if (this.mode === mode) return reject(new Error("Same mode already"));
             let payload = Helper.createPayload(this, 'setPurifierMode', {mode: mode})
             if (mode === "manual")
                 payload = Helper.createPayload(this, 'setLevel', {level: 1, id: 0, type: 'wind'});
@@ -131,7 +131,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     public setFanSpeed(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
             if (!this.getDeviceFeatures()?.levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t accept level: ' + level);
-            if (this.extension.fanSpeedLevel === level) return;
+            if (this.fan_level === level && this.mode === "manual") return reject("Fan level is the same");
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -144,7 +144,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.extension.fanSpeedLevel = level;
+                this.fan_level = level;
                 this.deviceStatus = 'on';
                 this.mode = "manual";
                 return resolve(level);

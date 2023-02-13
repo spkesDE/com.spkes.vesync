@@ -16,12 +16,12 @@ export default class VeSyncDeviceBase {
     macID: string = "";
     mode: string = "";
     speed: string = "";
-    extension: any = {};
     currentFirmVersion: string = "";
     subDeviceNo: number = 0
     deviceFirstSetupTime: string = "";
     Device_Features: { [key: string]: any } = {};
     protected api: VeSync;
+    extension: any;
 
     constructor(api: VeSync, device: any) {
         this.api = api;

@@ -25,8 +25,6 @@ export default class PurifierDeviceBase extends Homey.Device {
         }
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
-            if (this.device.mode == "sleep")
-                await this.device.setMode("manual");
             this.device?.setFanSpeed(level).catch(this.error);
             return;
         }
