@@ -101,8 +101,8 @@ class Classic300s extends Homey.Device implements VeSyncDeviceInterface {
             if (!this.getAvailable()) {
                 await this.setAvailable().catch(this.error);
             }
-            this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
-            if (this.hasCapability("classic300sCapability") && this.device.deviceStatus === "on") {
+            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+            if (this.hasCapability("classic300sCapability") && this.device.isOn()) {
                 if (this.device.mode === "manual") {
                     this.setCapabilityValue('classic300sCapability',
                         ["low", "medium", "high"][this.device.mist_level - 1 ?? 1] ?? "low").catch(this.error);

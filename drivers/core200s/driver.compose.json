@@ -6,7 +6,8 @@
   "capabilities": [
     "core200sCapability",
     "onoff",
-    "measure_filter_life"
+    "measure_filter_life",
+    "alarm_filter_life"
   ],
   "platforms": [
     "local"

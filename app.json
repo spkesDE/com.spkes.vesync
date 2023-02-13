@@ -472,7 +472,8 @@
       "class": "fan",
       "capabilities": [
         "classic300sCapability",
-        "onoff"
+        "onoff",
+        "measure_humidity"
       ],
       "platforms": [
         "local"
@@ -792,7 +793,8 @@
       "class": "fan",
       "capabilities": [
         "dual200sCapability",
-        "onoff"
+        "onoff",
+        "measure_humidity"
       ],
       "platforms": [
         "local"

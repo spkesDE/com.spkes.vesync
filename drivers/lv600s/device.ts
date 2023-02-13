@@ -132,8 +132,8 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
             if (!this.getAvailable()) {
                 await this.setAvailable().catch(this.error);
             }
-            this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
-            if (this.hasCapability("lv600sCapability") && this.device.deviceStatus === "on") {
+            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+            if (this.hasCapability("lv600sCapability") && this.device.isOn()) {
                 if (this.device.mode === "manual") {
                     this.setCapabilityValue('lv600sCapability', "fan_speed_" + this.device.mist_level).catch(this.error);
                 } else if (this.device.mode === "sleep")
@@ -142,18 +142,17 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
                     this.setCapabilityValue('lv600sCapability', "auto").catch(this.error);
             }
 
-            if (this.device.water_lacks) {
-                await this.setUnavailable(this.homey.__("devices.water_lacks")).catch(this.error);
-            } else {
-                await this.setUnavailable().catch(this.error);
-            }
 
-            if (this.hasCapability("lv600sWarmCapability") && this.device.deviceStatus === "on") {
+            if (this.hasCapability("lv600sWarmCapability") && this.device.isOn()) {
                 this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
             }
-
             if (this.hasCapability("measure_humidity"))
                 this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
+            if (this.hasCapability("alarm_water_lacks")) {
+                this.setCapabilityValue("alarm_water_lacks", this.device.water_lacks).catch(this.error);
+                /*if (this.device.water_lacks) await this.setUnavailable(this.homey.__("devices.water_lacks")).catch(this.error);
+                else await this.setAvailable().catch(this.error);*/
+            }
         } else if (this.getAvailable()) {
             await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
             await this.setCapabilityValue('onoff', false).catch(this.error);

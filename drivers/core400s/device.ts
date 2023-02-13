@@ -154,8 +154,8 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
             if (!this.getAvailable()) {
                 await this.setAvailable().catch(this.error);
             }
-            this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
-            if (this.hasCapability("core400sCapability") && this.device.deviceStatus === "on") {
+            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+            if (this.hasCapability("core400sCapability") && this.device.isOn()) {
                 if (this.device.mode === "manual") {
                     this.setCapabilityValue('core400sCapability',
                         ["fan_speed_1", "fan_speed_2", "fan_speed_3", "fan_speed_4"]
@@ -170,6 +170,8 @@ class Core400s extends Homey.Device implements VeSyncDeviceInterface {
                 await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
             if (this.hasCapability("measure_filter_life"))
                 this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+            if (this.hasCapability("alarm_filter_life"))
+                this.setCapabilityValue("alarm_filter_life", this.device.filter_life < 5).catch(this.error);
         } else if (this.getAvailable()) {
             await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
             await this.setCapabilityValue('onoff', false).catch(this.error);

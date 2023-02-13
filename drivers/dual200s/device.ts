@@ -94,8 +94,8 @@ class Dual200s extends Homey.Device implements VeSyncDeviceInterface {
             if (!this.getAvailable()) {
                 await this.setAvailable().catch(this.error);
             }
-            this.setCapabilityValue('onoff', this.device.deviceStatus === "on").catch(this.error);
-            if (this.hasCapability("core200sCapability") && this.device.deviceStatus === "on") {
+            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+            if (this.hasCapability("core200sCapability") && this.device.isOn()) {
                 if (this.device.mode === "manual") {
                     this.setCapabilityValue('dual200sCapability',
                         ["low", "medium", "high"][this.device.mist_level - 1 ?? 1] ?? "low").catch(this.error);
@@ -109,6 +109,8 @@ class Dual200s extends Homey.Device implements VeSyncDeviceInterface {
                 this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
             if (this.hasCapability("measure_filter_life"))
                 this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+            if (this.hasCapability("alarm_filter_life"))
+                this.setCapabilityValue("alarm_filter_life", this.device.filter_life < 5).catch(this.error);
         } else if (this.getAvailable()) {
             await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
             await this.setCapabilityValue('onoff', false).catch(this.error);
