@@ -31,6 +31,9 @@
     "developers": [
       {
         "name": "IconPark"
+      },
+      {
+        "name": "Etn Ccis"
       }
     ],
     "translators": [
@@ -1000,7 +1003,7 @@
       "setable": false,
       "insights": false,
       "uiComponent": "sensor",
-      "icon": "/assets/capability_icons/filter_life.svg"
+      "icon": "/assets/capability_icons/alarm_filter_life.svg"
     },
     "alarm_water_lacks": {
       "type": "boolean",
