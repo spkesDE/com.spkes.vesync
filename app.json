@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.spkes.vesync",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
@@ -582,7 +582,7 @@
     },
     {
       "name": {
-        "en": "Core200S"
+        "en": "Core200s"
       },
       "class": "fan",
       "capabilities": [
@@ -826,7 +826,7 @@
     },
     {
       "name": {
-        "en": "Dual200S"
+        "en": "Dual200s"
       },
       "class": "fan",
       "capabilities": [
@@ -909,7 +909,7 @@
     },
     {
       "name": {
-        "en": "LV600"
+        "en": "LV600s"
       },
       "class": "fan",
       "capabilities": [

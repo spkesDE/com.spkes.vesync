@@ -1,6 +1,6 @@
 {
   "id": "com.spkes.vesync",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
