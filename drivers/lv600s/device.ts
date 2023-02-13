@@ -1,9 +1,10 @@
 import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
 
 class LV600S extends HumidifierDeviceBase {
-    /**
-     * onInit is called when the device is initialized.
-     */
+    private capabilitiesAddition: string[] = [
+        "lv600sCapabilityTest",
+    ]
+
     async onInit() {
         await super.onInit();
 
@@ -23,6 +24,11 @@ class LV600S extends HumidifierDeviceBase {
             await this.setMode(value);
         });
 
+        this.registerCapabilityListener("lv600sCapabilityTest", async (value) => {
+            console.log(value)
+        })
+
+        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c))
 
         this.log('LV600S has been initialized');
     }

@@ -914,6 +914,7 @@
       "class": "fan",
       "capabilities": [
         "lv600sCapability",
+        "lv600sCapabilityTest",
         "lv600sWarmCapability",
         "onoff",
         "measure_humidity",
@@ -1396,16 +1397,18 @@
       "icon": "/assets/icon.svg"
     },
     "lv600sCapabilityTest": {
-      "type": "boolean",
+      "type": "number",
       "title": {
-        "en": "Unjoin group",
-        "de": "Gruppe verlassen",
-        "nl": "Deelnemen aan groep"
+        "en": "Fan Speed"
       },
-      "getable": false,
+      "min": 1,
+      "max": 9,
+      "decimals": 0,
+      "getable": true,
       "setable": true,
-      "uiComponent": "button",
-      "icon": "/assets/icon.svg"
+      "uiQuickAction": true,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
     },
     "lv600sWarmCapability": {
       "type": "enum",

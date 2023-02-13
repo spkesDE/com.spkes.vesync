@@ -25,7 +25,7 @@ class Dual200s extends HumidifierDeviceBase {
             await this.setMode(value);
         });
 
-        this.capabilitiesAddition.forEach((c) => this.checkOfCapability(c));
+        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
 
         this.log('Dual200s has been initialized');
     }

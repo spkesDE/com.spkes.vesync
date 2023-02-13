@@ -87,7 +87,7 @@ export default class PurifierDeviceBase extends Homey.Device {
         }
     }
 
-    async checkOfCapability(capability: string) {
+    async checkForCapability(capability: string) {
         if (!this.hasCapability(capability))
             await this.addCapability(capability);
     }

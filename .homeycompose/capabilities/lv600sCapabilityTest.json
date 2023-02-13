@@ -1,12 +1,14 @@
 {
-  "type": "boolean",
+  "type": "number",
   "title": {
-    "en": "Unjoin group",
-    "de": "Gruppe verlassen",
-    "nl": "Deelnemen aan groep"
+    "en": "Fan Speed"
   },
-  "getable": false,
+  "min": 1,
+  "max": 9,
+  "decimals": 0,
+  "getable": true,
   "setable": true,
-  "uiComponent": "button",
-  "icon": "/assets/icon.svg"
+  "uiQuickAction": true,
+  "uiComponent": "slider",
+  "icon": "/assets/capability_icons/heating_level.svg"
 }
