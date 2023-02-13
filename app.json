@@ -461,6 +461,22 @@
           }
         ]
       }
+    ],
+    "triggers": [
+      {
+        "id": "filter_life_low",
+        "title": {
+          "en": "Filter life low",
+          "de": "Filterlebensdauer niedrig"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s"
+          }
+        ]
+      }
     ]
   },
   "drivers": [

@@ -150,8 +150,9 @@ class LV600S extends Homey.Device implements VeSyncDeviceInterface {
                 this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
             if (this.hasCapability("alarm_water_lacks")) {
                 this.setCapabilityValue("alarm_water_lacks", this.device.water_lacks).catch(this.error);
-                /*if (this.device.water_lacks) await this.setUnavailable(this.homey.__("devices.water_lacks")).catch(this.error);
-                else await this.setAvailable().catch(this.error);*/
+                if (this.device.water_lacks) {
+                    await this.homey.flow.getTriggerCard("water_lacks").trigger();
+                }
             }
         } else if (this.getAvailable()) {
             await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);

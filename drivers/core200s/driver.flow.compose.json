@@ -53,9 +53,16 @@
                 "de": "Hoch"
               }
             }
-              ]
-            }
           ]
         }
       ]
     }
+  ],
+  "triggers": [
+    {
+      "$extends": [
+        "filter_life_low"
+      ]
+    }
+  ]
+}

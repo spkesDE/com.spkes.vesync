@@ -114,8 +114,12 @@ class Classic300s extends Homey.Device implements VeSyncDeviceInterface {
 
             if (this.hasCapability("measure_humidity"))
                 this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
-            if (this.hasCapability("measure_filter_life"))
-                this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+            if (this.hasCapability("alarm_water_lacks")) {
+                this.setCapabilityValue("alarm_water_lacks", this.device.water_lacks).catch(this.error);
+                if (this.device.water_lacks) {
+                    await this.homey.flow.getTriggerCard("water_lacks").trigger();
+                }
+            }
         } else if (this.getAvailable()) {
             await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
             await this.setCapabilityValue('onoff', false).catch(this.error);

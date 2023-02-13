@@ -6,7 +6,8 @@
   "capabilities": [
     "classic300sCapability",
     "onoff",
-    "measure_humidity"
+    "measure_humidity",
+    "alarm_water_lacks"
   ],
   "platforms": [
     "local"

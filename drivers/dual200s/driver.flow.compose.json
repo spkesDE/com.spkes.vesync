@@ -1,4 +1,11 @@
 {
+  "triggers": [
+    {
+      "$extends": [
+        "water_lacks"
+      ]
+    }
+  ],
   "actions": [
     {
       "id": "setModeDual200s",
