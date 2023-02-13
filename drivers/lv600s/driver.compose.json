@@ -8,7 +8,9 @@
     "lv600sWarmCapability",
     "onoff",
     "measure_humidity",
-    "alarm_water_lacks"
+    "alarm_water_lacks",
+    "measure_filter_life",
+    "alarm_filter_life"
   ],
   "platforms": [
     "local"

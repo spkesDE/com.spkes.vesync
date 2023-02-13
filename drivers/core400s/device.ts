@@ -6,16 +6,15 @@ class Core400s extends PurifierDeviceBase {
         await this.getDevice().catch(this.log);
 
         this.registerCapabilityListener("onoff", async (value) => {
-            if (!value) this.setCapabilityValue("core400sCapability", "off").then()
-            //Restore old mode? Using then and trigger this.updateDevice()?
-            await this.setMode(value ? "on" : "off")
+            if (!value) this.setCapabilityValue("core400sCapability", "off").then();
+            await this.setMode(value ? "on" : "off");
+            await this.updateDevice();
         });
         this.registerCapabilityListener("core400sCapability", async (value) => {
-            if (value === "off") this.setCapabilityValue("onoff", false).then()
-            else this.setCapabilityValue("onoff", true).then()
-            await this.setMode(value)
+            if (value === "off") this.setCapabilityValue("onoff", false).then();
+            else this.setCapabilityValue("onoff", true).then();
+            await this.setMode(value);
         });
-
 
         this.log('Core400s has been initialized');
     }
@@ -49,15 +48,15 @@ class Core400s extends PurifierDeviceBase {
         await super.updateDevice();
         if (this.device.isConnected()) {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
-            if (this.hasCapability("core400sCapability") && this.device.isOn()) {
-                if (this.device.mode === "manual") {
-                    this.setCapabilityValue('core400sCapability',
-                        ["fan_speed_1", "fan_speed_2", "fan_speed_3", "fan_speed_4"]
-                            [this.device.fan_level - 1 ?? 1] ?? "fan_speed_1").catch(this.error);
-                } else if (this.device.mode === "sleep")
+            if (this.hasCapability("core400sCapability")) {
+                if (this.device.mode === "manual")
+                    this.setCapabilityValue('core400sCapability', "fan_speed_" + this.device.fan_level).catch(this.error);
+                if (this.device.mode === "sleep")
                     this.setCapabilityValue('core400sCapability', "sleep").catch(this.error);
-                else if (this.device.mode === "auto")
-                    this.setCapabilityValue('core400sCapability', "auto").catch(this.error);
+                if (this.device.mode === "auto")
+                    this.setCapabilityValue('core400sCapability', "auto").catch(this.error)
+                if (!this.device.isOn())
+                    this.setCapabilityValue('core400sCapability', "off").catch(this.error);
             }
 
         }
