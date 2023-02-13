@@ -26,7 +26,7 @@ class Classic300s extends HumidifierDeviceBase {
             await this.setMode(value);
         });
 
-        this.capabilitiesAddition.forEach(this.checkOfCapability);
+        this.capabilitiesAddition.forEach((c) => this.checkOfCapability(c));
         this.log('Classic300s has been initialized');
     }
 

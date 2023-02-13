@@ -1,0 +1,14 @@
+{
+  "id": "water_lacks",
+  "title": {
+    "en": "Water Lacks",
+    "de": "Wasserstand zu niedrig"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=lv600s|dual200s|classic300s"
+    }
+  ]
+}

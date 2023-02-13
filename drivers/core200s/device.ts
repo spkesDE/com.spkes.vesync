@@ -21,7 +21,7 @@ class Core200S extends PurifierDeviceBase {
         });
 
 
-        this.capabilitiesAddition.forEach(this.checkOfCapability)
+        this.capabilitiesAddition.forEach((c) => this.checkOfCapability(c));
 
         this.log('Core200S has been initialized');
     }

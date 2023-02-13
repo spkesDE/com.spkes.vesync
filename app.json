@@ -53,6 +53,36 @@
   "support": "https://github.com/spkesDE",
   "homeyCommunityTopicId": 71369,
   "flow": {
+    "triggers": [
+      {
+        "id": "filter_life_low",
+        "title": {
+          "en": "Filter life low",
+          "de": "Filterlebensdauer niedrig"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s|dual200s|classic300s|core200s|core300s|core400s"
+          }
+        ]
+      },
+      {
+        "id": "water_lacks",
+        "title": {
+          "en": "Water Lacks",
+          "de": "Wasserstand zu niedrig"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s|dual200s|classic300s"
+          }
+        ]
+      }
+    ],
     "actions": [
       {
         "id": "setModeClassic300s",
@@ -473,7 +503,9 @@
         "classic300sCapability",
         "onoff",
         "measure_humidity",
-        "alarm_water_lacks"
+        "alarm_water_lacks",
+        "measure_filter_life",
+        "alarm_filter_life"
       ],
       "platforms": [
         "local"
@@ -798,7 +830,9 @@
         "dual200sCapability",
         "onoff",
         "measure_humidity",
-        "alarm_water_lacks"
+        "alarm_water_lacks",
+        "measure_filter_life",
+        "alarm_filter_life"
       ],
       "platforms": [
         "local"
@@ -880,7 +914,9 @@
         "lv600sWarmCapability",
         "onoff",
         "measure_humidity",
-        "alarm_water_lacks"
+        "alarm_water_lacks",
+        "measure_filter_life",
+        "alarm_filter_life"
       ],
       "platforms": [
         "local"
