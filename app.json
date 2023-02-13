@@ -30,8 +30,7 @@
   "contributors": {
     "developers": [
       {
-        "name": "spkesDE",
-        "email": "spkes@spkes.de"
+        "name": "IconPark"
       }
     ],
     "translators": [
@@ -553,7 +552,8 @@
       "capabilities": [
         "core200sCapability",
         "onoff",
-        "measure_filter_life"
+        "measure_filter_life",
+        "alarm_filter_life"
       ],
       "platforms": [
         "local"
@@ -633,7 +633,8 @@
       "capabilities": [
         "core300sCapability",
         "onoff",
-        "measure_filter_life"
+        "measure_filter_life",
+        "alarm_filter_life"
       ],
       "platforms": [
         "local"
@@ -714,7 +715,8 @@
         "core400sCapability",
         "onoff",
         "measure_pm25",
-        "measure_filter_life"
+        "measure_filter_life",
+        "alarm_filter_life"
       ],
       "platforms": [
         "local"
@@ -875,7 +877,8 @@
         "lv600sCapability",
         "lv600sWarmCapability",
         "onoff",
-        "measure_humidity"
+        "measure_humidity",
+        "alarm_water_lacks"
       ],
       "platforms": [
         "local"
@@ -949,6 +952,30 @@
     }
   ],
   "capabilities": {
+    "alarm_filter_life": {
+      "type": "boolean",
+      "title": {
+        "en": "Filter life low",
+        "de": "Filterlebensdauer niedrig"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/filter_life.svg"
+    },
+    "alarm_water_lacks": {
+      "type": "boolean",
+      "title": {
+        "en": "Water lacks",
+        "de": "Wasserstand zu niedrig"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/alarm_water_lacks.svg"
+    },
     "classic300sCapability": {
       "type": "enum",
       "title": {
