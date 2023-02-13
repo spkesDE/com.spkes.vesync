@@ -10,6 +10,9 @@ class Core200SDriver extends Homey.Driver {
      */
     async onInit() {
         this.log('Core200S Driver has been initialized');
+
+        this.homey.flow.getActionCard("setModeCore200s").registerRunListener(async (args) =>
+            args.device.triggerCapabilityListener("core200sCapability", args.mode));
     }
 
     /**
@@ -18,7 +21,7 @@ class Core200SDriver extends Homey.Driver {
      */
     async onPair(session: any) {
         //Skip login if there is valid session
-        session.setHandler('showView', async (data :any) => {
+        session.setHandler('showView', async (data: any) => {
             if (data === 'login') {
                 // @ts-ignore
                 if (this.homey.app.veSync.isLoggedIn()) await session.nextView();
@@ -26,7 +29,7 @@ class Core200SDriver extends Homey.Driver {
         });
 
         //Handle Login
-        session.setHandler("login", async (data:any) => {
+        session.setHandler("login", async (data: any) => {
             return await Utils.handleLogin(this, data);
         });
 
@@ -50,7 +53,7 @@ class Core200SDriver extends Homey.Driver {
                                 macID: d.macID
                             },
                             store: {
-                                fanSpeedLevel: d.level,
+                                fanSpeedLevel: d.fan_level,
                                 mode: d.mode,
                             }
                         });
@@ -59,10 +62,11 @@ class Core200SDriver extends Homey.Driver {
             return devicesList;
         });
     }
+
     async onRepair(session: any, device: any) {
-        session.setHandler("login", async (data:any) => {
+        session.setHandler("login", async (data: any) => {
             let result = await Utils.handleLogin(this, data);
-            if(result) await device.getDevice();
+            if (result) await device.getDevice();
             return result;
         });
 

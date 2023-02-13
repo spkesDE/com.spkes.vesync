@@ -461,22 +461,6 @@
           }
         ]
       }
-    ],
-    "triggers": [
-      {
-        "id": "filter_life_low",
-        "title": {
-          "en": "Filter life low",
-          "de": "Filterlebensdauer niedrig"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=core200s"
-          }
-        ]
-      }
     ]
   },
   "drivers": [
@@ -488,7 +472,8 @@
       "capabilities": [
         "classic300sCapability",
         "onoff",
-        "measure_humidity"
+        "measure_humidity",
+        "alarm_water_lacks"
       ],
       "platforms": [
         "local"
@@ -812,7 +797,8 @@
       "capabilities": [
         "dual200sCapability",
         "onoff",
-        "measure_humidity"
+        "measure_humidity",
+        "alarm_water_lacks"
       ],
       "platforms": [
         "local"
@@ -1021,21 +1007,21 @@
           }
         },
         {
-          "id": "low",
+          "id": "fan_speed_1",
           "title": {
             "en": "Low",
             "de": "Niedrig"
           }
         },
         {
-          "id": "medium",
+          "id": "fan_speed_2",
           "title": {
             "en": "Medium",
             "de": "Mittel"
           }
         },
         {
-          "id": "high",
+          "id": "fan_speed_3",
           "title": {
             "en": "High",
             "de": "Hoch"
@@ -1070,21 +1056,21 @@
           }
         },
         {
-          "id": "low",
+          "id": "fan_speed_1",
           "title": {
             "en": "Low",
             "de": "Niedrig"
           }
         },
         {
-          "id": "medium",
+          "id": "fan_speed_2",
           "title": {
             "en": "Medium",
             "de": "Mittel"
           }
         },
         {
-          "id": "high",
+          "id": "fan_speed_3",
           "title": {
             "en": "High",
             "de": "Hoch"
@@ -1252,21 +1238,21 @@
           }
         },
         {
-          "id": "low",
+          "id": "fan_speed_1",
           "title": {
             "en": "Low",
             "de": "Niedrig"
           }
         },
         {
-          "id": "medium",
+          "id": "fan_speed_2",
           "title": {
             "en": "Medium",
             "de": "Mittel"
           }
         },
         {
-          "id": "high",
+          "id": "fan_speed_3",
           "title": {
             "en": "High",
             "de": "Hoch"

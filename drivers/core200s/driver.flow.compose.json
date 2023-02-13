@@ -57,12 +57,5 @@
         }
       ]
     }
-  ],
-  "triggers": [
-    {
-      "$extends": [
-        "filter_life_low"
-      ]
-    }
   ]
 }

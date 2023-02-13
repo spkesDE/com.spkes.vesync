@@ -10,6 +10,9 @@ class Core300SDriver extends Homey.Driver {
      */
     async onInit() {
         this.log('Core300S Driver has been initialized');
+
+        this.homey.flow.getActionCard("setModeCore300s").registerRunListener(async (args) =>
+            args.device.triggerCapabilityListener("core300sCapability", args.mode));
     }
 
     /**
@@ -50,7 +53,7 @@ class Core300SDriver extends Homey.Driver {
                                 macID: d.macID
                             },
                             store: {
-                                fanSpeedLevel: d.level,
+                                fanSpeedLevel: d.fan_level,
                                 mode: d.mode,
                             }
                         });

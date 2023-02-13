@@ -1,11 +1,4 @@
 {
-  "triggers": [
-    {
-      "$extends": [
-        "water_lacks"
-      ]
-    }
-  ],
   "actions": [
     {
       "id": "setModeLV600S",

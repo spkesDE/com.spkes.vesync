@@ -9,7 +9,10 @@ class Core400SDriver extends Homey.Driver {
      * onInit is called when the driver is initialized.
      */
     async onInit() {
-        this.log('Core300S Driver has been initialized');
+        this.log('Core400S Driver has been initialized');
+
+        this.homey.flow.getActionCard("setModeCore400s").registerRunListener(async (args) =>
+            args.device.triggerCapabilityListener("core400sCapability", args.mode));
     }
 
     /**
@@ -49,7 +52,7 @@ class Core400SDriver extends Homey.Driver {
                             macID: d.macID
                         },
                         store: {
-                            fanSpeedLevel: d.level,
+                            fanSpeedLevel: d.fan_level,
                             mode: d.mode,
                         }
                     });

@@ -20,21 +20,21 @@
       }
     },
     {
-      "id": "low",
+      "id": "fan_speed_1",
       "title": {
         "en": "Low",
         "de": "Niedrig"
       }
     },
     {
-      "id": "medium",
+      "id": "fan_speed_2",
       "title": {
         "en": "Medium",
         "de": "Mittel"
       }
     },
     {
-      "id": "high",
+      "id": "fan_speed_3",
       "title": {
         "en": "High",
         "de": "Hoch"

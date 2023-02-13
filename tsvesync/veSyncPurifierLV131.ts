@@ -59,7 +59,7 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
                 this.filter_life = result.result.result.filterLife ?? 0;
                 this.screen_status = result.result.result.screenStatus ?? "Unknown";
                 this.mode = result.result.result.mode ?? this.mode;
-                this.level = result.result.result.level ?? 0;
+                this.fan_level = result.result.result.level ?? 0;
                 this.air_quality = result.result.result.airQuality ?? 0;
                 return resolve(true);
             })
@@ -83,7 +83,7 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
                 if (VeSync.debugMode) console.log(result);
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
                 this.mode = mode;
-                if (mode == "manual") this.level = 1;
+                if (mode == "manual") this.fan_level = 1;
                 resolve(mode)
             });
         });
@@ -93,7 +93,7 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
         return new Promise(async (resolve, reject) => {
             if (!this.getDeviceFeatures()?.levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t accept fan level: ' + level);
             if (this.mode != "manual") await this.setMode("manual");
-            if (this.level == level) resolve(level)
+            if (this.fan_level == level) resolve(level)
             let body: any = {
                 ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
                 uuid: this.uuid,
@@ -103,7 +103,7 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
             result.then(result => {
                 if (VeSync.debugMode) console.log(result);
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
-                this.level = level;
+                this.fan_level = level;
                 resolve(level)
             });
         });

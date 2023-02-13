@@ -10,6 +10,9 @@ class Dual200sDriver extends Homey.Driver {
      */
     async onInit() {
         this.log('Dual200s Driver has been initialized');
+
+        this.homey.flow.getActionCard("setModeDual200s").registerRunListener(async (args) =>
+            args.device.triggerCapabilityListener("dual200sCapability", args.mode));
     }
 
     /**

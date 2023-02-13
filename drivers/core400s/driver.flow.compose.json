@@ -1,11 +1,4 @@
 {
-  "triggers": [
-    {
-      "$extends": [
-        "filter_life_low"
-      ]
-    }
-  ],
   "actions": [
     {
       "id": "setModeCore400s",

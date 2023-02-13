@@ -59,7 +59,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     enabled: boolean = false;
     filter_life: number = 100;
     mode: string = "off";
-    level: number = 1;
+    fan_level: number = 1;
     display: boolean = true;
     child_lock: boolean = false;
     night_light: string = 'off';
@@ -189,7 +189,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 this.enabled = result.result.result.enabled ?? false;
                 this.filter_life = result.result.result.filter_life ?? 0;
                 this.mode = result.result.result.mode ?? "off";
-                this.level = result.result.result.level ?? "0";
+                this.fan_level = result.result.result.level ?? "0";
                 this.display = result.result.result.display ?? false;
                 this.child_lock = result.result.result.child_lock ?? false;
                 this.night_light = result.result.result.night_light ?? false;

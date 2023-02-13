@@ -10,6 +10,9 @@ class Classic300sDriver extends Homey.Driver {
      */
     async onInit() {
         this.log('Classic300s Driver has been initialized');
+
+        this.homey.flow.getActionCard("setModeClassic300s").registerRunListener(async (args) =>
+            args.device.triggerCapabilityListener("classic300sCapability", args.mode));
     }
 
     /**

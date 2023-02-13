@@ -10,6 +10,8 @@ class LV600SDriver extends Homey.Driver {
    */
   async onInit() {
     this.log('LV600s Driver has been initialized');
+    this.homey.flow.getActionCard("setModeLV600S").registerRunListener(async (args) =>
+        args.device.triggerCapabilityListener("lv600sCapability", args.mode));
   }
 
   /**
