@@ -1,6 +1,10 @@
 import PurifierDeviceBase from "../../lib/PurifierDeviceBase";
 
 class Core300S extends PurifierDeviceBase {
+    private capabilitiesAddition: string[] = [
+        "measure_pm25",
+        "alarm_pm25",
+    ]
 
     async onInit() {
         await super.onInit();
@@ -15,6 +19,8 @@ class Core300S extends PurifierDeviceBase {
             else this.setCapabilityValue("onoff", true).then();
             await this.setMode(value);
         });
+
+        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
 
         this.log('Core300S has been initialized');
     }

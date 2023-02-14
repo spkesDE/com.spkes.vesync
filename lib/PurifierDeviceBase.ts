@@ -75,6 +75,8 @@ export default class PurifierDeviceBase extends Homey.Device {
             }
             if (this.hasCapability("measure_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
                 await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
+            if (this.hasCapability("alarm_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
+                await this.setCapabilityValue('alarm_pm25', this.device.air_quality_value > 91)
             if (this.hasCapability("measure_filter_life"))
                 this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
             if (this.hasCapability("alarm_filter_life")) {
