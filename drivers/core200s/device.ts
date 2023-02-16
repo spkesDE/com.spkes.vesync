@@ -44,7 +44,7 @@ class Core200S extends PurifierDeviceBase {
                 }
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('core200sCapability', "sleep").catch(this.error);
-                if (this.device.isOn())
+                if (!this.device.isOn())
                     this.setCapabilityValue('core200sCapability', "off").catch(this.error);
             }
         }

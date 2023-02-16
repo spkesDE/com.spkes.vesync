@@ -20,13 +20,14 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
     //endregion
     private active_time: number = 0;
     private screen_status: string = "";
+    private deviceStatus: string = "";
 
     constructor(api: VeSync, device: any) {
         super(api, device);
         this.getStatus().catch();
     }
 
-    public async toggleSwitch(toggle: boolean): Promise<string> {
+    public async toggleSwitch(toggle: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
                 ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
@@ -37,7 +38,8 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
             result.then(result => {
                 if (VeSync.debugMode) console.log(result);
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
-                resolve("success")
+                this.enabled = toggle;
+                resolve(this.enabled)
             });
         });
     }

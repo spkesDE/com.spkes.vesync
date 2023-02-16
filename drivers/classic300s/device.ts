@@ -45,12 +45,12 @@ class Classic300s extends HumidifierDeviceBase {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
             if (this.hasCapability("classic300sCapability")) {
                 if (this.device.mode === "manual")
-                    this.setCapabilityValue('classic300sCapability', "fan_speed_" + this.device.mist_level).catch(this.error);
+                    this.setCapabilityValue('classic300sCapability', "fan_speed_" + this.device.mist_virtual_level).catch(this.error);
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('classic300sCapability', "sleep").catch(this.error);
                 if (this.device.mode === "auto")
                     this.setCapabilityValue('classic300sCapability', "auto").catch(this.error);
-                if (this.device.isOn())
+                if (!this.device.isOn())
                     this.setCapabilityValue('classic300sCapability', "off").catch(this.error);
             }
         }

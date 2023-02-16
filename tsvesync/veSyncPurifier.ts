@@ -56,7 +56,6 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     }
     //endregion
     debugMode: boolean = true
-    enabled: boolean = false;
     filter_life: number = 100;
     mode: string = "off";
     fan_level: number = 1;
@@ -73,7 +72,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     }
 
     /* turn on or off the device */
-    public async toggleSwitch(toggle: boolean): Promise<string> {
+    public async toggleSwitch(toggle: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
                 ...Helper.bypassBodyV2(this.api),
@@ -87,8 +86,8 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.deviceStatus = toggle ? 'on' : "off";
-                return resolve(this.deviceStatus);
+                this.enabled = toggle;
+                return resolve(this.enabled);
             });
         });
     }
@@ -145,7 +144,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 if (VeSync.debugMode) console.log(result)
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                 this.fan_level = level;
-                this.deviceStatus = 'on';
+                this.enabled = true;
                 this.mode = "manual";
                 return resolve(level);
             });

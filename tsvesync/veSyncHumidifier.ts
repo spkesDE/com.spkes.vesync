@@ -12,7 +12,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             models: ['Classic300S', 'LUH-A601S-WUSB'],
             features: ['nightlight'],
             mist_modes: ['auto', 'sleep', 'manual'],
-            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             method: ['getHumidifierStatus', 'setAutomaticStop',
                 'setSwitch', 'setNightLightBrightness',
                 'setVirtualLevel', 'setTargetHumidity',
@@ -51,7 +51,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 'LUH-A602S-WJP'],
             features: ['warm_mist', 'nightlight'],
             mist_modes: ['humidity', 'sleep', 'manual'],
-            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             warm_mist_levels: [0, 1, 2, 3],
             method: ['getHumidifierStatus', 'setAutomaticStop',
                 'setSwitch', 'setNightLightBrightness',
@@ -60,8 +60,6 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
         },
     }
     //endregion
-
-    enabled: boolean = false;
     filter_life: number = 100;
     mode: string = "off";
     display: boolean = false;
@@ -78,6 +76,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     automatic_stop_reach_target: boolean = true;
     night_light_brightness: number = 0;
     warm_mist_level: number = 0;
+    targetHumidity: number = 0;
 
     constructor(api: VeSync, device: any) {
         super(api, device);
@@ -86,7 +85,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     }
 
     /* turn on or off the device */
-    public async toggleSwitch(toggle: boolean): Promise<string> {
+    public async toggleSwitch(toggle: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
                 ...Helper.bypassBodyV2(this.api),
@@ -100,8 +99,8 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.deviceStatus = toggle ? 'on' : "off";
-                return resolve(this.deviceStatus);
+                this.enabled = toggle;
+                return resolve(this.enabled);
             });
         });
     }
@@ -160,7 +159,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     }
 
     /* Set Humidity */
-    public setHumidity(humidity: number): Promise<string | boolean> {
+    public setTargetHumidity(humidity: number): Promise<string | boolean> {
         return new Promise((resolve, reject) => {
             if (humidity > 80 || humidity < 40) return reject("Humidity value must be set between 40 and 80");
             let body = {
@@ -195,8 +194,8 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                     if (VeSync.debugMode) console.log(result.result.result)
                     this.enabled = result.result.result.enabled;
                     this.humidity = result.result.result.humidity;
-                    this.mist_virtual_level = result.result.result.mode;
-                    this.mist_level = result.result.result.level;
+                    this.mist_virtual_level = result.result.result.mist_virtual_level;
+                    this.mist_level = result.result.result.mist_level;
                     this.mode = result.result.result.mode;
                     this.water_lacks = result.result.result.water_lacks;
                     this.humidity_high = result.result.result.humidity_high;
@@ -206,6 +205,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                     this.warm_mist_level = result.result.result.warm_mist_level;
                     this.warm_mist_enabled = result.result.result.warm_mist_enabled;
                     this.display = result.result.result.display ?? result.result.result.indicator_light_switch;
+                    this.targetHumidity = result.result.result.configuration.auto_target_humidity;
                     return resolve(true)
                 } catch (e: any) {
                     return reject(result);

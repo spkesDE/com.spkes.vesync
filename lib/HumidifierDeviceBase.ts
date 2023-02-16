@@ -36,7 +36,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
             return;
         }
         if (value === "sleep") {
-            if (this.device?.deviceStatus === 'off')
+            if (this.device?.isOn())
                 this.device?.on().catch(this.error);
             this.device?.setHumidityMode('sleep').catch(this.error);
             return;

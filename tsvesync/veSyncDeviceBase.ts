@@ -6,7 +6,6 @@ export default class VeSyncDeviceBase {
     deviceName: string = "";
     deviceImg: string = "";
     cid: string = "";
-    deviceStatus: string = "";
     connectionStatus: string = "";
     connectionType: string = "";
     deviceType: string = "";
@@ -22,6 +21,7 @@ export default class VeSyncDeviceBase {
     Device_Features: { [key: string]: any } = {};
     protected api: VeSync;
     extension: any;
+    enabled: boolean = false;
 
     constructor(api: VeSync, device: any) {
         this.api = api;
@@ -30,7 +30,6 @@ export default class VeSyncDeviceBase {
         this.deviceName = device.deviceName;
         this.deviceImg = device.deviceImg;
         this.cid = device.cid;
-        this.deviceStatus = device.deviceStatus;
         this.connectionStatus = device.connectionStatus;
         this.connectionType = device.connectionType;
         this.deviceType = device.deviceType;
@@ -53,11 +52,11 @@ export default class VeSyncDeviceBase {
         return `Device Name: ${this.deviceName},\n
                  Device Type: ${this.deviceType},\n
                  SubDevice No.: ${this.subDeviceNo},\n
-                 Status: ${this.deviceStatus}`
+                 Status: ${this.enabled ? "Enabled" : "Disabled"}`
     }
 
     public isOn(): boolean {
-        return this.deviceStatus === "on";
+        return this.enabled;
     }
 
     public isConnected(): boolean {

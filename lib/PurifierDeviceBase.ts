@@ -29,13 +29,13 @@ export default class PurifierDeviceBase extends Homey.Device {
             return;
         }
         if (value === "auto") {
-            if (this.device?.deviceStatus === 'off')
+            if (!this.device.isOn())
                 this.device?.on().catch(this.error);
             this.device?.setMode('auto').catch(this.error);
             return;
         }
         if (value === "sleep") {
-            if (this.device?.deviceStatus === 'off')
+            if (!this.device.isOn())
                 this.device?.on().catch(this.error);
             this.device?.setMode('sleep').catch(this.error);
             return;
@@ -70,9 +70,8 @@ export default class PurifierDeviceBase extends Homey.Device {
         //Getting latest device status
         await this.device.getStatus().catch(this.error);
         if (this.device.isConnected()) {
-            if (!this.getAvailable()) {
+            if (!this.getAvailable())
                 await this.setAvailable().catch(this.error);
-            }
             if (this.hasCapability("measure_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
                 await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
             if (this.hasCapability("alarm_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
