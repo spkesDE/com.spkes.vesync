@@ -53,9 +53,9 @@ export default class HumidifierDeviceBase extends Homey.Device {
             }
             let device = veSync.getStoredDevice().find(d => d.uuid === this.getData().id);
             if (device === undefined || !(device instanceof VeSyncHumidifier)) {
-                this.error("Device is undefined or is not a VeSyncPurifier");
+                this.error("Device is undefined or is not a VeSyncHumidifier");
                 await this.setUnavailable(this.homey.__("devices.not_found"));
-                return reject("Device is undefined or is not a VeSyncPurifier");
+                return reject("Device is undefined or is not a VeSyncHumidifier");
             }
             this.device = device as VeSyncHumidifier;
             if (this.device.isConnected()) {

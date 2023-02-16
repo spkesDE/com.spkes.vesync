@@ -2,7 +2,7 @@ import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
 
 class LV600S extends HumidifierDeviceBase {
     private capabilitiesAddition: string[] = [
-        "lv600sCapabilityTest",
+        "lv600sCapability",
     ]
 
     async onInit() {

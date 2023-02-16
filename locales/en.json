@@ -3,7 +3,7 @@
     "failed_login": "Failed to login. Please use the repair function.",
     "not_found": "Device not found. Please re-add the device.",
     "offline": "Device is offline. Checking every 60 seconds for device availability.",
-    "water_lacks": "Watertank is empty!"
+    "water_lacks": "Water tank is empty!"
   },
   "settings": {
     "password": "Password",
