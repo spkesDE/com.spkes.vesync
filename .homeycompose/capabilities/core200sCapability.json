@@ -20,24 +20,10 @@
       }
     },
     {
-      "id": "fan_speed_1",
+      "id": "manual",
       "title": {
-        "en": "Low",
-        "de": "Niedrig"
-      }
-    },
-    {
-      "id": "fan_speed_2",
-      "title": {
-        "en": "Medium",
-        "de": "Mittel"
-      }
-    },
-    {
-      "id": "fan_speed_3",
-      "title": {
-        "en": "High",
-        "de": "Hoch"
+        "en": "Manual Mode",
+        "de": "Manueller Modus"
       }
     }
   ],

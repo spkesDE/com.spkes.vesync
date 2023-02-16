@@ -13,6 +13,13 @@
       }
     },
     {
+      "id": "auto",
+      "title": {
+        "en": "Auto Mode",
+        "de": "Auto Modus"
+      }
+    },
+    {
       "id": "sleep",
       "title": {
         "en": "Sleep Mode",
@@ -20,66 +27,10 @@
       }
     },
     {
-      "id": "fan_speed_1",
+      "id": "manual",
       "title": {
-        "en": "Fan Speed 1",
-        "de": "Geschwindigkeit 1"
-      }
-    },
-    {
-      "id": "fan_speed_2",
-      "title": {
-        "en": "Fan Speed 2",
-        "de": "Geschwindigkeit 2"
-      }
-    },
-    {
-      "id": "fan_speed_3",
-      "title": {
-        "en": "Fan Speed 3",
-        "de": "Geschwindigkeit 3"
-      }
-    },
-    {
-      "id": "fan_speed_4",
-      "title": {
-        "en": "Fan Speed 4",
-        "de": "Geschwindigkeit 4"
-      }
-    },
-    {
-      "id": "fan_speed_5",
-      "title": {
-        "en": "Fan Speed 5",
-        "de": "Geschwindigkeit 5"
-      }
-    },
-    {
-      "id": "fan_speed_6",
-      "title": {
-        "en": "Fan Speed 6",
-        "de": "Geschwindigkeit 6"
-      }
-    },
-    {
-      "id": "fan_speed_7",
-      "title": {
-        "en": "Fan Speed 7",
-        "de": "Geschwindigkeit 7"
-      }
-    },
-    {
-      "id": "fan_speed_8",
-      "title": {
-        "en": "Fan Speed 8",
-        "de": "Geschwindigkeit 8"
-      }
-    },
-    {
-      "id": "fan_speed_9",
-      "title": {
-        "en": "Fan Speed 9",
-        "de": "Geschwindigkeit 9"
+        "en": "Humidity Mode",
+        "de": "Luftfeuchtigkeit Modus"
       }
     }
   ],

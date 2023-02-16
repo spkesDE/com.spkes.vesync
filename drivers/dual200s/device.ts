@@ -2,6 +2,9 @@ import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
 
 class Dual200s extends HumidifierDeviceBase {
     private capabilitiesAddition: string[] = [
+        "dual200sCapability",
+        "fanSpeed0to3",
+        "onoff",
         "measure_humidity",
         "alarm_water_lacks",
         "measure_filter_life",
@@ -24,6 +27,14 @@ class Dual200s extends HumidifierDeviceBase {
             else this.setCapabilityValue("onoff", true).then();
             await this.setMode(value);
         });
+        this.registerCapabilityListener("fanSpeed0to3", async (value) => {
+            if (value === 0) this.triggerCapabilityListener("onoff", false).then();
+            else {
+                this.setCapabilityValue("onoff", true).then();
+                this.setCapabilityValue("dual200sCapability", "manual").then();
+                await this.setMode("fan_speed_" + value);
+            }
+        });
 
         this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
 
@@ -43,7 +54,7 @@ class Dual200s extends HumidifierDeviceBase {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
             if (this.hasCapability("dual200sCapability")) {
                 if (this.device.mode === "manual")
-                    this.setCapabilityValue('dual200sCapability', "fan_speed_" + this.device.mist_level).catch(this.error);
+                    this.setCapabilityValue('dual200sCapability', "manual").catch(this.error);
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('dual200sCapability', "sleep").catch(this.error);
                 if (this.device.mode === "auto")

@@ -1,14 +1,16 @@
 {
   "type": "number",
   "title": {
-    "en": "Fan Speed"
+    "en": "Fan Level",
+    "de": "Lüfter Geschwindigkeit"
   },
-  "min": 1,
-  "max": 9,
+  "min": 0,
+  "max": 5,
+  "step": 1,
   "decimals": 0,
   "getable": true,
   "setable": true,
-  "uiQuickAction": true,
+  "uiQuickAction": false,
   "uiComponent": "slider",
   "icon": "/assets/capability_icons/heating_level.svg"
 }

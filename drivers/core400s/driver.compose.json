@@ -5,6 +5,7 @@
   "class": "fan",
   "capabilities": [
     "core400sCapability",
+    "fanSpeed0to4",
     "onoff",
     "measure_pm25",
     "alarm_pm25",

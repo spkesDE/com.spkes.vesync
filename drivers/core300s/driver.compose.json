@@ -6,6 +6,7 @@
   "capabilities": [
     "core300sCapability",
     "onoff",
+    "fanSpeed0to5",
     "measure_pm25",
     "alarm_pm25",
     "measure_filter_life",

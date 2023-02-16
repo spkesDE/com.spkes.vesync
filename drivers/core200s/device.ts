@@ -2,6 +2,9 @@ import PurifierDeviceBase from "../../lib/PurifierDeviceBase";
 
 class Core200S extends PurifierDeviceBase {
     private capabilitiesAddition: string[] = [
+        "core200sCapability",
+        "fanSpeed0to3",
+        "onoff",
         "measure_filter_life",
         "alarm_filter_life"
     ]
@@ -20,6 +23,14 @@ class Core200S extends PurifierDeviceBase {
             await this.setMode(value);
         });
 
+        this.registerCapabilityListener("fanSpeed0to3", async (value) => {
+            if (value === 0) this.triggerCapabilityListener("onoff", false).then();
+            else {
+                this.setCapabilityValue("onoff", true).then();
+                this.setCapabilityValue("core200sCapability", "manual").then();
+                await this.setMode("fan_speed_" + value);
+            }
+        });
 
         this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
 
@@ -39,9 +50,8 @@ class Core200S extends PurifierDeviceBase {
         if (this.device.isConnected()) {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
             if (this.hasCapability("core200sCapability")) {
-                if (this.device.mode === "manual") {
-                    this.setCapabilityValue('core200sCapability', "fan_speed_" + this.device.fan_level).catch(this.error);
-                }
+                if (this.device.mode === "manual")
+                    this.setCapabilityValue("core200sCapability", "manual").catch(this.error);
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('core200sCapability', "sleep").catch(this.error);
                 if (!this.device.isOn())

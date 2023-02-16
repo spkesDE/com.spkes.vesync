@@ -15,7 +15,7 @@ export default class PurifierDeviceBase extends Homey.Device {
 
     async setMode(value: string) {
         this.log("Mode: " + value);
-        if (value === "on" || value === "manual") {
+        if (value === "on") {
             this.device?.toggleSwitch(true).catch(this.error);
             return;
         }
@@ -26,6 +26,12 @@ export default class PurifierDeviceBase extends Homey.Device {
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
             this.device?.setFanSpeed(level).catch(this.error);
+            return;
+        }
+        if (value === "manual") {
+            if (this.device.mode !== "manual")
+                await this.device.setMode("manual");
+            this.device?.setFanSpeed(this.device.fan_level ?? 1).catch(this.error);
             return;
         }
         if (value === "auto") {
@@ -72,9 +78,17 @@ export default class PurifierDeviceBase extends Homey.Device {
         if (this.device.isConnected()) {
             if (!this.getAvailable())
                 await this.setAvailable().catch(this.error);
-            if (this.hasCapability("measure_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
+            if (this.hasCapability("fanSpeed0to3"))
+                this.setCapabilityValue('fanSpeed0to3', this.device.fan_level ?? 0).catch(this.error);
+            if (this.hasCapability("fanSpeed0to4"))
+                this.setCapabilityValue('fanSpeed0to4', this.device.fan_level ?? 0).catch(this.error);
+            if (this.hasCapability("fanSpeed0to5"))
+                this.setCapabilityValue('fanSpeed0to5', this.device.fan_level ?? 0).catch(this.error);
+            if (this.hasCapability("fanSpeed0to9"))
+                this.setCapabilityValue('fanSpeed0to9', this.device.fan_level ?? 0).catch(this.error);
+            if (this.hasCapability("measure_pm25"))
                 await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
-            if (this.hasCapability("alarm_pm25") && this.device.getDeviceFeatures().features.includes('air_quality'))
+            if (this.hasCapability("alarm_pm25"))
                 await this.setCapabilityValue('alarm_pm25', this.device.air_quality_value > 91)
             if (this.hasCapability("measure_filter_life"))
                 this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
@@ -84,7 +98,6 @@ export default class PurifierDeviceBase extends Homey.Device {
             }
         } else if (this.getAvailable()) {
             await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-            await this.setCapabilityValue('onoff', false).catch(this.error);
         }
     }
 

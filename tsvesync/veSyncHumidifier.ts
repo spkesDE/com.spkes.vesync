@@ -191,6 +191,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
                 try {
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                     if (VeSync.debugMode) console.log(result.result.result)
                     this.enabled = result.result.result.enabled;
                     this.humidity = result.result.result.humidity;

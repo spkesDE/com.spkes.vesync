@@ -119,7 +119,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'post', body, Helper.bypassHeader());
             return result.then(result => {
                 if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) reject(new Error(result.msg ?? result))
+                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                 this.mode = mode;
                 return resolve(mode);
             });
@@ -183,7 +183,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             }
             let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
             result.then(result => {
-                if (VeSync.debugMode) console.log(result);
+                if (VeSync.debugMode) console.log(result.result.result ?? result);
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
                 this.enabled = result.result.result.enabled ?? false;
                 this.filter_life = result.result.result.filter_life ?? 0;

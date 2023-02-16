@@ -3,6 +3,13 @@ import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
 class LV600S extends HumidifierDeviceBase {
     private capabilitiesAddition: string[] = [
         "lv600sCapability",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "measure_filter_life",
+        "alarm_filter_life",
+        "fanSpeed0to9",
+        "warmFanSpeed0to3"
     ]
 
     async onInit() {
@@ -24,8 +31,17 @@ class LV600S extends HumidifierDeviceBase {
             await this.setMode(value);
         });
 
-        this.registerCapabilityListener("lv600sCapabilityTest", async (value) => {
-            console.log(value)
+        this.registerCapabilityListener("fanSpeed0to9", async (value) => {
+            if (value === 0) this.triggerCapabilityListener("onoff", false).then();
+            else {
+                this.setCapabilityValue("onoff", true).then();
+                this.setCapabilityValue("lv600sCapability", "manual").then();
+                await this.setMode("fan_speed_" + value);
+            }
+        })
+
+        this.registerCapabilityListener("warmFanSpeed0to3", async (value) => {
+            await this.setMode("warm_fan_speed_" + value);
         })
 
         this.capabilitiesAddition.forEach((c) => this.checkForCapability(c))
@@ -64,7 +80,7 @@ class LV600S extends HumidifierDeviceBase {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
             if (this.hasCapability("lv600sCapability")) {
                 if (this.device.mode === "manual")
-                    this.setCapabilityValue('lv600sCapability', "fan_speed_" + this.device.mist_level).catch(this.error);
+                    this.setCapabilityValue('lv600sCapability', "manual").catch(this.error);
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('lv600sCapability', "sleep").catch(this.error);
                 if (this.device.mode === "auto")

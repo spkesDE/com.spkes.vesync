@@ -1,0 +1,16 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Heating Level",
+    "de": "Heizstufe"
+  },
+  "min": 0,
+  "max": 3,
+  "step": 1,
+  "decimals": 0,
+  "getable": true,
+  "setable": true,
+  "uiQuickAction": false,
+  "uiComponent": "slider",
+  "icon": "/assets/capability_icons/heating_level.svg"
+}

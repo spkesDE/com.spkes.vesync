@@ -15,7 +15,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
     async setMode(value: string) {
         this.log("Mode: " + value);
-        if (value === "on" || value === "manual") {
+        if (value === "on") {
             this.device?.toggleSwitch(true).catch(this.error);
             return;
         }
@@ -25,14 +25,30 @@ export default class HumidifierDeviceBase extends Homey.Device {
         }
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
-            if (this.device.mode == "sleep")
+            if (this.device.mode !== "humidity" && this.device.deviceType == "LV600S")
                 await this.device.setHumidityMode("humidity");
+            else if (this.device.mode !== "manual")
+                await this.device.setHumidityMode("manual");
             this.device?.setMistLevel(level).catch(this.error);
             return;
         }
         if (value.startsWith("warm_fan_speed_")) {
             let level = Number(value.replace("warm_fan_speed_", ""));
             this.device?.setWarmLevel(level).catch(this.error);
+            return;
+        }
+        if (value === "auto") {
+            if (!this.device.isOn())
+                this.device?.on().catch(this.error);
+            this.device?.setHumidityMode('auto').catch(this.error);
+            return;
+        }
+        if (value === "manual") {
+            if (this.device.mode !== "humidity" && this.device.deviceType == "LV600S")
+                await this.device.setHumidityMode("humidity");
+            else if (this.device.mode !== "manual")
+                await this.device.setHumidityMode("manual");
+            this.device?.setMistLevel(this.device.mist_level ?? 1).catch(this.error);
             return;
         }
         if (value === "sleep") {
@@ -71,9 +87,17 @@ export default class HumidifierDeviceBase extends Homey.Device {
         //Getting latest device status
         await this.device.getStatus().catch(this.error);
         if (this.device.isConnected()) {
-            if (!this.getAvailable()) {
+            if (!this.getAvailable())
                 await this.setAvailable().catch(this.error);
-            }
+            if (this.hasCapability("fanSpeed0to3"))
+                this.setCapabilityValue('fanSpeed0to3', this.device.mist_virtual_level ?? this.device.mist_level ?? 0).catch(this.error);
+            if (this.hasCapability("fanSpeed0to4"))
+                this.setCapabilityValue('fanSpeed0to4', this.device.mist_virtual_level ?? this.device.mist_level ?? 0).catch(this.error);
+            if (this.hasCapability("fanSpeed0to5"))
+                this.setCapabilityValue('fanSpeed0to5', this.device.mist_virtual_level ?? this.device.mist_level ?? 0).catch(this.error);
+            if (this.hasCapability("fanSpeed0to9"))
+                this.setCapabilityValue('fanSpeed0to9', this.device.mist_virtual_level ?? this.device.mist_level ?? 0).catch(this.error);
+
             if (this.hasCapability("measure_humidity"))
                 this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
             if (this.hasCapability("alarm_water_lacks")) {
@@ -88,7 +112,6 @@ export default class HumidifierDeviceBase extends Homey.Device {
             }
         } else if (this.getAvailable()) {
             await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-            await this.setCapabilityValue('onoff', false).catch(this.error);
         }
     }
 

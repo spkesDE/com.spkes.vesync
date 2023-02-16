@@ -5,6 +5,7 @@
   "class": "fan",
   "capabilities": [
     "dual200sCapability",
+    "fanSpeed0to3",
     "onoff",
     "measure_humidity",
     "alarm_water_lacks",

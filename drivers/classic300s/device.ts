@@ -4,10 +4,13 @@ import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
 class Classic300s extends HumidifierDeviceBase {
 
     private capabilitiesAddition: string[] = [
+        "classic300sCapability",
+        "onoff",
         "measure_humidity",
         "alarm_water_lacks",
         "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_filter_life",
+        "fanSpeed0to9"
     ]
 
     /**
@@ -26,6 +29,15 @@ class Classic300s extends HumidifierDeviceBase {
             await this.setMode(value);
         });
 
+        this.registerCapabilityListener("fanSpeed0to9", async (value) => {
+            if (value === 0) this.triggerCapabilityListener("onoff", false).then();
+            else {
+                this.setCapabilityValue("onoff", true).then();
+                this.setCapabilityValue("classic300sCapability", "manual").then();
+                await this.setMode("fan_speed_" + value);
+            }
+        })
+
         this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
         this.log('Classic300s has been initialized');
     }
@@ -36,7 +48,6 @@ class Classic300s extends HumidifierDeviceBase {
             return;
         }
         await super.setMode(value);
-        this.log(value);
     }
 
     async updateDevice(): Promise<void> {
@@ -45,7 +56,7 @@ class Classic300s extends HumidifierDeviceBase {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
             if (this.hasCapability("classic300sCapability")) {
                 if (this.device.mode === "manual")
-                    this.setCapabilityValue('classic300sCapability', "fan_speed_" + this.device.mist_virtual_level).catch(this.error);
+                    this.setCapabilityValue("classic300sCapability", "manual").catch(this.error);
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('classic300sCapability', "sleep").catch(this.error);
                 if (this.device.mode === "auto")

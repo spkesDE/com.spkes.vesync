@@ -508,7 +508,8 @@
         "measure_humidity",
         "alarm_water_lacks",
         "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_filter_life",
+        "fanSpeed0to9"
       ],
       "platforms": [
         "local"
@@ -587,6 +588,7 @@
       "class": "fan",
       "capabilities": [
         "core200sCapability",
+        "fanSpeed0to3",
         "onoff",
         "measure_filter_life",
         "alarm_filter_life"
@@ -669,6 +671,7 @@
       "capabilities": [
         "core300sCapability",
         "onoff",
+        "fanSpeed0to5",
         "measure_pm25",
         "alarm_pm25",
         "measure_filter_life",
@@ -751,6 +754,7 @@
       "class": "fan",
       "capabilities": [
         "core400sCapability",
+        "fanSpeed0to4",
         "onoff",
         "measure_pm25",
         "alarm_pm25",
@@ -834,6 +838,7 @@
       "class": "fan",
       "capabilities": [
         "dual200sCapability",
+        "fanSpeed0to3",
         "onoff",
         "measure_humidity",
         "alarm_water_lacks",
@@ -917,12 +922,13 @@
       "class": "fan",
       "capabilities": [
         "lv600sCapability",
-        "lv600sWarmCapability",
         "onoff",
         "measure_humidity",
         "alarm_water_lacks",
         "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_filter_life",
+        "fanSpeed0to9",
+        "warmFanSpeed0to3"
       ],
       "platforms": [
         "local"
@@ -1049,66 +1055,10 @@
           }
         },
         {
-          "id": "fan_speed_1",
+          "id": "manual",
           "title": {
-            "en": "Fan Speed 1",
-            "de": "Geschwindigkeit 1"
-          }
-        },
-        {
-          "id": "fan_speed_2",
-          "title": {
-            "en": "Fan Speed 2",
-            "de": "Geschwindigkeit 2"
-          }
-        },
-        {
-          "id": "fan_speed_3",
-          "title": {
-            "en": "Fan Speed 3",
-            "de": "Geschwindigkeit 3"
-          }
-        },
-        {
-          "id": "fan_speed_4",
-          "title": {
-            "en": "Fan Speed 4",
-            "de": "Geschwindigkeit 4"
-          }
-        },
-        {
-          "id": "fan_speed_5",
-          "title": {
-            "en": "Fan Speed 5",
-            "de": "Geschwindigkeit 5"
-          }
-        },
-        {
-          "id": "fan_speed_6",
-          "title": {
-            "en": "Fan Speed 6",
-            "de": "Geschwindigkeit 6"
-          }
-        },
-        {
-          "id": "fan_speed_7",
-          "title": {
-            "en": "Fan Speed 7",
-            "de": "Geschwindigkeit 7"
-          }
-        },
-        {
-          "id": "fan_speed_8",
-          "title": {
-            "en": "Fan Speed 8",
-            "de": "Geschwindigkeit 8"
-          }
-        },
-        {
-          "id": "fan_speed_9",
-          "title": {
-            "en": "Fan Speed 9",
-            "de": "Geschwindigkeit 9"
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
           }
         }
       ],
@@ -1140,24 +1090,10 @@
           }
         },
         {
-          "id": "fan_speed_1",
+          "id": "manual",
           "title": {
-            "en": "Low",
-            "de": "Niedrig"
-          }
-        },
-        {
-          "id": "fan_speed_2",
-          "title": {
-            "en": "Medium",
-            "de": "Mittel"
-          }
-        },
-        {
-          "id": "fan_speed_3",
-          "title": {
-            "en": "High",
-            "de": "Hoch"
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
           }
         }
       ],
@@ -1196,38 +1132,10 @@
           }
         },
         {
-          "id": "fan_speed_1",
+          "id": "manual",
           "title": {
-            "en": "Fan Speed 1",
-            "de": "Geschwindigkeit 1"
-          }
-        },
-        {
-          "id": "fan_speed_2",
-          "title": {
-            "en": "Fan Speed 2",
-            "de": "Geschwindigkeit 2"
-          }
-        },
-        {
-          "id": "fan_speed_3",
-          "title": {
-            "en": "Fan Speed 3",
-            "de": "Geschwindigkeit 3"
-          }
-        },
-        {
-          "id": "fan_speed_4",
-          "title": {
-            "en": "Fan Speed 4",
-            "de": "Geschwindigkeit 4"
-          }
-        },
-        {
-          "id": "fan_speed_5",
-          "title": {
-            "en": "Fan Speed 5",
-            "de": "Geschwindigkeit 5"
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
           }
         }
       ],
@@ -1266,31 +1174,10 @@
           }
         },
         {
-          "id": "fan_speed_1",
+          "id": "manual",
           "title": {
-            "en": "Fan Speed 1",
-            "de": "Geschwindigkeit 1"
-          }
-        },
-        {
-          "id": "fan_speed_2",
-          "title": {
-            "en": "Fan Speed 2",
-            "de": "Geschwindigkeit 2"
-          }
-        },
-        {
-          "id": "fan_speed_3",
-          "title": {
-            "en": "Fan Speed 3",
-            "de": "Geschwindigkeit 3"
-          }
-        },
-        {
-          "id": "fan_speed_4",
-          "title": {
-            "en": "Fan Speed 4",
-            "de": "Geschwindigkeit 4"
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
           }
         }
       ],
@@ -1322,24 +1209,10 @@
           }
         },
         {
-          "id": "fan_speed_1",
+          "id": "manual",
           "title": {
-            "en": "Low",
-            "de": "Niedrig"
-          }
-        },
-        {
-          "id": "fan_speed_2",
-          "title": {
-            "en": "Medium",
-            "de": "Mittel"
-          }
-        },
-        {
-          "id": "fan_speed_3",
-          "title": {
-            "en": "High",
-            "de": "Hoch"
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
           }
         }
       ],
@@ -1348,6 +1221,70 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
+    },
+    "fanSpeed0to3": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "fanSpeed0to4": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "fanSpeed0to5": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "fanSpeed0to9": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 9,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
     },
     "lv600sCapability": {
       "type": "enum",
@@ -1364,6 +1301,13 @@
           }
         },
         {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
           "id": "sleep",
           "title": {
             "en": "Sleep Mode",
@@ -1371,66 +1315,10 @@
           }
         },
         {
-          "id": "fan_speed_1",
+          "id": "manual",
           "title": {
-            "en": "Fan Speed 1",
-            "de": "Geschwindigkeit 1"
-          }
-        },
-        {
-          "id": "fan_speed_2",
-          "title": {
-            "en": "Fan Speed 2",
-            "de": "Geschwindigkeit 2"
-          }
-        },
-        {
-          "id": "fan_speed_3",
-          "title": {
-            "en": "Fan Speed 3",
-            "de": "Geschwindigkeit 3"
-          }
-        },
-        {
-          "id": "fan_speed_4",
-          "title": {
-            "en": "Fan Speed 4",
-            "de": "Geschwindigkeit 4"
-          }
-        },
-        {
-          "id": "fan_speed_5",
-          "title": {
-            "en": "Fan Speed 5",
-            "de": "Geschwindigkeit 5"
-          }
-        },
-        {
-          "id": "fan_speed_6",
-          "title": {
-            "en": "Fan Speed 6",
-            "de": "Geschwindigkeit 6"
-          }
-        },
-        {
-          "id": "fan_speed_7",
-          "title": {
-            "en": "Fan Speed 7",
-            "de": "Geschwindigkeit 7"
-          }
-        },
-        {
-          "id": "fan_speed_8",
-          "title": {
-            "en": "Fan Speed 8",
-            "de": "Geschwindigkeit 8"
-          }
-        },
-        {
-          "id": "fan_speed_9",
-          "title": {
-            "en": "Fan Speed 9",
-            "de": "Geschwindigkeit 9"
+            "en": "Humidity Mode",
+            "de": "Luftfeuchtigkeit Modus"
           }
         }
       ],
@@ -1439,20 +1327,6 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
-    },
-    "lv600sCapabilityTest": {
-      "type": "number",
-      "title": {
-        "en": "Fan Speed"
-      },
-      "min": 1,
-      "max": 9,
-      "decimals": 0,
-      "getable": true,
-      "setable": true,
-      "uiQuickAction": true,
-      "uiComponent": "slider",
-      "icon": "/assets/capability_icons/heating_level.svg"
     },
     "lv600sWarmCapability": {
       "type": "enum",
@@ -1508,6 +1382,22 @@
       "units": "%",
       "uiComponent": "sensor",
       "icon": "/assets/capability_icons/filter_life.svg"
+    },
+    "warmFanSpeed0to3": {
+      "type": "number",
+      "title": {
+        "en": "Heating Level",
+        "de": "Heizstufe"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
     }
   }
 }

@@ -5,6 +5,7 @@
   "class": "fan",
   "capabilities": [
     "core200sCapability",
+    "fanSpeed0to3",
     "onoff",
     "measure_filter_life",
     "alarm_filter_life"

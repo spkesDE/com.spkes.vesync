@@ -2,12 +2,17 @@ import PurifierDeviceBase from "../../lib/PurifierDeviceBase";
 
 class Core400s extends PurifierDeviceBase {
     private capabilitiesAddition: string[] = [
+        "core400sCapability",
+        "fanSpeed0to4",
+        "onoff",
         "measure_pm25",
         "alarm_pm25",
+        "measure_filter_life",
+        "alarm_filter_life"
     ]
 
     async onInit() {
-        await this.getDevice().catch(this.log);
+        await super.onInit();
 
         this.registerCapabilityListener("onoff", async (value) => {
             if (!value) this.setCapabilityValue("core400sCapability", "off").then();
@@ -20,6 +25,14 @@ class Core400s extends PurifierDeviceBase {
             await this.setMode(value);
         });
 
+        this.registerCapabilityListener("fanSpeed0to4", async (value) => {
+            if (value === 0) this.triggerCapabilityListener("onoff", false).then();
+            else {
+                this.setCapabilityValue("onoff", true).then();
+                this.setCapabilityValue("core400sCapability", "manual").then();
+                await this.setMode("fan_speed_" + value);
+            }
+        })
 
         this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
 
@@ -57,7 +70,7 @@ class Core400s extends PurifierDeviceBase {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
             if (this.hasCapability("core400sCapability")) {
                 if (this.device.mode === "manual")
-                    this.setCapabilityValue('core400sCapability', "fan_speed_" + this.device.fan_level).catch(this.error);
+                    this.setCapabilityValue('core400sCapability', "manual").catch(this.error);
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('core400sCapability', "sleep").catch(this.error);
                 if (this.device.mode === "auto")
