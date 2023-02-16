@@ -25,16 +25,9 @@ export default class HumidifierDeviceBase extends Homey.Device {
         }
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
-            if (this.device.mode !== "humidity" && this.device.deviceType == "LV600S")
-                await this.device.setHumidityMode("humidity");
-            else if (this.device.mode !== "manual")
+            if (this.device.mode !== "manual")
                 await this.device.setHumidityMode("manual");
             this.device?.setMistLevel(level).catch(this.error);
-            return;
-        }
-        if (value.startsWith("warm_fan_speed_")) {
-            let level = Number(value.replace("warm_fan_speed_", ""));
-            this.device?.setWarmLevel(level).catch(this.error);
             return;
         }
         if (value === "auto") {
@@ -44,9 +37,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
             return;
         }
         if (value === "manual") {
-            if (this.device.mode !== "humidity" && this.device.deviceType == "LV600S")
-                await this.device.setHumidityMode("humidity");
-            else if (this.device.mode !== "manual")
+            if (this.device.mode !== "manual")
                 await this.device.setHumidityMode("manual");
             this.device?.setMistLevel(this.device.mist_level ?? 1).catch(this.error);
             return;

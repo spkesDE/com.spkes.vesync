@@ -70,7 +70,19 @@ class LV600S extends HumidifierDeviceBase {
             this.error("LV600S is not connected");
             return;
         }
-        this.log("Mode: " + value);
+        if (value.startsWith("fan_speed_")) {
+            let level = Number(value.replace("fan_speed_", ""));
+            if (this.device.mode !== "humidity")
+                await this.device.setHumidityMode("humidity");
+            this.device?.setMistLevel(level).catch(this.error);
+            return;
+        }
+        if (value === "auto") {
+            if (!this.device.isOn())
+                this.device?.on().catch(this.error);
+            await this.device.setHumidityMode("humidity").catch(this.error);
+            return;
+        }
         await super.setMode(value);
     }
 
