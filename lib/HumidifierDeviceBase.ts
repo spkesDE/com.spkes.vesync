@@ -30,9 +30,14 @@ export default class HumidifierDeviceBase extends Homey.Device {
             this.device?.setMistLevel(level).catch(this.error);
             return;
         }
+        if (value.startsWith("warm_fan_speed_")) {
+            let level = Number(value.replace("warm_fan_speed_", ""));
+            this.device?.setWarmLevel(level).catch(this.error);
+            return;
+        }
         if (value === "auto") {
             if (!this.device.isOn())
-                this.device?.on().catch(this.error);
+                await this.device?.on().catch(this.error);
             this.device?.setHumidityMode('auto').catch(this.error);
             return;
         }
@@ -44,7 +49,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         }
         if (value === "sleep") {
             if (this.device?.isOn())
-                this.device?.on().catch(this.error);
+                await this.device?.on().catch(this.error);
             this.device?.setHumidityMode('sleep').catch(this.error);
             return;
         }

@@ -507,8 +507,6 @@
         "onoff",
         "measure_humidity",
         "alarm_water_lacks",
-        "measure_filter_life",
-        "alarm_filter_life",
         "fanSpeed0to9"
       ],
       "platforms": [
@@ -841,9 +839,7 @@
         "fanSpeed0to3",
         "onoff",
         "measure_humidity",
-        "alarm_water_lacks",
-        "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_water_lacks"
       ],
       "platforms": [
         "local"
@@ -925,8 +921,6 @@
         "onoff",
         "measure_humidity",
         "alarm_water_lacks",
-        "measure_filter_life",
-        "alarm_filter_life",
         "fanSpeed0to9",
         "warmFanSpeed0to3"
       ],
@@ -1317,8 +1311,8 @@
         {
           "id": "manual",
           "title": {
-            "en": "Humidity Mode",
-            "de": "Luftfeuchtigkeit Modus"
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
           }
         }
       ],

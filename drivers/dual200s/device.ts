@@ -6,9 +6,7 @@ class Dual200s extends HumidifierDeviceBase {
         "fanSpeed0to3",
         "onoff",
         "measure_humidity",
-        "alarm_water_lacks",
-        "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_water_lacks"
     ]
 
     /**

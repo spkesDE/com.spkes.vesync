@@ -6,8 +6,6 @@ class LV600S extends HumidifierDeviceBase {
         "onoff",
         "measure_humidity",
         "alarm_water_lacks",
-        "measure_filter_life",
-        "alarm_filter_life",
         "fanSpeed0to9",
         "warmFanSpeed0to3"
     ]
@@ -71,16 +69,18 @@ class LV600S extends HumidifierDeviceBase {
             return;
         }
         if (value.startsWith("fan_speed_")) {
+            this.log("Mode: " + value);
             let level = Number(value.replace("fan_speed_", ""));
-            if (this.device.mode !== "humidity")
-                await this.device.setHumidityMode("humidity");
-            this.device?.setMistLevel(level).catch(this.error);
+            if (this.device.mode === "sleep")
+                await this.device.setHumidityMode("humidity").catch(this.error);
+            this.device.setMistLevel(level).catch(this.error);
             return;
         }
         if (value === "auto") {
+            this.log("Mode: " + value);
             if (!this.device.isOn())
-                this.device?.on().catch(this.error);
-            await this.device.setHumidityMode("humidity").catch(this.error);
+                await this.device.on().catch(this.error);
+            this.device.setHumidityMode("humidity").catch(this.error);
             return;
         }
         await super.setMode(value);
@@ -95,7 +95,7 @@ class LV600S extends HumidifierDeviceBase {
                     this.setCapabilityValue('lv600sCapability', "manual").catch(this.error);
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('lv600sCapability', "sleep").catch(this.error);
-                if (this.device.mode === "auto")
+                if (this.device.mode === "auto" || this.device.mode === "humidity")
                     this.setCapabilityValue('lv600sCapability', "auto").catch(this.error);
                 if (!this.device.isOn())
                     this.setCapabilityValue('lv600sCapability', "off").catch(this.error);

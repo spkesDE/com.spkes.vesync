@@ -36,13 +36,13 @@ export default class PurifierDeviceBase extends Homey.Device {
         }
         if (value === "auto") {
             if (!this.device.isOn())
-                this.device?.on().catch(this.error);
+                await this.device?.on().catch(this.error);
             this.device?.setMode('auto').catch(this.error);
             return;
         }
         if (value === "sleep") {
             if (!this.device.isOn())
-                this.device?.on().catch(this.error);
+                await this.device?.on().catch(this.error);
             this.device?.setMode('sleep').catch(this.error);
             return;
         }
