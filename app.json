@@ -507,7 +507,9 @@
         "onoff",
         "measure_humidity",
         "alarm_water_lacks",
-        "fanSpeed0to9"
+        "fanSpeed0to9",
+        "display_toggle",
+        "nightlight_toggle"
       ],
       "platforms": [
         "local"
@@ -589,7 +591,9 @@
         "fanSpeed0to3",
         "onoff",
         "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_filter_life",
+        "display_toggle",
+        "nightlight_toggle"
       ],
       "platforms": [
         "local"
@@ -757,7 +761,8 @@
         "measure_pm25",
         "alarm_pm25",
         "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_filter_life",
+        "display_toggle"
       ],
       "platforms": [
         "local"
@@ -839,7 +844,8 @@
         "fanSpeed0to3",
         "onoff",
         "measure_humidity",
-        "alarm_water_lacks"
+        "alarm_water_lacks",
+        "display_toggle"
       ],
       "platforms": [
         "local"
@@ -922,7 +928,8 @@
         "measure_humidity",
         "alarm_water_lacks",
         "fanSpeed0to9",
-        "warmFanSpeed0to3"
+        "warmFanSpeed0to3",
+        "display_toggle"
       ],
       "platforms": [
         "local"
@@ -1181,6 +1188,18 @@
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
     },
+    "display_toggle": {
+      "type": "boolean",
+      "title": {
+        "en": "Display",
+        "de": "Display"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/display_toggle.svg"
+    },
     "dual200sCapability": {
       "type": "enum",
       "title": {
@@ -1376,6 +1395,18 @@
       "units": "%",
       "uiComponent": "sensor",
       "icon": "/assets/capability_icons/filter_life.svg"
+    },
+    "nightlight_toggle": {
+      "type": "boolean",
+      "title": {
+        "en": "Nightlight",
+        "de": "Nachtlicht"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/nightlight_toggle.svg"
     },
     "warmFanSpeed0to3": {
       "type": "number",

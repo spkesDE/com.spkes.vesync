@@ -8,13 +8,16 @@ class Classic300s extends HumidifierDeviceBase {
         "onoff",
         "measure_humidity",
         "alarm_water_lacks",
-        "fanSpeed0to9"
+        "fanSpeed0to9",
+        "display_toggle",
+        "nightlight_toggle"
     ]
 
     /**
      * onInit is called when the device is initialized.
      */
     async onInit() {
+        await this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
         await super.onInit();
         this.registerCapabilityListener("onoff", async (value) => {
             if (!value) this.setCapabilityValue("classic300sCapability", "off").then();
@@ -35,8 +38,6 @@ class Classic300s extends HumidifierDeviceBase {
                 await this.setMode("fan_speed_" + value);
             }
         })
-
-        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
         this.log('Classic300s has been initialized');
     }
 

@@ -8,7 +8,9 @@
     "fanSpeed0to3",
     "onoff",
     "measure_filter_life",
-    "alarm_filter_life"
+    "alarm_filter_life",
+    "display_toggle",
+    "nightlight_toggle"
   ],
   "platforms": [
     "local"

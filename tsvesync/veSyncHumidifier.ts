@@ -54,7 +54,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             warm_mist_levels: [0, 1, 2, 3],
             method: ['getHumidifierStatus', 'setAutomaticStop',
-                'setSwitch', 'setNightLightBrightness',
+                'setSwitch',
                 'setVirtualLevel', 'setTargetHumidity',
                 'setHumidityMode', 'setDisplay', 'setLevel']
         },
@@ -140,7 +140,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     public setNightLightBrightness(brightness: number): Promise<string | boolean> {
         return new Promise((resolve, reject) => {
             if (!this.getDeviceFeatures()?.features.includes('nightlight') ?? false) return reject(this.deviceType + ' don\'t accept nightlight');
-            if (brightness > 0 || brightness < 100) return reject("Brightness value must be set between 0 and 100");
+            if (brightness < 0 || brightness > 100) return reject("Brightness value must be set between 0 and 100");
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -153,6 +153,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.night_light_brightness = brightness;
                 return resolve(true);
             });
         });
@@ -221,7 +222,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             let payload = this.deviceType === 'Classic200S' ?
                 Helper.createPayload(this, 'setIndicatorLightSwitch', {state: state})
                 :
-                Helper.createPayload(this, 'setDisplay', {enabled: state, id: 0})
+                Helper.createPayload(this, 'setDisplay', {state: state})
 
             let body = {
                 ...Helper.bypassBodyV2(this.api),

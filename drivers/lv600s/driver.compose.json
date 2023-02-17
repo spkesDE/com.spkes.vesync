@@ -9,7 +9,8 @@
     "measure_humidity",
     "alarm_water_lacks",
     "fanSpeed0to9",
-    "warmFanSpeed0to3"
+    "warmFanSpeed0to3",
+    "display_toggle"
   ],
   "platforms": [
     "local"

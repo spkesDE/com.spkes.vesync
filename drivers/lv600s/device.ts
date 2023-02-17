@@ -7,8 +7,13 @@ class LV600S extends HumidifierDeviceBase {
         "measure_humidity",
         "alarm_water_lacks",
         "fanSpeed0to9",
-        "warmFanSpeed0to3"
+        "warmFanSpeed0to3",
+        "display_toggle"
     ]
+
+    //TODO: Flow for: Mode, Fan Speed, Warm Mist Speed, Target Humidity
+    //TODO: Device Settings target Humidity
+
 
     async onInit() {
         await super.onInit();

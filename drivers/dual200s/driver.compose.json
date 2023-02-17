@@ -8,7 +8,8 @@
     "fanSpeed0to3",
     "onoff",
     "measure_humidity",
-    "alarm_water_lacks"
+    "alarm_water_lacks",
+    "display_toggle"
   ],
   "platforms": [
     "local"

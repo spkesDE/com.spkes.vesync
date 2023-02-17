@@ -1,0 +1,12 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Nightlight",
+    "de": "Nachtlicht"
+  },
+  "getable": true,
+  "setable": true,
+  "uiQuickAction": false,
+  "uiComponent": "button",
+  "icon": "/assets/capability_icons/nightlight_toggle.svg"
+}

@@ -8,10 +8,12 @@ class Core300S extends PurifierDeviceBase {
         "measure_pm25",
         "alarm_pm25",
         "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_filter_life",
+        "display_toggle"
     ]
 
     async onInit() {
+        await this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
         await super.onInit();
 
         this.registerCapabilityListener("onoff", async (value) => {
@@ -33,8 +35,6 @@ class Core300S extends PurifierDeviceBase {
                 await this.setMode("fan_speed_" + value);
             }
         })
-
-        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
 
         this.log('Core300S has been initialized');
     }

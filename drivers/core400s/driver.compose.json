@@ -10,7 +10,8 @@
     "measure_pm25",
     "alarm_pm25",
     "measure_filter_life",
-    "alarm_filter_life"
+    "alarm_filter_life",
+    "display_toggle"
   ],
   "platforms": [
     "local"

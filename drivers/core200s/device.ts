@@ -6,12 +6,14 @@ class Core200S extends PurifierDeviceBase {
         "fanSpeed0to3",
         "onoff",
         "measure_filter_life",
-        "alarm_filter_life"
+        "alarm_filter_life",
+        "display_toggle",
+        "nightlight_toggle",
     ]
 
     async onInit() {
+        await this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
         await super.onInit();
-
         this.registerCapabilityListener("onoff", async (value) => {
             if (!value) this.setCapabilityValue("core200sCapability", "off").then();
             await this.setMode(value ? "on" : "off");
@@ -31,9 +33,6 @@ class Core200S extends PurifierDeviceBase {
                 await this.setMode("fan_speed_" + value);
             }
         });
-
-        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
-
         this.log('Core200S has been initialized');
     }
 
