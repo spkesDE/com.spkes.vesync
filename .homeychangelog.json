@@ -85,5 +85,8 @@
   },
   "0.0.29": {
     "en": "Bug fixes. Translation fixes"
+  },
+  "0.0.30": {
+    "en": "Please re-add your devices if you have any issues. Using Sliders now for fan speed. Code improvements. Following updates may contain breaking changes."
   }
 }
