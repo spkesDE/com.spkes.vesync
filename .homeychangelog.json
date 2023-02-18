@@ -88,5 +88,8 @@
   },
   "0.0.30": {
     "en": "Please re-add your devices if you have any issues. Using Sliders now for fan speed. Code improvements. Following updates may contain breaking changes."
+  },
+  "0.1.0": {
+    "en": "First Release Candidate - Added support for Classic300s, Core300s, Core400s, Dual200s, LV600s. "
   }
 }
