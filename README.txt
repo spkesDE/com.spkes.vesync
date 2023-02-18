@@ -1,8 +1,7 @@
-Increase the potential of your Homey pro! Purify your home’s air or add the ideal amount of humidity!
+Integrate your Levoit air purifiers and humidifiers with your Homey Pro using VeSync.
+With VeSync, you can easily control and monitor your devices from anywhere using the Homey Pro app.
 
-Supported Devices
-Core 200s Air Purifier
+Check air quality and humidity levels in your home, and create automations to turn your devices on or off based on other smart home triggers.
 
-Upcoming
-Humidifier Classic 300s
-Humidifier Dual 200s
+VeSync Homey Pro integration is compatible with a range of Levoit devices and is easy to set up.
+Simplify your smart home experience with VeSync Homey Pro integration today.
