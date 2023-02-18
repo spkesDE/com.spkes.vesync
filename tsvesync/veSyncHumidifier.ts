@@ -49,7 +49,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 'LUH-A602S-WEUR',
                 'LUH-A602S-WEU',
                 'LUH-A602S-WJP'],
-            features: ['warm_mist', 'nightlight'],
+            features: ['warm_mist'],
             mist_modes: ['humidity', 'sleep', 'manual'],
             mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             warm_mist_levels: [0, 1, 2, 3],

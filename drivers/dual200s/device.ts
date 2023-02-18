@@ -10,9 +10,6 @@ class Dual200s extends HumidifierDeviceBase {
         "display_toggle"
     ]
 
-    /**
-     * onInit is called when the device is initialized.
-     */
     async onInit() {
         await this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
         await super.onInit();

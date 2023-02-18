@@ -1,0 +1,25 @@
+{
+  "title": {
+    "en": "Set Display to...",
+    "de": "Setzte Display zu..."
+  },
+  "titleFormatted": {
+    "en": "Set display to [[checkbox]]",
+    "de": "Setzte Display zu [[checkbox]]"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=core200s|core400s|dual200s|classic300s|lv600s"
+    },
+    {
+      "type": "checkbox",
+      "name": "checkbox",
+      "title": {
+        "en": "On/Off",
+        "de": "An/Aus"
+      }
+    }
+  ]
+}

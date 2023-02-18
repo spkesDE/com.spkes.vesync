@@ -38,6 +38,13 @@
                 "en": "Sleep Mode",
                 "de": "Schlaf Modus"
               }
+            },
+            {
+              "id": "manual",
+              "label": {
+                "en": "Manual Mode",
+                "de": "Manualler Modus"
+              }
             }
           ]
         }

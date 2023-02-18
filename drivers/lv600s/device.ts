@@ -11,7 +11,7 @@ class LV600S extends HumidifierDeviceBase {
         "display_toggle"
     ]
 
-    //TODO: Flow for: Mode, Fan Speed, Warm Mist Speed, Display, Night light
+    //TODO: Flow for: Fan Speed, Warm Mist Speed, Display, Night light
     //TODO: Device Settings target Humidity
 
 

@@ -67,7 +67,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=lv600s|dual200s|classic300s|core200s|core300s|core400s"
+            "filter": "driver_id=core200s|core300s|core400s"
           }
         ]
       },
@@ -87,6 +87,428 @@
       }
     ],
     "actions": [
+      {
+        "title": {
+          "en": "Set Display to...",
+          "de": "Setzte Display zu..."
+        },
+        "titleFormatted": {
+          "en": "Set display to [[checkbox]]",
+          "de": "Setzte Display zu [[checkbox]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core400s|dual200s|classic300s|lv600s"
+          },
+          {
+            "type": "checkbox",
+            "name": "checkbox",
+            "title": {
+              "en": "On/Off",
+              "de": "An/Aus"
+            }
+          }
+        ],
+        "id": "display_toggle"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|dual200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_3"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core400s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "4",
+                "title": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_4"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core300s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "4",
+                "title": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              },
+              {
+                "id": "5",
+                "title": {
+                  "en": "Fan Speed 5",
+                  "de": "Geschwindigkeit 5"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_5"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s|classic300s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "4",
+                "title": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              },
+              {
+                "id": "5",
+                "title": {
+                  "en": "Fan Speed 5",
+                  "de": "Geschwindigkeit 5"
+                }
+              },
+              {
+                "id": "6",
+                "title": {
+                  "en": "Fan Speed 6",
+                  "de": "Geschwindigkeit 6"
+                }
+              },
+              {
+                "id": "7",
+                "title": {
+                  "en": "Fan Speed 7",
+                  "de": "Geschwindigkeit 7"
+                }
+              },
+              {
+                "id": "8",
+                "title": {
+                  "en": "Fan Speed 8",
+                  "de": "Geschwindigkeit 8"
+                }
+              },
+              {
+                "id": "9",
+                "title": {
+                  "en": "Fan Speed 9",
+                  "de": "Geschwindigkeit 9"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_9"
+      },
+      {
+        "title": {
+          "en": "Set nightlight to...",
+          "de": "Setzte Nachtlicht zu..."
+        },
+        "titleFormatted": {
+          "en": "Set nightlight to [[level]]",
+          "de": "Setzte Nachtlicht zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "On/Dim/Off",
+              "de": "An/Schwach/Aus"
+            },
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "On",
+                  "de": "An"
+                }
+              },
+              {
+                "id": "dim",
+                "title": {
+                  "en": "Dim",
+                  "de": "Schwach"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "nightlight"
+      },
+      {
+        "title": {
+          "en": "Set nightlight to...",
+          "de": "Setzte Nachtlicht zu..."
+        },
+        "titleFormatted": {
+          "en": "Set nightlight to [[brightness]]",
+          "de": "Setzte Nachtlicht zu [[brightness]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic300s"
+          },
+          {
+            "type": "range",
+            "name": "brightness",
+            "title": {
+              "en": "Brightness",
+              "de": "Helligkeit"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "%",
+            "labelMultiplier": 1,
+            "labelDecimals": 0
+          }
+        ],
+        "id": "nightlight_slider"
+      },
+      {
+        "title": {
+          "en": "Set Heating Level",
+          "de": "Setze Heizstufe"
+        },
+        "titleFormatted": {
+          "en": "Set heating level to [[level]]",
+          "de": "Setzte Heizstufe zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Heating Level",
+              "de": "Heizstufe"
+            },
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "Heating Off",
+                  "de": "Heizstufe Aus"
+                }
+              },
+              {
+                "id": "1",
+                "title": {
+                  "en": "Heating Level 1",
+                  "de": "Heizstufe 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Heating Level 2",
+                  "de": "Heizstufe 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Heating Level 3",
+                  "de": "Heizstufe 3"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "warm_fan_speed_0_3"
+      },
       {
         "id": "setModeClassic300s",
         "title": {
@@ -132,24 +554,10 @@
                 }
               },
               {
-                "id": "low",
+                "id": "manual",
                 "label": {
-                  "en": "Low Mode",
-                  "de": "Niedrig"
-                }
-              },
-              {
-                "id": "medium",
-                "label": {
-                  "en": "Medium Mode",
-                  "de": "Mittel"
-                }
-              },
-              {
-                "id": "high",
-                "label": {
-                  "en": "High Mode",
-                  "de": "Hoch"
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
                 }
               }
             ]
@@ -194,24 +602,10 @@
                 }
               },
               {
-                "id": "low",
+                "id": "manual",
                 "label": {
-                  "en": "Low Mode",
-                  "de": "Niedrig"
-                }
-              },
-              {
-                "id": "medium",
-                "label": {
-                  "en": "Medium Mode",
-                  "de": "Mittel"
-                }
-              },
-              {
-                "id": "high",
-                "label": {
-                  "en": "High Mode",
-                  "de": "Hoch"
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
                 }
               }
             ]
@@ -263,38 +657,10 @@
                 }
               },
               {
-                "id": "fan_speed_1",
+                "id": "manual",
                 "label": {
-                  "en": "Fan Speed 1",
-                  "de": "Geschwindigkeit 1"
-                }
-              },
-              {
-                "id": "fan_speed_2",
-                "label": {
-                  "en": "Fan Speed 2",
-                  "de": "Geschwindigkeit 2"
-                }
-              },
-              {
-                "id": "fan_speed_3",
-                "label": {
-                  "en": "Fan Speed 3",
-                  "de": "Geschwindigkeit 3"
-                }
-              },
-              {
-                "id": "fan_speed_4",
-                "label": {
-                  "en": "Fan Speed 4",
-                  "de": "Geschwindigkeit 4"
-                }
-              },
-              {
-                "id": "fan_speed_5",
-                "label": {
-                  "en": "Fan Speed 5",
-                  "de": "Geschwindigkeit 5"
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
                 }
               }
             ]
@@ -346,38 +712,10 @@
                 }
               },
               {
-                "id": "fan_speed_1",
+                "id": "manual",
                 "label": {
-                  "en": "Fan Speed 1",
-                  "de": "Geschwindigkeit 1"
-                }
-              },
-              {
-                "id": "fan_speed_2",
-                "label": {
-                  "en": "Fan Speed 2",
-                  "de": "Geschwindigkeit 2"
-                }
-              },
-              {
-                "id": "fan_speed_3",
-                "label": {
-                  "en": "Fan Speed 3",
-                  "de": "Geschwindigkeit 3"
-                }
-              },
-              {
-                "id": "fan_speed_4",
-                "label": {
-                  "en": "Fan Speed 4",
-                  "de": "Geschwindigkeit 4"
-                }
-              },
-              {
-                "id": "fan_speed_5",
-                "label": {
-                  "en": "Fan Speed 5",
-                  "de": "Geschwindigkeit 5"
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
                 }
               }
             ]
@@ -422,24 +760,10 @@
                 }
               },
               {
-                "id": "low",
+                "id": "manual",
                 "label": {
-                  "en": "Low Mode",
-                  "de": "Niedrig"
-                }
-              },
-              {
-                "id": "medium",
-                "label": {
-                  "en": "Medium Mode",
-                  "de": "Mittel"
-                }
-              },
-              {
-                "id": "high",
-                "label": {
-                  "en": "High Mode",
-                  "de": "Hoch"
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
                 }
               }
             ]
@@ -488,6 +812,13 @@
                 "label": {
                   "en": "Sleep Mode",
                   "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
                 }
               }
             ]
@@ -1340,48 +1671,6 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
-    },
-    "lv600sWarmCapability": {
-      "type": "enum",
-      "title": {
-        "en": "Heating Level",
-        "de": "Heizstufe"
-      },
-      "values": [
-        {
-          "id": "warm_fan_speed_0",
-          "title": {
-            "en": "Heating level 0",
-            "de": "Heizstufe 0"
-          }
-        },
-        {
-          "id": "warm_fan_speed_1",
-          "title": {
-            "en": "Heating level 1",
-            "de": "Heizstufe 1"
-          }
-        },
-        {
-          "id": "warm_fan_speed_2",
-          "title": {
-            "en": "Heating level 2",
-            "de": "Heizstufe 2"
-          }
-        },
-        {
-          "id": "warm_fan_speed_3",
-          "title": {
-            "en": "Heating level 3",
-            "de": "Heizstufe 3"
-          }
-        }
-      ],
-      "getable": true,
-      "setable": true,
-      "uiComponent": "picker",
-      "uiQuickAction": true,
-      "icon": "/assets/capability_icons/heating_level.svg"
     },
     "measure_filter_life": {
       "type": "number",

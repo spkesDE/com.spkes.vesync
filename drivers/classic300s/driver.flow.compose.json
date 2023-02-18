@@ -40,24 +40,10 @@
               }
             },
             {
-              "id": "low",
+              "id": "manual",
               "label": {
-                "en": "Low Mode",
-                "de": "Niedrig"
-              }
-            },
-            {
-              "id": "medium",
-              "label": {
-                "en": "Medium Mode",
-                "de": "Mittel"
-              }
-            },
-            {
-              "id": "high",
-              "label": {
-                "en": "High Mode",
-                "de": "Hoch"
+                "en": "Manual Mode",
+                "de": "Manualler Modus"
               }
             }
           ]

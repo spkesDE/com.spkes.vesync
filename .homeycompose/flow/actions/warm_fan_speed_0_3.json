@@ -1,0 +1,55 @@
+{
+  "title": {
+    "en": "Set Heating Level",
+    "de": "Setze Heizstufe"
+  },
+  "titleFormatted": {
+    "en": "Set heating level to [[level]]",
+    "de": "Setzte Heizstufe zu [[level]]"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=lv600s"
+    },
+    {
+      "type": "dropdown",
+      "name": "level",
+      "title": {
+        "en": "Heating Level",
+        "de": "Heizstufe"
+      },
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Heating Off",
+            "de": "Heizstufe Aus"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Heating Level 1",
+            "de": "Heizstufe 1"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Heating Level 2",
+            "de": "Heizstufe 2"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "Heating Level 3",
+            "de": "Heizstufe 3"
+          }
+        }
+      ]
+    }
+  ]
+}
