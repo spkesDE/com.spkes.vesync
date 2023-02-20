@@ -94,8 +94,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         await this.device.getStatus().catch(async (reason: Error) => {
             switch (reason.message) {
                 case "device offline":
-                    console.log("Here!", this.homey.__("devices.offline"))
-                    await this.setUnavailable(this.homey.__("devices.offline"));
+                    await this.setUnavailable(this.homey.__("devices.offline"))
                     return;
                 default:
                     await this.setUnavailable(reason.message);
@@ -104,10 +103,8 @@ export default class HumidifierDeviceBase extends Homey.Device {
             }
         });
         if (this.device.isConnected()) {
-            if (!this.getAvailable()) {
-                this.error("device is not available");
+            if (!this.getAvailable())
                 await this.setAvailable().catch(this.error);
-            }
             if (this.hasCapability("fanSpeed0to3"))
                 this.setCapabilityValue('fanSpeed0to3', this.device.mist_virtual_level ?? this.device.mist_level ?? 0).catch(this.error);
             if (this.hasCapability("fanSpeed0to4"))
