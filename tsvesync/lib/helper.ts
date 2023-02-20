@@ -1,4 +1,5 @@
 import VeSync from "../veSync";
+import * as https from "https";
 import {RequestOptions} from "https";
 import {IncomingMessage} from "http";
 import VeSyncDeviceBase from "../veSyncDeviceBase";
@@ -141,24 +142,26 @@ export default class Helper {
     //HTTP Client for requests
     private static async makeRequest(url: string, requestOptions: RequestOptions, requestBody: {}): Promise<any> {
         return new Promise((resolve, reject) => {
-            const client = require('https');
             let postData = JSON.stringify(requestBody);
-
-            let req = client.request(url, requestOptions, (res: IncomingMessage) => {
-                if (res.statusCode != 200) console.log(`STATUS of ${url}: ${res.statusCode}`);
-                res.setEncoding('utf8');
-                res.on('data', (chunk) => {
-                    resolve(JSON.parse(chunk));
+            try {
+                let req = https.request(url, requestOptions, (res: IncomingMessage) => {
+                    if (res.statusCode != 200) console.log(`STATUS of ${url}: ${res.statusCode}`);
+                    res.setEncoding('utf8');
+                    res.on('data', (chunk) => {
+                        resolve(JSON.parse(chunk));
+                    });
                 });
-            })
-            req.setTimeout(this.API_TIMEOUT * 1000, () => {
-                reject(`Timeout for ${url}`);
-            });
-            req.on('error', (e: Error) => {
-                reject(e);
-            });
-            req.write(postData);
-            req.end();
+                req.setTimeout(this.API_TIMEOUT * 1000, () => {
+                    reject(`Timeout for ${url}`);
+                });
+                req.on('error', (e: Error) => {
+                    reject(e);
+                });
+                req.write(postData);
+                req.end();
+            } catch (e) {
+                reject(e)
+            }
         });
     }
 

@@ -71,7 +71,8 @@ class Classic300s extends HumidifierDeviceBase {
         this.log('Classic300s has been added');
     }
 
-    async onSettings({oldSettings: {}, newSettings: {}, changedKeys: []}): Promise<string | void> {
+    async onSettings(settings: { oldSettings: any, newSettings: any, changedKeys: string[] }): Promise<string | void> {
+        await super.onSettings(settings);
         this.log('Classic300s settings where changed');
     }
 

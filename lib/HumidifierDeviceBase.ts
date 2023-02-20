@@ -91,10 +91,23 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
     async updateDevice(): Promise<void> {
         //Getting latest device status
-        await this.device.getStatus().catch(this.error);
+        await this.device.getStatus().catch(async (reason: Error) => {
+            switch (reason.message) {
+                case "device offline":
+                    console.log("Here!", this.homey.__("devices.offline"))
+                    await this.setUnavailable(this.homey.__("devices.offline"));
+                    return;
+                default:
+                    await this.setUnavailable(reason.message);
+                    this.error(reason);
+                    return;
+            }
+        });
         if (this.device.isConnected()) {
-            if (!this.getAvailable())
+            if (!this.getAvailable()) {
+                this.error("device is not available");
                 await this.setAvailable().catch(this.error);
+            }
             if (this.hasCapability("fanSpeed0to3"))
                 this.setCapabilityValue('fanSpeed0to3', this.device.mist_virtual_level ?? this.device.mist_level ?? 0).catch(this.error);
             if (this.hasCapability("fanSpeed0to4"))
@@ -120,9 +133,21 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 this.setCapabilityValue("display_toggle", this.device.display).catch(this.error);
             if (this.hasCapability("nightlight_toggle"))
                 this.setCapabilityValue("nightlight_toggle", this.device.night_light_brightness > 0).catch(this.error);
+            if (this.getSetting("humidity") != null) {
+                let humidity = Number(this.getSetting("humidity"));
+                if (humidity != this.device.targetHumidity)
+                    await this.setSettings({
+                        humidity: this.device.targetHumidity
+                    }).catch(this.error);
+            }
         } else if (this.getAvailable()) {
             await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
         }
+    }
+
+    async onSettings(settings: { oldSettings: any, newSettings: any, changedKeys: string[] }): Promise<string | void> {
+        if (settings.changedKeys.includes("humidity"))
+            await this.device.setTargetHumidity(settings.newSettings.humidity ?? 45).catch(this.error);
     }
 
     async checkForCapability(capability: string) {

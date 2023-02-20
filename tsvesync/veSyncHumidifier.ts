@@ -162,7 +162,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set Humidity */
     public setTargetHumidity(humidity: number): Promise<string | boolean> {
         return new Promise((resolve, reject) => {
-            if (humidity > 80 || humidity < 40) return reject("Humidity value must be set between 40 and 80");
+            if (humidity > 80 || humidity < 30) return reject("Humidity value must be set between 30 and 80");
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -175,6 +175,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             result.then(result => {
                 if (VeSync.debugMode) console.log(result)
                 if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                this.targetHumidity = humidity;
                 return resolve(true);
             });
         });
@@ -207,7 +208,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                     this.warm_mist_level = result.result.result.warm_mist_level;
                     this.warm_mist_enabled = result.result.result.warm_mist_enabled;
                     this.display = result.result.result.display ?? result.result.result.indicator_light_switch;
-                    this.targetHumidity = result.result.result.configuration.auto_target_humidity;
+                    this.targetHumidity = result.result.result.configuration.auto_target_humidity ?? 45;
                     return resolve(true)
                 } catch (e: any) {
                     return reject(result);

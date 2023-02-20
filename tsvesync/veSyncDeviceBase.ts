@@ -6,7 +6,7 @@ export default class VeSyncDeviceBase {
     deviceName: string = "";
     deviceImg: string = "";
     cid: string = "";
-    connectionStatus: string = "";
+    connectionStatus: string = "offline";
     connectionType: string = "";
     deviceType: string = "";
     type: string = "";

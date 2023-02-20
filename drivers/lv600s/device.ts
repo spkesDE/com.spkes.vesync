@@ -108,8 +108,8 @@ class LV600S extends HumidifierDeviceBase {
             if (this.hasCapability("lv600sWarmCapability") && this.device.isOn()) {
                 this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
             }
+            this.log("Device has been updated!");
         }
-        this.log("Updating device status!");
     }
 
 
