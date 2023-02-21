@@ -20,7 +20,7 @@ export default class PurifierDeviceBase extends Homey.Device {
                 await this.device.setNightLight(value ? "dim" : "off");
                 this.log(`Night Light: ${value}`);
             });
-        this.updateInterval = setInterval(async () => this.updateDevice(), 1000 * 60);
+        this.updateInterval = this.homey.setInterval(async () => this.updateDevice(), 1000 * 60);
     }
 
     async setMode(value: string) {
@@ -84,7 +84,17 @@ export default class PurifierDeviceBase extends Homey.Device {
 
     async updateDevice(): Promise<void> {
         //Getting latest device status
-        await this.device.getStatus().catch(this.error);
+        await this.device.getStatus().catch(async (reason: Error) => {
+            switch (reason.message) {
+                case "device offline":
+                    this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                    return;
+                default:
+                    await this.setUnavailable(reason.message);
+                    this.error(reason);
+                    return;
+            }
+        });
         if (this.device.isConnected()) {
             if (!this.getAvailable())
                 await this.setAvailable().catch(this.error);
@@ -110,8 +120,6 @@ export default class PurifierDeviceBase extends Homey.Device {
                 this.setCapabilityValue("display_toggle", this.device.display).catch(this.error);
             if (this.hasCapability("nightlight_toggle"))
                 this.setCapabilityValue("nightlight_toggle", this.device.night_light !== "off").catch(this.error);
-        } else if (this.getAvailable()) {
-            await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
         }
     }
 

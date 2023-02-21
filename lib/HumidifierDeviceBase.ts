@@ -20,7 +20,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 await this.device.setNightLightBrightness(value ? 50 : 0);
                 this.log(`Night Light: ${value}`);
             });
-        this.updateInterval = setInterval(async () => this.updateDevice(), 1000 * 60);
+        this.updateInterval = this.homey.setInterval(async () => this.updateDevice(), 1000 * 60);
     }
 
     async setMode(value: string) {
@@ -94,7 +94,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         await this.device.getStatus().catch(async (reason: Error) => {
             switch (reason.message) {
                 case "device offline":
-                    await this.setUnavailable(this.homey.__("devices.offline"))
+                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
                     return;
                 default:
                     await this.setUnavailable(reason.message);
