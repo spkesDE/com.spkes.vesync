@@ -94,5 +94,8 @@
   },
   "0.1.1": {
     "en": "First Release Candidate - Added support for Classic300s, Core300s, Core400s, Dual200s, LV600s."
+  },
+  "0.1.2": {
+    "en": "Second Release Candidate - Added support for Classic300s, Core300s, Core400s, Dual200s, LV600s."
   }
 }
