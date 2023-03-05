@@ -51,7 +51,7 @@ class Classic300s extends HumidifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.isConnected()) {
+        if (this.device.isConnected() && this.getAvailable()) {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
             if (this.hasCapability("classic300sCapability")) {
                 if (this.device.mode === "manual")

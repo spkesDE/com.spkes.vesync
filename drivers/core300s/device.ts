@@ -65,7 +65,7 @@ class Core300S extends PurifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.isConnected()) {
+        if (this.device.isConnected() && this.getAvailable()) {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
             if (this.hasCapability("core300SCapability")) {
                 if (this.device.mode === "manual")

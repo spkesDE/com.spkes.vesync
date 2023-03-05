@@ -9,7 +9,7 @@ export default class PurifierDeviceBase extends Homey.Device {
 
     async onInit() {
         await this.getDevice().catch(this.log);
-        await this.updateDevice();
+        await this.updateDevice().catch(this.error);
         if (this.hasCapability("display_toggle"))
             this.registerCapabilityListener("display_toggle", async (value) => {
                 await this.device.setDisplay(value);
@@ -20,7 +20,7 @@ export default class PurifierDeviceBase extends Homey.Device {
                 await this.device.setNightLight(value ? "dim" : "off");
                 this.log(`Night Light: ${value}`);
             });
-        this.updateInterval = this.homey.setInterval(async () => this.updateDevice(), 1000 * 60);
+        this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
     }
 
     async setMode(value: string) {
@@ -74,7 +74,7 @@ export default class PurifierDeviceBase extends Homey.Device {
             }
             this.device = device as VeSyncPurifier;
             if (this.device.isConnected()) {
-                await this.setAvailable();
+                await this.setAvailable().catch(this.error);
                 return resolve();
             }
             await this.setUnavailable(this.homey.__("devices.offline"))
@@ -90,7 +90,7 @@ export default class PurifierDeviceBase extends Homey.Device {
                     this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
                     return;
                 default:
-                    await this.setUnavailable(reason.message);
+                    await this.setUnavailable(reason.message).catch(this.error);
                     this.error(reason);
                     return;
             }
@@ -125,7 +125,7 @@ export default class PurifierDeviceBase extends Homey.Device {
 
     async checkForCapability(capability: string) {
         if (!this.hasCapability(capability))
-            await this.addCapability(capability);
+            await this.addCapability(capability).catch(this.error);
     }
 
 }
