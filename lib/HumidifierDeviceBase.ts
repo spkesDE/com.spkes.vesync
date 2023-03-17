@@ -118,13 +118,13 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
             if (this.hasCapability("alarm_water_lacks")) {
                 this.setCapabilityValue("alarm_water_lacks", this.device.water_lacks).catch(this.error);
-                if (this.device.water_lacks) await this.homey.flow.getTriggerCard("water_lacks").trigger().catch(this.error);
+                if (this.device.water_lacks) await this.homey.flow.getDeviceTriggerCard("water_lacks").trigger(this).catch(this.error);
             }
             if (this.hasCapability("measure_filter_life"))
                 this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
             if (this.hasCapability("alarm_filter_life")) {
                 this.setCapabilityValue("alarm_filter_life", this.device.filter_life < 5).catch(this.error);
-                if (this.device.filter_life < 5) await this.homey.flow.getTriggerCard("filter_life_low").trigger().catch(this.error);
+                if (this.device.filter_life < 5) await this.homey.flow.getDeviceTriggerCard("filter_life_low").trigger(this).catch(this.error);
             }
             if (this.hasCapability("display_toggle"))
                 this.setCapabilityValue("display_toggle", this.device.display).catch(this.error);
