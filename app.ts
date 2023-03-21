@@ -2,6 +2,8 @@ import Homey from 'homey';
 import VeSync from './tsvesync/veSync';
 import VeSyncPurifier from "./tsvesync/veSyncPurifier";
 import VeSyncHumidifier from "./tsvesync/veSyncHumidifier";
+import axiosRetry from "axios-retry";
+import axios from "axios";
 
 export default class VeSyncApp extends Homey.App {
     veSync: VeSync = new VeSync();
@@ -18,6 +20,17 @@ export default class VeSyncApp extends Homey.App {
         this.username = await this.homey.settings.get('username');
         this.password = await this.homey.settings.get('password');
         await this._initializeFlows();
+        axiosRetry(axios, {
+            retries: 3,
+            retryDelay: (retryCount) => {
+                this.error(`Failed to make API call. Retry attempt #${retryCount}`);
+                if (retryCount == 1) return 1000;
+                if (retryCount == 2) return 1000 * 5;
+                if (retryCount == 3) return 1000 * 10;
+                return retryCount * 1000;
+            },
+            retryCondition: () => true
+        });
         await this.startVeSync();
     }
 

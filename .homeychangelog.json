@@ -97,5 +97,11 @@
   },
   "0.1.2": {
     "en": "Second Release Candidate - Added support for Classic300s, Core300s, Core400s, Dual200s, LV600s."
+  },
+  "0.1.3": {
+    "en": "Fixed Trigger flows"
+  },
+  "0.1.4": {
+    "en": "Fixed flows"
   }
 }
