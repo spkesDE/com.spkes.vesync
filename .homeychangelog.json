@@ -103,5 +103,8 @@
   },
   "0.1.4": {
     "en": "Fixed flows"
+  },
+  "0.1.5": {
+    "en": "Switched API client to axios for better request stabillity"
   }
 }
