@@ -34,13 +34,14 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
                 uuid: this.uuid,
                 status: toggle ? "on" : "off"
             }
-            let result = Helper.callApi(this.api, "/131airPurifier/v1/device/deviceStatus", 'put', body);
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result);
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
-                this.enabled = toggle;
-                resolve(this.enabled)
-            });
+            Helper.callApi(this.api, "/131airPurifier/v1/device/deviceStatus", 'put', body)
+                .catch(reject)
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result);
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
+                    this.enabled = toggle;
+                    resolve(this.enabled)
+                });
         });
     }
 
@@ -51,20 +52,21 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
                 ...Helper.requestBody(this.api, BodyTypes.DEVICE_DETAIL),
                 uuid: this.uuid,
             }
-            let result = Helper.callApi(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body);
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result);
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
-                this.deviceStatus = result.result.result.deviceStatus ?? "Unknown";
-                this.connectionStatus = result.result.result.connectionStatus ?? "Unknown";
-                this.active_time = result.result.result.active_time ?? 0;
-                this.filter_life = result.result.result.filterLife ?? 0;
-                this.screen_status = result.result.result.screenStatus ?? "Unknown";
-                this.mode = result.result.result.mode ?? this.mode;
-                this.fan_level = result.result.result.level ?? 0;
-                this.air_quality = result.result.result.airQuality ?? 0;
-                return resolve(true);
-            })
+            Helper.callApi(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result);
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
+                    this.deviceStatus = result.result.result.deviceStatus ?? "Unknown";
+                    this.connectionStatus = result.result.result.connectionStatus ?? "Unknown";
+                    this.active_time = result.result.result.active_time ?? 0;
+                    this.filter_life = result.result.result.filterLife ?? 0;
+                    this.screen_status = result.result.result.screenStatus ?? "Unknown";
+                    this.mode = result.result.result.mode ?? this.mode;
+                    this.fan_level = result.result.result.level ?? 0;
+                    this.air_quality = result.result.result.airQuality ?? 0;
+                    return resolve(true);
+                })
+                .catch(reject)
         });
     }
 
@@ -80,14 +82,15 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
             if (mode == "manual") {
                 body = {...body, level: 1}
             }
-            let result = Helper.callApi(this.api, "/131airPurifier/v1/device/updateMode", 'put', body);
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result);
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
-                this.mode = mode;
-                if (mode == "manual") this.fan_level = 1;
-                resolve(mode)
-            });
+            Helper.callApi(this.api, "/131airPurifier/v1/device/updateMode", 'put', body)
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result);
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
+                    this.mode = mode;
+                    if (mode == "manual") this.fan_level = 1;
+                    resolve(mode)
+                })
+                .catch(reject)
         });
     }
 
@@ -101,13 +104,14 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
                 uuid: this.uuid,
                 level: level
             }
-            let result = Helper.callApi(this.api, "/131airPurifier/v1/device/updateSpeed", 'put', body);
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result);
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
-                this.fan_level = level;
-                resolve(level)
-            });
+            Helper.callApi(this.api, "/131airPurifier/v1/device/updateSpeed", 'put', body)
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result);
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
+                    this.fan_level = level;
+                    resolve(level)
+                })
+                .catch(reject)
         });
     }
 }

@@ -21,7 +21,7 @@ export default class VeSync {
     public async login(username: string, password: string, isHashedPassword: boolean = false): Promise<boolean> {
         this.username = username;
         this.password = isHashedPassword ? password : this.hashPassword(password);
-        let response = await Helper.callApi(this, ApiCalls.LOGIN, 'post', Helper.requestBody(this, BodyTypes.LOGIN))
+        let response = await Helper.callApi(this, ApiCalls.LOGIN, 'post', Helper.requestBody(this, BodyTypes.LOGIN)).catch(console.error)
         try {
             this.account_id = response.result.accountID;
             this.token = response.result.token;
@@ -39,7 +39,7 @@ export default class VeSync {
     public async getDevices(): Promise<VeSyncDeviceBase[]> {
         if (this.token === "") return [];
         this.devices = [];
-        let response = await Helper.callApi(this, ApiCalls.DEVICES, 'post', Helper.requestBody(this, BodyTypes.DEVICE_LIST));
+        let response = await Helper.callApi(this, ApiCalls.DEVICES, 'post', Helper.requestBody(this, BodyTypes.DEVICE_LIST)).catch(console.error);
         await this.processDevices(response.result.list);
         return this.devices;
     }

@@ -2,6 +2,7 @@ import Helper from "./lib/helper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
 import VeSync from "./veSync";
 import {ApiCalls} from "./lib/enum/apiCalls";
+import {rejects} from "assert";
 
 export default class VeSyncPurifier extends VeSyncDeviceBase {
 
@@ -80,15 +81,14 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setSwitch', {enabled: toggle, id: 0}),
             }
-            let result = Helper.callApi(this.api,
-                ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.enabled = toggle;
-                return resolve(this.enabled);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.enabled = toggle;
+                    return resolve(this.enabled);
+                })
+                .catch(reject)
         });
     }
 
@@ -114,15 +114,14 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: payload,
             }
-            let result = Helper.callApi(this.api,
-                ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            return result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.mode = mode;
-                return resolve(mode);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) reject(new Error(result.msg ?? result))
+                    this.mode = mode;
+                    resolve(mode);
+                })
+                .catch(reject)
         });
     }
 
@@ -137,17 +136,18 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setLevel', {level: level, id: 0, type: 'wind'}),
             }
-            let result = Helper.callApi(this.api,
+            Helper.callApi(this.api,
                 ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.fan_level = level;
-                this.enabled = true;
-                this.mode = "manual";
-                return resolve(level);
-            });
+                'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) reject(new Error(result.msg ?? result))
+                    this.fan_level = level;
+                    this.enabled = true;
+                    this.mode = "manual";
+                    resolve(level);
+                })
+                .catch(reject)
         });
     }
 
@@ -160,15 +160,14 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setChildLock', {child_lock: mode}),
             }
-            let result = Helper.callApi(this.api,
-                ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.child_lock = mode;
-                return resolve(mode);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.child_lock = mode;
+                    return resolve(mode);
+                })
+                .catch(reject)
         });
     }
 
@@ -181,24 +180,24 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'getPurifierStatus', {}),
             }
-            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result.result.result ?? result);
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
-                this.enabled = result.result.result.enabled ?? false;
-                this.filter_life = result.result.result.filter_life ?? 0;
-                this.mode = result.result.result.mode ?? "off";
-                this.fan_level = result.result.result.level ?? "0";
-                this.display = result.result.result.display ?? false;
-                this.child_lock = result.result.result.child_lock ?? false;
-                this.night_light = result.result.result.night_light ?? false;
-                if (this.getDeviceFeatures().features.includes('air_quality')) {
-                    this.air_quality = result.result.result.air_quality ?? 0;
-                    this.air_quality_value = result.result.result.air_quality_value ?? 0;
-                }
-                return resolve(true);
-            })
-        });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result.result.result ?? result);
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
+                    this.enabled = result.result.result.enabled ?? false;
+                    this.filter_life = result.result.result.filter_life ?? 0;
+                    this.mode = result.result.result.mode ?? "off";
+                    this.fan_level = result.result.result.level ?? "0";
+                    this.display = result.result.result.display ?? false;
+                    this.child_lock = result.result.result.child_lock ?? false;
+                    this.night_light = result.result.result.night_light ?? false;
+                    if (this.getDeviceFeatures().features.includes('air_quality')) {
+                        this.air_quality = result.result.result.air_quality ?? 0;
+                        this.air_quality_value = result.result.result.air_quality_value ?? 0;
+                    }
+                    return resolve(true);
+                }).catch(rejects)
+        })
     }
 
     /* Toggle display on/off. */
@@ -210,13 +209,14 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setDisplay', {state: state}),
             }
-            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.display = state;
-                return resolve(state);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.display = state;
+                    return resolve(state);
+                })
+                .catch(reject)
         });
     }
 
@@ -233,13 +233,14 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setNightLight', {night_light: mode.toLowerCase()}),
             }
-            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.night_light = mode;
-                return resolve(mode);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.night_light = mode;
+                    return resolve(mode);
+                })
+                .catch(reject)
         });
     }
 }

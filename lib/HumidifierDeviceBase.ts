@@ -12,12 +12,12 @@ export default class HumidifierDeviceBase extends Homey.Device {
         await this.updateDevice().catch(this.error);
         if (this.hasCapability("display_toggle"))
             this.registerCapabilityListener("display_toggle", async (value) => {
-                await this.device.setDisplay(value);
+                await this.device.setDisplay(value).catch(this.error);
                 this.log(`Display: ${value}`);
             });
         if (this.hasCapability("nightlight_toggle"))
             this.registerCapabilityListener("nightlight_toggle", async (value) => {
-                await this.device.setNightLightBrightness(value ? 50 : 0);
+                await this.device.setNightLightBrightness(value ? 50 : 0).catch(this.error);
                 this.log(`Night Light: ${value}`);
             });
         this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
@@ -36,7 +36,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
             if (this.device.mode !== "manual")
-                await this.device.setHumidityMode("manual");
+                await this.device.setHumidityMode("manual").catch(this.error);
             this.device?.setMistLevel(level).catch(this.error);
             return;
         }
@@ -53,7 +53,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         }
         if (value === "manual") {
             if (this.device.mode !== "manual")
-                await this.device.setHumidityMode("manual");
+                await this.device.setHumidityMode("manual").catch(this.error);
             this.device?.setMistLevel(this.device.mist_level ?? 1).catch(this.error);
             return;
         }

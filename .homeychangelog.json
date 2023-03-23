@@ -106,5 +106,8 @@
   },
   "0.1.5": {
     "en": "Switched API client to axios for better request stabillity"
+  },
+  "0.1.6": {
+    "en": "Fix for 300s"
   }
 }

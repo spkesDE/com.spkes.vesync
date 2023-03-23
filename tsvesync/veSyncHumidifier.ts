@@ -93,15 +93,14 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setSwitch', {enabled: toggle, id: 0}),
             }
-            let result = Helper.callApi(this.api,
-                ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.enabled = toggle;
-                return resolve(this.enabled);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.enabled = toggle;
+                    return resolve(this.enabled);
+                })
+                .catch(reject)
         });
     }
 
@@ -124,15 +123,14 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setHumidityMode', {mode: mode.toLowerCase()}),
             }
-            let result = Helper.callApi(this.api,
-                ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.mode = mode;
-                return resolve(mode);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.mode = mode;
+                    return resolve(mode);
+                })
+                .catch(reject)
         });
     }
 
@@ -147,15 +145,14 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setNightLightBrightness', {night_light_brightness: brightness}),
             }
-            let result = Helper.callApi(this.api,
-                ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.night_light_brightness = brightness;
-                return resolve(true);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.night_light_brightness = brightness;
+                    return resolve(true);
+                })
+                .catch(reject)
         });
     }
 
@@ -169,15 +166,14 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setTargetHumidity', {target_humidity: humidity}),
             }
-            let result = Helper.callApi(this.api,
-                ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.targetHumidity = humidity;
-                return resolve(true);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.targetHumidity = humidity;
+                    return resolve(true);
+                })
+                .catch(reject)
         });
     }
 
@@ -190,30 +186,31 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'getHumidifierStatus', {}),
             }
-            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-            result.then(result => {
-                try {
-                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                    if (VeSync.debugMode) console.log(result.result.result)
-                    this.enabled = result.result.result.enabled;
-                    this.humidity = result.result.result.humidity;
-                    this.mist_virtual_level = result.result.result.mist_virtual_level;
-                    this.mist_level = result.result.result.mist_level;
-                    this.mode = result.result.result.mode;
-                    this.water_lacks = result.result.result.water_lacks;
-                    this.humidity_high = result.result.result.humidity_high;
-                    this.water_tank_lifted = result.result.result.water_tank_lifted;
-                    this.automatic_stop_reach_target = result.result.result.automatic_stop_reach_target;
-                    this.night_light_brightness = result.result.result.night_light_brightness;
-                    this.warm_mist_level = result.result.result.warm_mist_level;
-                    this.warm_mist_enabled = result.result.result.warm_mist_enabled;
-                    this.display = result.result.result.display ?? result.result.result.indicator_light_switch;
-                    this.targetHumidity = result.result.result.configuration.auto_target_humidity ?? 45;
-                    return resolve(true)
-                } catch (e: any) {
-                    return reject(result);
-                }
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    try {
+                        if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                        if (VeSync.debugMode) console.log(result.result.result)
+                        this.enabled = result.result.result.enabled;
+                        this.humidity = result.result.result.humidity;
+                        this.mist_virtual_level = result.result.result.mist_virtual_level;
+                        this.mist_level = result.result.result.mist_level;
+                        this.mode = result.result.result.mode;
+                        this.water_lacks = result.result.result.water_lacks;
+                        this.humidity_high = result.result.result.humidity_high;
+                        this.water_tank_lifted = result.result.result.water_tank_lifted;
+                        this.automatic_stop_reach_target = result.result.result.automatic_stop_reach_target;
+                        this.night_light_brightness = result.result.result.night_light_brightness;
+                        this.warm_mist_level = result.result.result.warm_mist_level;
+                        this.warm_mist_enabled = result.result.result.warm_mist_enabled;
+                        this.display = result.result.result.display ?? result.result.result.indicator_light_switch;
+                        this.targetHumidity = result.result.result.configuration.auto_target_humidity ?? 45;
+                        return resolve(true)
+                    } catch (e: any) {
+                        return reject(result);
+                    }
+                })
+                .catch(reject)
         });
     }
 
@@ -231,13 +228,14 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: payload,
             }
-            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.display = state;
-                return resolve(state);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.display = state;
+                    return resolve(state);
+                })
+                .catch(reject)
         });
     }
 
@@ -250,13 +248,14 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 configModule: this.configModule,
                 payload: Helper.createPayload(this, 'setAutomaticStop', {enabled: mode}),
             }
-            let result = Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.automatic_stop_reach_target = mode;
-                return resolve(mode);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.automatic_stop_reach_target = mode;
+                    return resolve(mode);
+                })
+                .catch(reject)
         });
     }
 
@@ -275,16 +274,17 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                     type: 'warm'
                 }),
             }
-            let result = Helper.callApi(this.api,
+            Helper.callApi(this.api,
                 ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.warm_mist_level = level;
-                this.warm_mist_enabled = true;
-                return resolve(level);
-            });
+                'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.warm_mist_level = level;
+                    this.warm_mist_enabled = true;
+                    return resolve(level);
+                })
+                .catch(reject)
         });
     }
 
@@ -314,15 +314,14 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                     type: 'mist'
                 }),
             }
-            let result = Helper.callApi(this.api,
-                ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader());
-            result.then(result => {
-                if (VeSync.debugMode) console.log(result)
-                if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                this.mist_level = level;
-                return resolve(level);
-            });
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    if (VeSync.debugMode) console.log(result)
+                    if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                    this.mist_level = level;
+                    return resolve(level);
+                })
+                .catch(reject)
         });
     }
 }

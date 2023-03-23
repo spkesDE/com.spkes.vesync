@@ -12,12 +12,12 @@ export default class PurifierDeviceBase extends Homey.Device {
         await this.updateDevice().catch(this.error);
         if (this.hasCapability("display_toggle"))
             this.registerCapabilityListener("display_toggle", async (value) => {
-                await this.device.setDisplay(value);
+                await this.device.setDisplay(value).catch(this.error);
                 this.log(`Display: ${value}`);
             });
         if (this.hasCapability("nightlight_toggle"))
             this.registerCapabilityListener("nightlight_toggle", async (value) => {
-                await this.device.setNightLight(value ? "dim" : "off");
+                await this.device.setNightLight(value ? "dim" : "off").catch(this.error);
                 this.log(`Night Light: ${value}`);
             });
         this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
@@ -40,7 +40,7 @@ export default class PurifierDeviceBase extends Homey.Device {
         }
         if (value === "manual") {
             if (this.device.mode !== "manual")
-                await this.device.setMode("manual");
+                await this.device.setMode("manual").catch(this.error);
             this.device?.setFanSpeed(this.device.fan_level ?? 1).catch(this.error);
             return;
         }
