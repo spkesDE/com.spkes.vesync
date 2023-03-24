@@ -1,7 +1,7 @@
 import VeSync from "../veSync";
 import VeSyncDeviceBase from "../veSyncDeviceBase";
 import {BodyTypes} from "./enum/bodyTypes";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 
 export default class Helper {
     static API_BASE_URL = 'https://smartapi.vesync.com'
@@ -149,6 +149,8 @@ export default class Helper {
             }).then((response) => {
                 resolve(response.data)
             }).catch((error) => {
+                if(error instanceof AxiosError || error.isAxiosError)
+                    reject(error.cause)
                 reject(error)
             });
         });

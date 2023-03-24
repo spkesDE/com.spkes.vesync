@@ -109,5 +109,8 @@
   },
   "0.1.6": {
     "en": "Fix for 300s"
+  },
+  "0.1.7": {
+    "en": "Better error handling"
   }
 }
