@@ -115,5 +115,8 @@
   },
   "0.1.8": {
     "en": "Fixed error handling"
+  },
+  "0.1.9": {
+    "en": "Debugging"
   }
 }

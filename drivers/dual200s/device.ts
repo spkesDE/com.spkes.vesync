@@ -40,6 +40,7 @@ class Dual200s extends HumidifierDeviceBase {
             this.error("Dual200S is not connected");
             return;
         }
+        await super.setMode(value);
     }
 
     async updateDevice(): Promise<void> {
