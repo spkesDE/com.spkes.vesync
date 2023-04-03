@@ -9,7 +9,7 @@ import VeSyncPurifierLV131 from "./veSyncPurifierLV131";
 
 export default class VeSync {
 
-    static debugMode: boolean = false;
+    static debugMode: boolean = true;
     username: string = "";
     password: string = "";
     time_zone: string = 'America/New_York';
