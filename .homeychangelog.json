@@ -118,5 +118,11 @@
   },
   "0.1.9": {
     "en": "Debugging"
+  },
+  "0.2.0": {
+    "en": "Fixed an issue with Dual200S"
+  },
+  "0.2.1": {
+    "en": "Fixed an issue with the Dual200s. Disabled adv. debugging"
   }
 }

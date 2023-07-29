@@ -107,19 +107,19 @@ export default class PurifierDeviceBase extends Homey.Device {
             if (this.hasCapability("fanSpeed0to9"))
                 this.setCapabilityValue('fanSpeed0to9', this.device.fan_level ?? 0).catch(this.error);
             if (this.hasCapability("measure_pm25"))
-                await this.setCapabilityValue('measure_pm25', this.device.air_quality_value)
+                await this.setCapabilityValue('measure_pm25', this.device.air_quality_value ?? 0)
             if (this.hasCapability("alarm_pm25"))
-                await this.setCapabilityValue('alarm_pm25', this.device.air_quality_value > 91)
+                await this.setCapabilityValue('alarm_pm25', this.device.air_quality_value > 91 ?? false)
             if (this.hasCapability("measure_filter_life"))
-                this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+                this.setCapabilityValue("measure_filter_life", this.device.filter_life ?? 100).catch(this.error);
             if (this.hasCapability("alarm_filter_life")) {
-                this.setCapabilityValue("alarm_filter_life", this.device.filter_life < 5).catch(this.error);
+                this.setCapabilityValue("alarm_filter_life", this.device.filter_life < 5 ?? false).catch(this.error);
                 if (this.device.filter_life < 5) await this.homey.flow.getDeviceTriggerCard("filter_life_low").trigger(this);
             }
             if (this.hasCapability("display_toggle"))
                 this.setCapabilityValue("display_toggle", this.device.display).catch(this.error);
             if (this.hasCapability("nightlight_toggle"))
-                this.setCapabilityValue("nightlight_toggle", this.device.night_light !== "off").catch(this.error);
+                this.setCapabilityValue("nightlight_toggle", this.device.night_light !== "off" ?? false).catch(this.error);
         }
     }
 

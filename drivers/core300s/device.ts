@@ -13,25 +13,24 @@ class Core300S extends PurifierDeviceBase {
     ]
 
     async onInit() {
-        await this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
+        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
         await super.onInit();
-
         this.registerCapabilityListener("onoff", async (value) => {
-            if (!value) this.setCapabilityValue("core300sCapability", "off").then();
+            if (!value) await this.setCapabilityValue("core300sCapability", "off");
             await this.setMode(value ? "on" : "off");
             await this.updateDevice();
         });
         this.registerCapabilityListener("core300sCapability", async (value) => {
-            if (value === "off") this.setCapabilityValue("onoff", false).then();
-            else this.setCapabilityValue("onoff", true).then();
+            if (value === "off") await this.setCapabilityValue("onoff", false);
+            else await this.setCapabilityValue("onoff", true);
             await this.setMode(value);
         });
 
         this.registerCapabilityListener("fanSpeed0to5", async (value) => {
-            if (value === 0) this.triggerCapabilityListener("onoff", false).then();
+            if (value === 0) await this.triggerCapabilityListener("onoff", false);
             else {
-                this.setCapabilityValue("onoff", true).then();
-                this.setCapabilityValue("core300sCapability", "manual").then();
+                await this.setCapabilityValue("onoff", true);
+                await this.setCapabilityValue("core300sCapability", "manual");
                 await this.setMode("fan_speed_" + value);
             }
         })

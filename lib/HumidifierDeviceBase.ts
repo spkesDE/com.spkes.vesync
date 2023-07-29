@@ -115,26 +115,26 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 this.setCapabilityValue('fanSpeed0to9', this.device.mist_virtual_level ?? this.device.mist_level ?? 0).catch(this.error);
 
             if (this.hasCapability("measure_humidity"))
-                this.setCapabilityValue("measure_humidity", this.device.humidity).catch(this.error);
+                this.setCapabilityValue("measure_humidity", this.device.humidity ?? 0).catch(this.error);
             if (this.hasCapability("alarm_water_lacks")) {
-                this.setCapabilityValue("alarm_water_lacks", this.device.water_lacks).catch(this.error);
+                this.setCapabilityValue("alarm_water_lacks", this.device.water_lacks ?? false).catch(this.error);
                 if (this.device.water_lacks) await this.homey.flow.getDeviceTriggerCard("water_lacks").trigger(this).catch(this.error);
             }
             if (this.hasCapability("measure_filter_life"))
-                this.setCapabilityValue("measure_filter_life", this.device.filter_life).catch(this.error);
+                this.setCapabilityValue("measure_filter_life", this.device.filter_life ?? 100).catch(this.error);
             if (this.hasCapability("alarm_filter_life")) {
-                this.setCapabilityValue("alarm_filter_life", this.device.filter_life < 5).catch(this.error);
+                this.setCapabilityValue("alarm_filter_life", this.device.filter_life < 5 ?? false).catch(this.error);
                 if (this.device.filter_life < 5) await this.homey.flow.getDeviceTriggerCard("filter_life_low").trigger(this).catch(this.error);
             }
             if (this.hasCapability("display_toggle"))
                 this.setCapabilityValue("display_toggle", this.device.display).catch(this.error);
             if (this.hasCapability("nightlight_toggle"))
-                this.setCapabilityValue("nightlight_toggle", this.device.night_light_brightness > 0).catch(this.error);
+                this.setCapabilityValue("nightlight_toggle", this.device.night_light_brightness > 0 ?? false).catch(this.error);
             if (this.getSetting("humidity") != null) {
                 let humidity = Number(this.getSetting("humidity"));
                 if (humidity != this.device.targetHumidity)
                     await this.setSettings({
-                        humidity: this.device.targetHumidity
+                        humidity: this.device.targetHumidity ?? 0
                     }).catch(this.error);
             }
         } else if (this.getAvailable()) {

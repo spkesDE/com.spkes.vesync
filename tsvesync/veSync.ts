@@ -9,10 +9,10 @@ import VeSyncPurifierLV131 from "./veSyncPurifierLV131";
 
 export default class VeSync {
 
-    static debugMode: boolean = true;
+    static debugMode: boolean = false;
     username: string = "";
     password: string = "";
-    time_zone: string = 'America/New_York';
+    time_zone: string = 'Europe/Berlin';
     private token: string = "";
     private account_id: number = 0;
     private devices: VeSyncDeviceBase[] = [];
