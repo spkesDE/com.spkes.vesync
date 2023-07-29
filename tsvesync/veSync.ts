@@ -100,8 +100,8 @@ export default class VeSync {
             return new VeSyncHumidifier(this, deviceRaw);
         if (devices.VeSyncPurifier.includes(deviceRaw.deviceType))
             return new VeSyncPurifier(this, deviceRaw);
-        if (devices.VeSyncPurifierLV131.includes(deviceRaw.deviceType))
-            return new VeSyncPurifierLV131(this, deviceRaw);
+        /*if (devices.VeSyncPurifierLV131.includes(deviceRaw.deviceType))
+            return new VeSyncPurifierLV131(this, deviceRaw);*/
         return new VeSyncDeviceBase(this, deviceRaw);
     }
 }
