@@ -124,5 +124,8 @@
   },
   "0.2.1": {
     "en": "Fixed an issue with the Dual200s. Disabled adv. debugging"
+  },
+  "0.2.2": {
+    "en": "Bug fixes"
   }
 }
