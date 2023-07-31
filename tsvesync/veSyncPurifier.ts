@@ -2,7 +2,6 @@ import Helper from "./lib/helper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
 import VeSync from "./veSync";
 import {ApiCalls} from "./lib/enum/apiCalls";
-import {rejects} from "assert";
 
 export default class VeSyncPurifier extends VeSyncDeviceBase {
 
@@ -196,7 +195,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                         this.air_quality_value = result.result.result.air_quality_value ?? 0;
                     }
                     return resolve(true);
-                }).catch(rejects)
+                }).catch(reject)
         })
     }
 
