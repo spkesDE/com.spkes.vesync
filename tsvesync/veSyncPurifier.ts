@@ -40,7 +40,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'setLevel', 'setPurifierMode', 'setDisplay',
                 'setChildLock', 'setIndicatorLight']
         },
-        'Core600S': {
+        Core600S: {
             module: 'VeSyncAirBypass',
             models: ['Core600S',
                 'LAP-C601S-WUS',
@@ -48,7 +48,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'LAP-C601S-WEU'],
             modes: ['sleep', 'off', 'auto', 'manual'],
             features: ['air_quality'],
-            levels: [1, 2, 3, 4, 5],
+            levels: [1, 2, 3, 4],
             method: ['getPurifierStatus', 'setSwitch', 'setNightLight',
                 'setLevel', 'setPurifierMode', 'setDisplay',
                 'setChildLock', 'setIndicatorLight']

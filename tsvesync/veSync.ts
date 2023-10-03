@@ -40,7 +40,7 @@ export default class VeSync {
         if (this.token === "") return [];
         this.devices = [];
         let response = await Helper.callApi(this, ApiCalls.DEVICES, 'post', Helper.requestBody(this, BodyTypes.DEVICE_LIST)).catch(console.error);
-        await this.processDevices(response.result.list);
+        this.processDevices(response.result.list);
         return this.devices;
     }
 
