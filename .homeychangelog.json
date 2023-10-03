@@ -133,5 +133,8 @@
   },
   "0.2.4": {
     "en": "Bug fix"
+  },
+  "0.3.0": {
+    "en": "Core600S Support (Untested)"
   }
 }
