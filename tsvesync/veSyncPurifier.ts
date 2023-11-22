@@ -3,11 +3,20 @@ import VeSyncDeviceBase from "./veSyncDeviceBase";
 import VeSync from "./veSync";
 import {ApiCalls} from "./lib/enum/apiCalls";
 
+interface DeviceFeatures {
+    module: string,
+    models: string[],
+    modes: string[],
+    features: string[],
+    levels: number[],
+    method: string[]
+}
+
 export default class VeSyncPurifier extends VeSyncDeviceBase {
 
     //region Device Features
-    Device_Features: { [key: string]: any } = {
-        'Core200S': {
+    Device_Features: { [key: string]: DeviceFeatures } = {
+        Core200S: {
             module: 'VeSyncAirBypass',
             models: ['Core200S', 'LAP-C201S-AUSR', 'LAP-C202S-WUSR'],
             modes: ['sleep', 'off', 'manual'],
@@ -17,7 +26,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'setLevel', 'setPurifierMode', 'setDisplay',
                 'setChildLock', 'setIndicatorLight']
         },
-        'Core300S': {
+        Core300S: {
             module: 'VeSyncAirBypass',
             models: ['Core300S', 'LAP-C301S-WJP', 'LAP-C302S-WUSB'],
             modes: ['sleep', 'off', 'auto', 'manual'],
@@ -47,6 +56,28 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'LAP-C601S-WUSR',
                 'LAP-C601S-WEU'],
             modes: ['sleep', 'off', 'auto', 'manual'],
+            features: ['air_quality'],
+            levels: [1, 2, 3, 4],
+            method: ['getPurifierStatus', 'setSwitch', 'setNightLight',
+                'setLevel', 'setPurifierMode', 'setDisplay',
+                'setChildLock', 'setIndicatorLight']
+        },
+        Vital100S: {
+            module: 'VeSyncVital',
+            models: ['LAP-V102S-AASR', 'LAP-V102S-WUS', 'LAP-V102S-WEU',
+                'LAP-V102S-AUSR', 'LAP-V102S-WJP'],
+            modes: ['manual', 'auto', 'sleep', 'off', 'pet'],
+            features: ['air_quality'],
+            levels: [1, 2, 3, 4],
+            method: ['getPurifierStatus', 'setSwitch', 'setNightLight',
+                'setLevel', 'setPurifierMode', 'setDisplay',
+                'setChildLock', 'setIndicatorLight']
+        },
+        Vital200S: {
+            module: 'VeSyncVital',
+            models: ['LAP-V201S-AASR', 'LAP-V201S-WJP', 'LAP-V201S-WEU',
+                'LAP-V201S-WUS', 'LAP-V201-AUSR'],
+            modes: ['manual', 'auto', 'sleep', 'off', 'pet'],
             features: ['air_quality'],
             levels: [1, 2, 3, 4],
             method: ['getPurifierStatus', 'setSwitch', 'setNightLight',

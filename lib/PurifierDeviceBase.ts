@@ -56,6 +56,12 @@ export default class PurifierDeviceBase extends Homey.Device {
             this.device?.setMode('sleep').catch(this.error);
             return;
         }
+        if (value === "pet") {
+            if (!this.device.isOn())
+                await this.device?.on().catch(this.error);
+            this.device?.setMode('pet').catch(this.error);
+            return;
+        }
         this.error("Unknown Mode: " + value);
     }
 

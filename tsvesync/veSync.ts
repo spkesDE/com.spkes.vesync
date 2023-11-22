@@ -89,7 +89,9 @@ export default class VeSync {
                 'Core200S', 'LAP-C201S-AUSR', 'LAP-C202S-WUSR',
                 'Core300S', 'LAP-C301S-WJP', 'LAP-C302S-WUSB',
                 'Core400S', 'LAP-C401S-WJP', 'LAP-C401S-WUSR', 'LAP-C401S-WAAA',
-                'Core600S', 'LAP-C601S-WUS', 'LAP-C601S-WUSR', 'LAP-C601S-WEU'
+                'Core600S', 'LAP-C601S-WUS', 'LAP-C601S-WUSR', 'LAP-C601S-WEU',
+                'Vital100S', 'LAP-V102S-AASR', 'LAP-V102S-WUS', 'LAP-V102S-WEU', 'LAP-V102S-AUSR', 'LAP-V102S-WJP',
+                'Vital200S', 'LAP-V201S-AASR', 'LAP-V201S-WJP', 'LAP-V201S-WEU', 'LAP-V201S-WUS', 'LAP-V201-AUSR'
             ],
             VeSyncPurifierLV131: [
                 'LV-PUR131S', 'LV-RH131S'
