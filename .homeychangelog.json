@@ -139,5 +139,8 @@
   },
   "0.3.1": {
     "en": "Added Core600s icon"
+  },
+  "0.3.2": {
+    "en": "Added untested Vital 200s & Vital 100s support."
   }
 }
