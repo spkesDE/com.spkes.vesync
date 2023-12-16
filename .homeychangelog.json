@@ -142,5 +142,8 @@
   },
   "0.3.2": {
     "en": "Added untested Vital 200s & Vital 100s support."
+  },
+  "0.3.3": {
+    "en": "Added experimental Classic200S support."
   }
 }
