@@ -145,5 +145,8 @@
   },
   "0.3.3": {
     "en": "Added experimental Classic200S support."
+  },
+  "0.3.4": {
+    "en": "Added Support for LV131S, Added untested support for Oasis450s and Oasis1000s"
   }
 }
