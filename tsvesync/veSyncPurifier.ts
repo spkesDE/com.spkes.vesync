@@ -4,7 +4,6 @@ import VeSync from "./veSync";
 import {ApiCalls} from "./lib/enum/apiCalls";
 
 interface DeviceFeatures {
-    module: string,
     models: string[],
     modes: string[],
     features: string[],
@@ -17,7 +16,6 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     //region Device Features
     Device_Features: { [key: string]: DeviceFeatures } = {
         Core200S: {
-            module: 'VeSyncAirBypass',
             models: ['Core200S', 'LAP-C201S-AUSR', 'LAP-C202S-WUSR'],
             modes: ['sleep', 'off', 'manual'],
             features: [],
@@ -27,7 +25,6 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'setChildLock', 'setIndicatorLight']
         },
         Core300S: {
-            module: 'VeSyncAirBypass',
             models: ['Core300S', 'LAP-C301S-WJP', 'LAP-C302S-WUSB'],
             modes: ['sleep', 'off', 'auto', 'manual'],
             features: ['air_quality'],
@@ -37,7 +34,6 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'setChildLock', 'setIndicatorLight']
         },
         Core400S: {
-            module: 'VeSyncAirBypass',
             models: ['Core400S',
                 'LAP-C401S-WJP',
                 'LAP-C401S-WUSR',
@@ -50,7 +46,6 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'setChildLock', 'setIndicatorLight']
         },
         Core600S: {
-            module: 'VeSyncAirBypass',
             models: ['Core600S',
                 'LAP-C601S-WUS',
                 'LAP-C601S-WUSR',
@@ -63,7 +58,6 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'setChildLock', 'setIndicatorLight']
         },
         Vital100S: {
-            module: 'VeSyncVital',
             models: ['LAP-V102S-AASR', 'LAP-V102S-WUS', 'LAP-V102S-WEU',
                 'LAP-V102S-AUSR', 'LAP-V102S-WJP'],
             modes: ['manual', 'auto', 'sleep', 'off', 'pet'],
@@ -74,7 +68,6 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 'setChildLock', 'setIndicatorLight']
         },
         Vital200S: {
-            module: 'VeSyncVital',
             models: ['LAP-V201S-AASR', 'LAP-V201S-WJP', 'LAP-V201S-WEU',
                 'LAP-V201S-WUS', 'LAP-V201-AUSR'],
             modes: ['manual', 'auto', 'sleep', 'off', 'pet'],

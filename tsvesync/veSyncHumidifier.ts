@@ -2,62 +2,76 @@ import Helper from "./lib/helper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
 import VeSync from "./veSync";
 import {ApiCalls} from "./lib/enum/apiCalls";
-
+interface DeviceFeatures {
+    models: string[],
+    modes: string[],
+    features: string[],
+    levels: number[],
+    warm_levels?: number[]
+    method: string[]
+}
 export default class VeSyncHumidifier extends VeSyncDeviceBase {
 
     //region Device Features
-    Device_Features: { [key: string]: any } = {
-        'Classic300S': {
-            module: 'VeSyncHumid200300S',
+    Device_Features: { [key: string]: DeviceFeatures } = {
+        Classic300S: {
             models: ['Classic300S', 'LUH-A601S-WUSB'],
             features: ['nightlight'],
-            mist_modes: ['auto', 'sleep', 'manual'],
-            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            modes: ['auto', 'sleep', 'manual'],
+            levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             method: ['getHumidifierStatus', 'setAutomaticStop',
                 'setSwitch', 'setNightLightBrightness',
                 'setVirtualLevel', 'setTargetHumidity',
                 'setHumidityMode', 'setDisplay', 'setLevel']
         },
-        'Classic200S': {
-            module: 'VeSyncHumid200S',
+        Classic200S: {
             models: ['Classic200S'],
             features: [],
-            mist_modes: ['auto', 'manual'],
-            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            modes: ['auto', 'manual'],
+            levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             method: ['getHumidifierStatus', 'setAutomaticStop',
                 'setSwitch', 'setVirtualLevel', 'setTargetHumidity',
                 'setHumidityMode', 'setIndicatorLightSwitch']
         },
-        'Dual200S': {
-            module: 'VeSyncHumid200300S',
+        Dual200S: {
             models: ['Dual200S',
                 'LUH-D301S-WUSR',
                 'LUH-D301S-WJP',
                 'LUH-D301S-WEU'],
             features: [],
-            mist_modes: ['auto', 'manual'],
-            mist_levels: [1, 2, 3],
+            modes: ['auto', 'manual'],
+            levels: [1, 2, 3],
             method: ['getHumidifierStatus', 'setAutomaticStop',
                 'setSwitch', 'setNightLightBrightness',
                 'setVirtualLevel', 'setTargetHumidity',
                 'setHumidityMode', 'setDisplay', 'setLevel']
         },
-        'LV600S': {
-            module: 'VeSyncHumid200300S',
+        LV600S: {
             models: ['LUH-A602S-WUSR',
                 'LUH-A602S-WUS',
                 'LUH-A602S-WEUR',
                 'LUH-A602S-WEU',
                 'LUH-A602S-WJP'],
             features: ['warm_mist'],
-            mist_modes: ['humidity', 'sleep', 'manual'],
-            mist_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-            warm_mist_levels: [0, 1, 2, 3],
+            modes: ['humidity', 'sleep', 'manual'],
+            levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            warm_levels: [0, 1, 2, 3],
             method: ['getHumidifierStatus', 'setAutomaticStop',
                 'setSwitch',
                 'setVirtualLevel', 'setTargetHumidity',
                 'setHumidityMode', 'setDisplay', 'setLevel']
         },
+        Oasis450S: {
+            models: ['LUH-O451S-WUS', 'LUH-O451S-WEU'],
+            features: ['warm_mist'],
+            modes: ['humidity', 'sleep', 'manual'],
+            levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            warm_levels: [0, 1, 2, 3],
+            method: ['getHumidifierStatus', 'setAutomaticStop',
+                'setSwitch',
+                'setVirtualLevel', 'setTargetHumidity',
+                'setHumidityMode', 'setDisplay', 'setLevel']
+        }
     }
     //endregion
     filter_life: number = 100;
@@ -77,6 +91,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     night_light_brightness: number = 0;
     warm_mist_level: number = 0;
     targetHumidity: number = 0;
+    autoStopSwitch: boolean = false;
 
     constructor(api: VeSync, device: any) {
         super(api, device);
@@ -115,7 +130,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set mode to manual or sleep or auto */
     public async setHumidityMode(mode: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            if (!this.getDeviceFeatures()?.mist_modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mist modes: ' + mode);
+            if (!this.getDeviceFeatures()?.modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mist modes: ' + mode);
             if (this.mode === mode) return;
             let body = {
                 ...Helper.bypassBodyV2(this.api),
@@ -202,6 +217,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                         this.automatic_stop_reach_target = result.result.result.automatic_stop_reach_target;
                         this.night_light_brightness = result.result.result.night_light_brightness;
                         this.warm_mist_level = result.result.result.warm_mist_level;
+                        this.autoStopSwitch = result.result.result.autoStopSwitch ?? false;
                         this.warm_mist_enabled = result.result.result.warm_mist_enabled;
                         this.display = result.result.result.display ?? result.result.result.indicator_light_switch;
                         this.targetHumidity = result.result.result.configuration.auto_target_humidity ?? 45;
@@ -263,7 +279,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     public async setWarmLevel(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
             if (!this.getDeviceFeatures()?.features.includes('warm_mist') ?? false) return reject(this.deviceType + ' don\'t support warm_mist');
-            if (!this.getDeviceFeatures()?.warm_mist_levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support warm_mist_levels ' + level);
+            if (!this.getDeviceFeatures()?.warm_levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support warm_levels ' + level);
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -291,19 +307,19 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     /* Set auto mode for humidifiers. */
     public async setAutoMode() {
         let mode = "";
-        if (this.getDeviceFeatures()?.mist_modes.includes('auto'))
+        if (this.getDeviceFeatures()?.modes.includes('auto'))
             mode = 'auto';
-        else if (this.getDeviceFeatures()?.mist_modes.includes('humidity'))
+        else if (this.getDeviceFeatures()?.modes.includes('humidity'))
             mode = 'humidity';
         else
-            throw Error(this.deviceType + ' don\'t support mist_modes auto|humidity');
+            throw Error(this.deviceType + ' don\'t support modes auto|humidity');
         await this.setHumidityMode(mode)
     }
 
     /* Set humidifier mist level with int between 0 - 9. */
     public async setMistLevel(level: number): Promise<string | number> {
         return new Promise((resolve, reject) => {
-            if (!this.getDeviceFeatures()?.mist_levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support mist level ' + level);
+            if (!this.getDeviceFeatures()?.levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support mist level ' + level);
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,

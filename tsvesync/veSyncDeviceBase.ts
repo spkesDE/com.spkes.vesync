@@ -21,6 +21,7 @@ export default class VeSyncDeviceBase {
     Device_Features: { [key: string]: any } = {};
     protected api: VeSync;
     extension: any;
+    childLock: string = "off";
     enabled: boolean = false;
 
     constructor(api: VeSync, device: any) {

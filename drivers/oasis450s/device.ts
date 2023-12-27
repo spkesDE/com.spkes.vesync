@@ -1,8 +1,8 @@
 import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
 
-class LV600S extends HumidifierDeviceBase {
+class Oasis450S extends HumidifierDeviceBase {
     private capabilitiesAddition: string[] = [
-        "lv600sCapability",
+        "oasis450sCapability",
         "onoff",
         "measure_humidity",
         "alarm_water_lacks",
@@ -11,19 +11,15 @@ class LV600S extends HumidifierDeviceBase {
         "display_toggle"
     ]
 
-    //TODO: Flow for: Fan Speed, Warm Mist Speed, Display, Night light
-    //TODO: Device Settings target Humidity
-
-
     async onInit() {
         await super.onInit();
 
         this.registerCapabilityListener("onoff", async (value) => {
-            if (!value) this.setCapabilityValue("lv600sCapability", "off").then();
+            if (!value) this.setCapabilityValue("oasis450sCapability", "off").then();
             await this.setMode(value ? "on" : "off");
             await this.updateDevice();
         });
-        this.registerCapabilityListener("lv600sCapability", async (value) => {
+        this.registerCapabilityListener("oasis450sCapability", async (value) => {
             if (value === "off") this.setCapabilityValue("onoff", false).then();
             else this.setCapabilityValue("onoff", true).then();
             await this.setMode(value);
@@ -32,7 +28,7 @@ class LV600S extends HumidifierDeviceBase {
             if (value === 0) this.triggerCapabilityListener("onoff", false).then();
             else {
                 this.setCapabilityValue("onoff", true).then();
-                this.setCapabilityValue("lv600sCapability", "manual").then();
+                this.setCapabilityValue("oasis450sCapability", "manual").then();
                 await this.setMode("fan_speed_" + value);
             }
         })
@@ -43,28 +39,28 @@ class LV600S extends HumidifierDeviceBase {
 
         this.capabilitiesAddition.forEach((c) => this.checkForCapability(c))
 
-        this.log('LV600S has been initialized');
+        this.log('Oasis450S has been initialized');
     }
 
     async onAdded() {
-        this.log('LV600S has been added');
+        this.log('Oasis450S has been added');
     }
 
     async onSettings({oldSettings: {}, newSettings: {}, changedKeys: []}): Promise<string | void> {
-        this.log('LV600S settings where changed');
+        this.log('Oasis450S settings where changed');
     }
 
     async onRenamed(name: string) {
-        this.log('LV600S was renamed');
+        this.log('Oasis450S was renamed');
     }
 
     async onDeleted() {
-        this.log('LV600S has been deleted');
+        this.log('Oasis450S has been deleted');
     }
 
     async setMode(value: string) {
         if (!this.device.isConnected()) {
-            this.error("LV600S is not connected");
+            this.error("Oasis450S is not connected");
             return;
         }
         if (value.startsWith("fan_speed_")) {
@@ -89,18 +85,18 @@ class LV600S extends HumidifierDeviceBase {
         await super.updateDevice();
         if (this.device.isConnected() && this.getAvailable()) {
             this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
-            if (this.hasCapability("lv600sCapability")) {
+            if (this.hasCapability("oasis450sCapability")) {
                 if (this.device.mode === "manual")
-                    this.setCapabilityValue('lv600sCapability', "manual").catch(this.error);
+                    this.setCapabilityValue('oasis450sCapability', "manual").catch(this.error);
                 if (this.device.mode === "sleep")
-                    this.setCapabilityValue('lv600sCapability', "sleep").catch(this.error);
+                    this.setCapabilityValue('oasis450sCapability', "sleep").catch(this.error);
                 if (this.device.mode === "auto" || this.device.mode === "humidity")
-                    this.setCapabilityValue('lv600sCapability', "auto").catch(this.error);
+                    this.setCapabilityValue('oasis450sCapability', "auto").catch(this.error);
                 if (!this.device.isOn())
-                    this.setCapabilityValue('lv600sCapability', "off").catch(this.error);
+                    this.setCapabilityValue('oasis450sCapability', "off").catch(this.error);
             }
-            if (this.hasCapability("lv600sWarmCapability") && this.device.isOn()) {
-                this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
+            if (this.hasCapability("oasis450sWarmCapability") && this.device.isOn()) {
+                this.setCapabilityValue('oasis450sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
             }
             this.log("Device has been updated!");
         }
@@ -109,4 +105,4 @@ class LV600S extends HumidifierDeviceBase {
 
 }
 
-module.exports = LV600S;
+module.exports = Oasis450S;

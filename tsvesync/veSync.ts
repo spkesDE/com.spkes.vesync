@@ -6,6 +6,7 @@ import VeSyncHumidifier from "./veSyncHumidifier";
 import {BodyTypes} from "./lib/enum/bodyTypes";
 import {ApiCalls} from "./lib/enum/apiCalls";
 import VeSyncPurifierLV131 from "./veSyncPurifierLV131";
+import VeSyncHumidifierOasis1000S from "./veSyncHumidifierOasis1000S.js";
 
 export default class VeSync {
 
@@ -95,6 +96,9 @@ export default class VeSync {
             ],
             VeSyncPurifierLV131: [
                 'LV-PUR131S', 'LV-RH131S'
+            ],
+            VeSyncHumidifierOasis1000S: [
+                'LUH-M101S-WUS'
             ]
 
         }
@@ -102,8 +106,11 @@ export default class VeSync {
             return new VeSyncHumidifier(this, deviceRaw);
         if (devices.VeSyncPurifier.includes(deviceRaw.deviceType))
             return new VeSyncPurifier(this, deviceRaw);
-        /*if (devices.VeSyncPurifierLV131.includes(deviceRaw.deviceType))
-            return new VeSyncPurifierLV131(this, deviceRaw);*/
+        if (devices.VeSyncPurifierLV131.includes(deviceRaw.deviceType))
+            return new VeSyncPurifierLV131(this, deviceRaw);
+        if (devices.VeSyncHumidifierOasis1000S.includes(deviceRaw.deviceType))
+            return new VeSyncHumidifierOasis1000S(this, deviceRaw);
+        console.error("Device not supported found: " + deviceRaw);
         return new VeSyncDeviceBase(this, deviceRaw);
     }
 }
