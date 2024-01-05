@@ -157,5 +157,8 @@
   },
   "0.3.7": {
     "en": "Fixed LUH-M101S-WEUR"
+  },
+  "0.3.8": {
+    "en": "Added Icons"
   }
 }
