@@ -41,7 +41,7 @@ class Oasis1000SDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncHumidifier &&
+                return d instanceof VeSyncHumidifierOasis1000S &&
                     (d as VeSyncHumidifierOasis1000S).Device_Features.OasisMist1000S.models.includes(d.deviceType)
             })
                 .forEach((d) => {

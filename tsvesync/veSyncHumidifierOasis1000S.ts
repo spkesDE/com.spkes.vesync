@@ -17,7 +17,7 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
     //region Device Features
     Device_Features: { [key: string]: DeviceFeatures } = {
         OasisMist1000S: {
-            models: ['LUH-M101S-WUS'],
+            models: ['LUH-M101S-WUS', 'LUH-M101S-WEUR'],
             features: [],
             modes: ['auto', 'sleep', 'manual'],
             levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],

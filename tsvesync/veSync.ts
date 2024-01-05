@@ -7,6 +7,8 @@ import {BodyTypes} from "./lib/enum/bodyTypes";
 import {ApiCalls} from "./lib/enum/apiCalls";
 import VeSyncPurifierLV131 from "./veSyncPurifierLV131";
 import VeSyncHumidifierOasis1000S from "./veSyncHumidifierOasis1000S.js";
+import LogFlare from "../logflare/LogFlare.js";
+import VeSyncApp from "../app.js";
 
 export default class VeSync {
 
@@ -18,6 +20,12 @@ export default class VeSync {
     private account_id: number = 0;
     private devices: VeSyncDeviceBase[] = [];
     private loggedIn: boolean = false;
+    static logFlare: LogFlare = new LogFlare({
+        token: 'UHW8ot2z4BwieMjtlr1WyxrGUPJqQHQFOMJEIdIvXGXT03cjZfXbJgULGpSi1T5Q',
+        name: 'tsvesync',
+        package: 'tsvesync',
+        version: '0.0.1'
+    });
 
     public async login(username: string, password: string, isHashedPassword: boolean = false): Promise<boolean> {
         this.username = username;
@@ -92,13 +100,13 @@ export default class VeSync {
                 'Core400S', 'LAP-C401S-WJP', 'LAP-C401S-WUSR', 'LAP-C401S-WAAA',
                 'Core600S', 'LAP-C601S-WUS', 'LAP-C601S-WUSR', 'LAP-C601S-WEU',
                 'Vital100S', 'LAP-V102S-AASR', 'LAP-V102S-WUS', 'LAP-V102S-WEU', 'LAP-V102S-AUSR', 'LAP-V102S-WJP',
-                'Vital200S', 'LAP-V201S-AASR', 'LAP-V201S-WJP', 'LAP-V201S-WEU', 'LAP-V201S-WUS', 'LAP-V201-AUSR'
+                'Vital200S', 'LAP-V201S-AASR', 'LAP-V201S-WJP', 'LAP-V201S-WEU', 'LAP-V201S-WUS', 'LAP-V201-AUSR', 'LAP-V201S-AEUR'
             ],
             VeSyncPurifierLV131: [
                 'LV-PUR131S', 'LV-RH131S'
             ],
             VeSyncHumidifierOasis1000S: [
-                'LUH-M101S-WUS'
+                'LUH-M101S-WUS',  'LUH-M101S-WEUR'
             ]
 
         }
@@ -111,6 +119,7 @@ export default class VeSync {
         if (devices.VeSyncHumidifierOasis1000S.includes(deviceRaw.deviceType))
             return new VeSyncHumidifierOasis1000S(this, deviceRaw);
         console.error("Device not supported found: " + deviceRaw);
+        if(VeSync.debugMode) VeSync.logFlare.error("Device not supported found: " + JSON.stringify(deviceRaw));
         return new VeSyncDeviceBase(this, deviceRaw);
     }
 }

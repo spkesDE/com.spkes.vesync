@@ -69,7 +69,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
         },
         Vital200S: {
             models: ['LAP-V201S-AASR', 'LAP-V201S-WJP', 'LAP-V201S-WEU',
-                'LAP-V201S-WUS', 'LAP-V201-AUSR'],
+                'LAP-V201S-WUS', 'LAP-V201-AUSR', 'LAP-V201S-AEUR'],
             modes: ['manual', 'auto', 'sleep', 'off', 'pet'],
             features: ['air_quality'],
             levels: [1, 2, 3, 4],

@@ -75,8 +75,10 @@ export default class VeSyncDeviceBase {
             case 'device timeout':
                 this.connectionStatus = "offline";
                 return false;
+            default:
+                if(VeSync.debugMode) VeSync.logFlare.error(`Unknown Response for ${this.deviceType}. ` + JSON.stringify(result));
+                return false;
         }
-        return false;
     }
 
     public getDeviceFeatures(): { [key: string]: any } {

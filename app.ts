@@ -4,6 +4,7 @@ import VeSyncPurifier from "./tsvesync/veSyncPurifier";
 import VeSyncHumidifier from "./tsvesync/veSyncHumidifier";
 import axiosRetry from "axios-retry";
 import axios from "axios";
+import LogFlare from "./logflare/LogFlare.js";
 
 export default class VeSyncApp extends Homey.App {
     veSync: VeSync = new VeSync();
@@ -32,6 +33,7 @@ export default class VeSyncApp extends Homey.App {
             retryCondition: () => true
         });
         await this.startVeSync();
+
     }
 
     private async startVeSync() {
