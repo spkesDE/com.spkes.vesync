@@ -2,6 +2,7 @@ import Helper from "./lib/helper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
 import VeSync from "./veSync";
 import {ApiCalls} from "./lib/enum/apiCalls";
+
 interface DeviceFeatures {
     models: string[],
     modes: string[],
@@ -339,5 +340,11 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
                 })
                 .catch(reject)
         });
+    }
+
+    //Overwrite for vaildResponse
+    public validResponse(result: any) {
+        if (VeSync.debugMode) VeSync.logRift.log('Invalid response: ' + JSON.stringify(result))
+        return super.validResponse(result);
     }
 }

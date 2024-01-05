@@ -266,4 +266,9 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 .catch(reject)
         });
     }
+
+    public validResponse(result: any) {
+        if (VeSync.debugMode) VeSync.logRift.log('Invalid response: ' + JSON.stringify(result))
+        return super.validResponse(result);
+    }
 }

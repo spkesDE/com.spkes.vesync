@@ -287,4 +287,8 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
         });
     }
 
+    public validResponse(result: any) {
+        if (VeSync.debugMode) VeSync.logRift.log('Invalid response: ' + JSON.stringify(result))
+        return super.validResponse(result);
+    }
 }

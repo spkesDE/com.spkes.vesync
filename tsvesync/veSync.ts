@@ -7,7 +7,7 @@ import {BodyTypes} from "./lib/enum/bodyTypes";
 import {ApiCalls} from "./lib/enum/apiCalls";
 import VeSyncPurifierLV131 from "./veSyncPurifierLV131";
 import VeSyncHumidifierOasis1000S from "./veSyncHumidifierOasis1000S.js";
-import LogFlare from "../logflare/LogFlare.js";
+import LogRift from "../logrift/LogRift.js";
 import VeSyncApp from "../app.js";
 
 export default class VeSync {
@@ -20,7 +20,7 @@ export default class VeSync {
     private account_id: number = 0;
     private devices: VeSyncDeviceBase[] = [];
     private loggedIn: boolean = false;
-    static logFlare: LogFlare = new LogFlare({
+    static logRift: LogRift = new LogRift({
         token: 'UHW8ot2z4BwieMjtlr1WyxrGUPJqQHQFOMJEIdIvXGXT03cjZfXbJgULGpSi1T5Q',
         name: 'tsvesync',
         package: 'tsvesync',
@@ -119,7 +119,7 @@ export default class VeSync {
         if (devices.VeSyncHumidifierOasis1000S.includes(deviceRaw.deviceType))
             return new VeSyncHumidifierOasis1000S(this, deviceRaw);
         console.error("Device not supported found: " + deviceRaw);
-        if(VeSync.debugMode) VeSync.logFlare.error("Device not supported found: " + JSON.stringify(deviceRaw));
+        if(VeSync.debugMode && deviceRaw.type.includes('wifi')) VeSync.logRift.error("Device not supported found: " + JSON.stringify(deviceRaw));
         return new VeSyncDeviceBase(this, deviceRaw);
     }
 }

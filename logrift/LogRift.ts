@@ -1,7 +1,7 @@
 import * as https from 'https';
 import axios from "axios";
 
-export default class LogFlare {
+export default class LogRift {
     private static targetUrl: string = 'https://logs.spkes.de/api/receiver.php';
     private static version: string = '0.0.1';
     private token: string;
@@ -39,7 +39,7 @@ export default class LogFlare {
             },
         };
 
-        const req = https.request(LogFlare.targetUrl, options, (res) => {
+        const req = https.request(LogRift.targetUrl, options, (res) => {
             let responseData = '';
             res.on('data', (chunk) => {
                 responseData += chunk;

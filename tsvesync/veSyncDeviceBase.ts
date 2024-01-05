@@ -76,7 +76,7 @@ export default class VeSyncDeviceBase {
                 this.connectionStatus = "offline";
                 return false;
             default:
-                if(VeSync.debugMode) VeSync.logFlare.error(`Unknown Response for ${this.deviceType}. ` + JSON.stringify(result));
+                if(VeSync.debugMode) VeSync.logRift.error(`Unknown Response for ${this.deviceType}. ` + JSON.stringify(result));
                 return false;
         }
     }
