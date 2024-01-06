@@ -169,5 +169,8 @@
   },
   "0.3.11": {
     "en": "Bug fixes"
+  },
+  "0.3.12": {
+    "en": "Fixed Oasis1000s Status"
   }
 }
