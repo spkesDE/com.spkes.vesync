@@ -345,7 +345,7 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     //Overwrite for validResponse
     public validResponse(result: any) {
         const resultResponse = super.validResponse(result);
-        if (VeSync.debugMode && resultResponse) VeSync.logRift.log('Invalid response: ' + JSON.stringify(result))
+        if (VeSync.debugMode && !resultResponse) VeSync.logRift.log('Invalid response: ' + JSON.stringify(result))
         return resultResponse;
     }
 }

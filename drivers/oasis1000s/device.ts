@@ -10,8 +10,7 @@ class Oasis1000S extends HumidifierDeviceBase {
         "measure_humidity",
         "alarm_water_lacks",
         "fanSpeed0to9",
-        "display_toggle",
-        "nightlight_toggle"
+        "display_toggle"
     ]
 
     /**

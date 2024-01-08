@@ -23,11 +23,12 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
             levels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             method: ['getHumidifierStatus', 'setAutoStopSwitch',
                 'setSwitch', 'setVirtualLevel', 'setTargetHumidity',
-                'setHumidityMode', 'setDisplay']
+                'setHumidityMode', 'setDisplay', "setNightLightBrightness"]
         }
     }
 
     //endregion
+    private night_light_state: boolean = false;
 
 
     constructor(api: VeSync, device: any) {
@@ -57,20 +58,45 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
                             resolve(true)
                         }
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
-                        if (VeSync.debugMode) console.log(result.result.result)
-                        this.mode = result.result.result.powerSwitch === 0 ? 'off' : 'on'
-                        this.mist_virtual_level = result.result.result.virtualLevel ?? 0
-                        this.mist_level = result.result.result.mistLevel ?? 0
-                        this.mode = result.result.result.workMode ?? 'manual'
-                        this.water_lacks = result.result.result.waterLacksState ?? false
-                        this.humidity_high = result.result.result.targetHumidity < result.result.result.humidity
-                        this.water_tank_lifted = result.result.result.waterTankLifted ?? false
-                        this.automatic_stop_reach_target = result.result.result.autoStopState ?? true
-                        this.display = result.result.result.screenState ?? false
-                        this.targetHumidity = result.result.result.targetHumidity ?? 0
-                        this.display = result.result.result.screenSwitch ?? false
-                        this.autoStopSwitch = result.result.result.autoStopSwitch ?? true
+                        const payload = result.result.result;
+                        if (VeSync.debugMode) console.log(payload)
+                        /*
+                            Result in result.result.result
+                            {
+                              powerSwitch: 1,
+                              humidity: 54,
+                              targetHumidity: 60,
+                              virtualLevel: 5,
+                              mistLevel: 2,
+                              workMode: 'auto',
+                              waterLacksState: 0,
+                              waterTankLifted: 0,
+                              autoStopSwitch: 1,
+                              autoStopState: 0,
+                              screenSwitch: 0,
+                              screenState: 0,
+                              scheduleCount: 0,
+                              timerRemain: 0,
+                              errorCode: 0,
+                              nightLight: { nightLightSwitch: 0, brightness: 60 }
+                            }
+                         */
+
+                        this.enabled = payload.powerSwitch === 1
+                        this.humidity = payload.humidity
+                        this.targetHumidity = payload.targetHumidity
+                        this.mist_virtual_level = payload.virtualLevel
+                        this.mist_level = payload.mistLevel
+                        this.water_lacks = payload.waterLacksState === 1
+                        this.water_tank_lifted = payload.waterTankLifted === 1
+                        this.autoStopSwitch = payload.autoStopSwitch === 1
+                        this.display = payload.screenSwitch === 1
+                        this.night_light_brightness = payload.nightLight.brightness
+                        this.night_light_state = payload.nightLight.nightLightSwitch === 1
                         this.connectionStatus = 'online'
+
+                        // console.log(this) //TODO
+
                         return resolve(true)
                     } catch (e: any) {
                         return reject(result);
@@ -158,7 +184,7 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
     public async setMistLevel(level: number): Promise<any> {
         return new Promise((resolve, reject) => {
             // Validate level
-            if (!this.Device_Features.OasisMist100S.levels.includes(level)) return reject(new Error('Invalid level: ' + level))
+            if (!this.Device_Features.OasisMist1000S.levels.includes(level)) return reject(new Error('Invalid level: ' + level))
             let body = {
                 ...Helper.bypassBodyV2(this.api),
                 cid: this.cid,
@@ -173,6 +199,7 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                        if (VeSync.debugMode) console.log(result)
                         this.mist_virtual_level = level
                         return resolve(true)
                     } catch (e: any) {
@@ -287,10 +314,46 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
         });
     }
 
+    /**
+     * Set Night Light Brightness
+     * Payload: {
+     *             'brightness': int(brightness)
+     *         }
+     *
+     *         //TODO Not working!
+     */
+    public async setNightLightBrightness(brightness: number): Promise<any> {
+        return new Promise((resolve, reject) => {
+            // Validate brightness
+            if (brightness < 0 || brightness > 100) return reject(new Error('Invalid brightness: ' + brightness))
+            let body = {
+                ...Helper.bypassBodyV2(this.api),
+                cid: this.cid,
+                configModule: this.configModule,
+                payload: Helper.createPayload(this, 'setNightLightBrightness', {
+                    nightLightSwitch: brightness > 0 ? 1 : 0,
+                    brightness: brightness
+                }),
+            }
+            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+                .then(result => {
+                    try {
+                        if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
+                        if (VeSync.debugMode) console.log(result)
+                        this.night_light_brightness = brightness
+                        return resolve(true)
+                    } catch (e: any) {
+                        return reject(result);
+                    }
+                })
+                .catch(reject)
+        });
+    }
+
     //Overwrite for validResponse
     public validResponse(result: any) {
         const resultResponse = super.validResponse(result);
-        if (VeSync.debugMode && resultResponse) VeSync.logRift.log('Invalid response: ' + JSON.stringify(result))
+        if (VeSync.debugMode && !resultResponse) VeSync.logRift.log('Invalid response: ' + JSON.stringify(result))
         return resultResponse;
     }
 }
