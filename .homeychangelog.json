@@ -181,5 +181,8 @@
   },
   "0.4.0": {
     "en": "Support for Levoit LV131, Oasis1000s, Classic200s. Experimental support for Vital 100s & 200s and Oasis450s"
+  },
+  "0.4.1": {
+    "en": "Bug fixes for flows and Oasis1000s"
   }
 }
