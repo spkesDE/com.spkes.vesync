@@ -11,7 +11,7 @@
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=core200s|dual200s"
+      "filter": "driver_id=core200s|dual200s|lv131s|lv600s|oasis450s"
     },
     {
       "type": "dropdown",

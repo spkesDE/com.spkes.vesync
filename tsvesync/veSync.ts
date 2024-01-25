@@ -8,7 +8,6 @@ import {ApiCalls} from "./lib/enum/apiCalls";
 import VeSyncPurifierLV131 from "./veSyncPurifierLV131";
 import VeSyncHumidifierOasis1000S from "./veSyncHumidifierOasis1000S.js";
 import LogRift from "../logrift/LogRift.js";
-import VeSyncApp from "../app.js";
 
 export default class VeSync {
 
@@ -110,6 +109,7 @@ export default class VeSync {
             ]
 
         }
+
         if (devices.VeSyncHumidifier.includes(deviceRaw.deviceType))
             return new VeSyncHumidifier(this, deviceRaw);
         if (devices.VeSyncPurifier.includes(deviceRaw.deviceType))
@@ -119,7 +119,24 @@ export default class VeSync {
         if (devices.VeSyncHumidifierOasis1000S.includes(deviceRaw.deviceType))
             return new VeSyncHumidifierOasis1000S(this, deviceRaw);
         console.error("Device not supported found: " + deviceRaw);
-        if(VeSync.debugMode && deviceRaw.type.includes('wifi')) VeSync.logRift.error("Device not supported found: " + JSON.stringify(deviceRaw));
+        if(deviceRaw.type.includes('wifi')) VeSync.logRift.error("Device not supported found: " + JSON.stringify(deviceRaw));
         return new VeSyncDeviceBase(this, deviceRaw);
+    }
+
+    public generateSQLStatements(deviceFeatures: { [key: string]: any }) {
+        let sqlStatements = [];
+        for (let deviceFamily in deviceFeatures) {
+            let deviceFeature = deviceFeatures[deviceFamily];
+            for (let model of deviceFeature.models) {
+                //Switch regions JP = Japan, EU = Europe, US = United States, everything else is Unknown
+                let region = 'Unknown';
+                if (model.includes('JP')) region = 'JP';
+                if (model.includes('EU')) region = 'EU';
+                if (model.includes('US')) region = 'US';
+                let sqlStatement = `INSERT INTO \`devices\`(\`app\`, \`type\`, \`deviceFamily\`, \`connectionType\`, \`deviceRegion\`) VALUES ('veSync', '${model}', '${deviceFamily}', 'wifi-air', '${region}')`;
+                sqlStatements.push(sqlStatement);
+            }
+        }
+        return sqlStatements;
     }
 }

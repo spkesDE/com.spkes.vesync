@@ -90,6 +90,11 @@ export default class HumidifierDeviceBase extends Homey.Device {
     }
 
     async updateDevice(): Promise<void> {
+        if(this.device === undefined) {
+            this.log("Device is undefined");
+            this.log(this);
+            return;
+        }
         //Getting latest device status
         await this.device.getStatus().catch(async (reason: Error) => {
             switch (reason.message) {

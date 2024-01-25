@@ -8,7 +8,7 @@
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=core200s|core300s|core400s"
+      "filter": "driver_id=core200s|core300s|core400s|core600s|lv131s|vital100s|vital200s"
     }
   ]
 }

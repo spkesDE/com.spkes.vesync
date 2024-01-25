@@ -67,7 +67,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=core200s|core300s|core400s"
+            "filter": "driver_id=core200s|core300s|core400s|core600s|lv131s|vital100s|vital200s"
           }
         ]
       },
@@ -81,7 +81,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=lv600s|dual200s|classic300s"
+            "filter": "driver_id=lv600s|dual200s|classic200s|classic300s|oasis450s|oasis1000s"
           }
         ]
       }
@@ -100,7 +100,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=core200s|core400s|dual200s|classic300s|lv600s"
+            "filter": "driver_id=classic200s|classic300s|core200s|core400s|core600s|dual200s|lv131s|lv600s|oasis1000s|oasis450s|vital100s|vital200s"
           },
           {
             "type": "checkbox",
@@ -126,7 +126,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=core200s|dual200s"
+            "filter": "driver_id=core200s|dual200s|lv131s|lv600s|oasis450s"
           },
           {
             "type": "dropdown",
@@ -175,7 +175,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=core400s"
+            "filter": "driver_id=core400s|vital200s|vital100s|core600s"
           },
           {
             "type": "dropdown",
@@ -294,7 +294,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=lv600s|classic300s"
+            "filter": "driver_id=lv600s|classic300s|classic200s|oasis1000s|oasis450s"
           },
           {
             "type": "dropdown",

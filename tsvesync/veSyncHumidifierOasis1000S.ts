@@ -63,22 +63,22 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
                         /*
                             Result in result.result.result
                             {
-                              powerSwitch: 1,
-                              humidity: 54,
-                              targetHumidity: 60,
-                              virtualLevel: 5,
-                              mistLevel: 2,
-                              workMode: 'auto',
-                              waterLacksState: 0,
-                              waterTankLifted: 0,
-                              autoStopSwitch: 1,
-                              autoStopState: 0,
-                              screenSwitch: 0,
+                              powerSwitch: 1, +
+                              humidity: 54, +
+                              targetHumidity: 60, +
+                              virtualLevel: 5, +
+                              mistLevel: 2, +
+                              workMode: 'auto', +
+                              waterLacksState: 0, +
+                              waterTankLifted: 0,+
+                              autoStopSwitch: 1, +
+                              autoStopState: 0, +
+                              screenSwitch: 0, +
                               screenState: 0,
                               scheduleCount: 0,
                               timerRemain: 0,
                               errorCode: 0,
-                              nightLight: { nightLightSwitch: 0, brightness: 60 }
+                              nightLight: { nightLightSwitch: 0, brightness: 60 } +
                             }
                          */
 
@@ -94,6 +94,7 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
                         this.night_light_brightness = payload.nightLight.brightness
                         this.night_light_state = payload.nightLight.nightLightSwitch === 1
                         this.connectionStatus = 'online'
+                        this.mode = payload.workMode
 
                         // console.log(this) //TODO
 

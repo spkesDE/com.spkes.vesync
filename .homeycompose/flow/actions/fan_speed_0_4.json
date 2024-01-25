@@ -11,7 +11,7 @@
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=core400s"
+      "filter": "driver_id=core400s|vital200s|vital100s|core600s"
     },
     {
       "type": "dropdown",

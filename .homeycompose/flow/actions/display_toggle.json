@@ -11,7 +11,7 @@
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=core200s|core400s|dual200s|classic300s|lv600s"
+      "filter": "driver_id=classic200s|classic300s|core200s|core400s|core600s|dual200s|lv131s|lv600s|oasis1000s|oasis450s|vital100s|vital200s"
     },
     {
       "type": "checkbox",

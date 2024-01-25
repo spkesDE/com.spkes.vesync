@@ -11,7 +11,7 @@
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=lv600s|classic300s"
+      "filter": "driver_id=lv600s|classic300s|classic200s|oasis1000s|oasis450s"
     },
     {
       "type": "dropdown",
