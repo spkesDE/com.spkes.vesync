@@ -11,7 +11,7 @@ import LogRift from "../logrift/LogRift.js";
 
 export default class VeSync {
 
-    static debugMode: boolean = true;
+    static debugMode: boolean = false;
     username: string = "";
     password: string = "";
     time_zone: string = 'Europe/Berlin';
@@ -90,6 +90,7 @@ export default class VeSync {
             VeSyncHumidifier: [
                 'Classic300S', 'LUH-A601S-WUSB',
                 'Classic200S',
+                'Oasis450S',  'LUH-O451S-WUS', 'LUH-O451S-WEU',
                 'Dual200S', 'LUH-D301S-WUSR', 'LUH-D301S-WJP', 'LUH-D301S-WEU',
                 'LV600S', 'LUH-A602S-WUSR', 'LUH-A602S-WUS', 'LUH-A602S-WEUR', 'LUH-A602S-WEU', 'LUH-A602S-WJP'
             ],

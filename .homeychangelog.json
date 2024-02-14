@@ -184,5 +184,8 @@
   },
   "0.4.1": {
     "en": "Bug fixes for flows and Oasis1000s"
+  },
+  "0.4.2": {
+    "en": "Bug fixes"
   }
 }
