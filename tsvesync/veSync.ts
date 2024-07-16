@@ -102,8 +102,8 @@ export default class VeSync {
             VeSyncHumidifierOasis1000S: [
                 'LUH-M101S-WUS',  'LUH-M101S-WEUR'
             ],
-            VeSyncFan: [
-                'LTF-F422S-KEU'
+            VeSyncTowerFan: [
+                'LTF-F422S-KEU', 'LTF-F422S-WUSR', 'LTF-F422_WJP', 'LTF-F422S-WUS'
             ]
 
         }
@@ -116,7 +116,7 @@ export default class VeSync {
             return new VeSyncPurifierLV131(this, deviceRaw);
         if (devices.VeSyncHumidifierOasis1000S.includes(deviceRaw.deviceType))
             return new VeSyncHumidifierOasis1000S(this, deviceRaw);
-        if (devices.VeSyncFan.includes(deviceRaw.deviceType)){
+        if (devices.VeSyncTowerFan.includes(deviceRaw.deviceType)){
             return new VeSyncTowerFan(this, deviceRaw);
         }
         console.error("Device not supported found: " + JSON.stringify(deviceRaw));
