@@ -4,6 +4,3 @@
 [![wakapi](https://wakapi.spkes.dev/api/badge/spkes/interval:any/project:com.spkes.vesync)]()
 
 Adds support for VeSync devices.
-
-
-[![wakapi](https://wakapi.spkes.dev/api/activity/chart/spkes.svg)]()
