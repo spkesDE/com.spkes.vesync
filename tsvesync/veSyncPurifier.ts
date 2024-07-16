@@ -271,7 +271,7 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     //Overwrite for validResponse
     public validResponse(result: any) {
         const resultResponse = super.validResponse(result);
-        if (VeSync.debugMode && !resultResponse) VeSync.logRift.log('Invalid response: ' + JSON.stringify(result))
+        if (VeSync.debugMode && !resultResponse) console.log('Invalid response: ' + JSON.stringify(result))
         return resultResponse;
     }
 }

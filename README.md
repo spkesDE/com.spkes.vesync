@@ -1,7 +1,9 @@
 # VeSync Smart Home Devices
+### This project is heavly inspired by the work of [pyvesync](https://github.com/webdjoe/pyvesync/)! Check out their project for more information on the VeSync API.
 
-[![wakatime](https://wakatime.com/badge/user/b1847e34-df83-4b5d-be70-c9ec2847dad3/project/dc7f07f4-1b1f-45ce-9d3d-b22238e646cf.svg)](https://wakatime.com/badge/user/b1847e34-df83-4b5d-be70-c9ec2847dad3/project/dc7f07f4-1b1f-45ce-9d3d-b22238e646cf)
+[![wakapi](https://wakapi.spkes.dev/api/badge/spkes/interval:any/project:com.spkes.vesync)]()
 
 Adds support for VeSync devices.
 
-https://community.homey.app/t/app-pro-vesync-levoit/71369
+
+[![wakapi](https://wakapi.spkes.dev/api/activity/chart/spkes.svg)]()

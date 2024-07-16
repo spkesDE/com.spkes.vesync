@@ -874,6 +874,68 @@
         ]
       },
       {
+        "id": "setModeF422S",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=f422s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "advancedSleep",
+                "title": {
+                  "en": "Advanced Sleep",
+                  "de": "Erweitertes Schlafen"
+                }
+              },
+              {
+                "id": "auto",
+                "title": {
+                  "en": "Auto",
+                  "de": "Automatisch"
+                }
+              },
+              {
+                "id": "turbo",
+                "title": {
+                  "en": "Turbo",
+                  "de": "Turbo"
+                }
+              },
+              {
+                "id": "normal",
+                "title": {
+                  "en": "Normal",
+                  "de": "Normal"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
         "id": "setModeLV131S",
         "title": {
           "en": "Set mode",
@@ -1858,6 +1920,90 @@
     },
     {
       "name": {
+        "en": "F422S"
+      },
+      "class": "fan",
+      "capabilities": [
+        "measure_temperature",
+        "onoff",
+        "display_toggle",
+        "f422sCapability",
+        "oscillation_toggle",
+        "fanSpeed0to12",
+        "mute_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/f422s/assets/images/small.png",
+        "large": "/drivers/f422s/assets/images/large.png",
+        "xlarge": "/drivers/f422s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "f422s"
+    },
+    {
+      "name": {
         "en": "LV131S"
       },
       "class": "fan",
@@ -2720,6 +2866,71 @@
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
     },
+    "f422sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "advancedSleep",
+          "title": {
+            "en": "Advanced Sleep",
+            "de": "Erweitertes Schlafen"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto",
+            "de": "Automatisch"
+          }
+        },
+        {
+          "id": "turbo",
+          "title": {
+            "en": "Turbo",
+            "de": "Turbo"
+          }
+        },
+        {
+          "id": "normal",
+          "title": {
+            "en": "Normal",
+            "de": "Normal"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "fanSpeed0to12": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
     "fanSpeed0to3": {
       "type": "number",
       "title": {
@@ -2881,6 +3092,18 @@
       "uiComponent": "sensor",
       "icon": "/assets/capability_icons/filter_life.svg"
     },
+    "mute_toggle": {
+      "type": "boolean",
+      "title": {
+        "en": "Mute",
+        "de": "Stumm"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/display_toggle.svg"
+    },
     "nightlight_toggle": {
       "type": "boolean",
       "title": {
@@ -2976,6 +3199,18 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
+    },
+    "oscillation_toggle": {
+      "type": "boolean",
+      "title": {
+        "en": "Oscillation",
+        "de": "Schwenken"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/display_toggle.svg"
     },
     "sensor_air_quality": {
       "type": "string",

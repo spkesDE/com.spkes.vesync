@@ -7,7 +7,7 @@ import {BodyTypes} from "./lib/enum/bodyTypes";
 import {ApiCalls} from "./lib/enum/apiCalls";
 import VeSyncPurifierLV131 from "./veSyncPurifierLV131";
 import VeSyncHumidifierOasis1000S from "./veSyncHumidifierOasis1000S.js";
-import LogRift from "../logrift/LogRift.js";
+import VeSyncTowerFan from "./veSyncTowerFan";
 
 export default class VeSync {
 
@@ -19,12 +19,6 @@ export default class VeSync {
     private account_id: number = 0;
     private devices: VeSyncDeviceBase[] = [];
     private loggedIn: boolean = false;
-    static logRift: LogRift = new LogRift({
-        token: 'UHW8ot2z4BwieMjtlr1WyxrGUPJqQHQFOMJEIdIvXGXT03cjZfXbJgULGpSi1T5Q',
-        name: 'tsvesync',
-        package: 'tsvesync',
-        version: '0.0.1'
-    });
 
     public async login(username: string, password: string, isHashedPassword: boolean = false): Promise<boolean> {
         this.username = username;
@@ -107,6 +101,9 @@ export default class VeSync {
             ],
             VeSyncHumidifierOasis1000S: [
                 'LUH-M101S-WUS',  'LUH-M101S-WEUR'
+            ],
+            VeSyncFan: [
+                'LTF-F422S-KEU'
             ]
 
         }
@@ -119,25 +116,13 @@ export default class VeSync {
             return new VeSyncPurifierLV131(this, deviceRaw);
         if (devices.VeSyncHumidifierOasis1000S.includes(deviceRaw.deviceType))
             return new VeSyncHumidifierOasis1000S(this, deviceRaw);
-        console.error("Device not supported found: " + deviceRaw);
-        if(deviceRaw.type.includes('wifi')) VeSync.logRift.error("Device not supported found: " + JSON.stringify(deviceRaw));
+        if (devices.VeSyncFan.includes(deviceRaw.deviceType)){
+            const fan = new VeSyncTowerFan(this, deviceRaw);
+            void fan.toggleSwitch(true);
+            return fan;
+        }
+        console.error("Device not supported found: " + JSON.stringify(deviceRaw));
         return new VeSyncDeviceBase(this, deviceRaw);
     }
 
-    public generateSQLStatements(deviceFeatures: { [key: string]: any }) {
-        let sqlStatements = [];
-        for (let deviceFamily in deviceFeatures) {
-            let deviceFeature = deviceFeatures[deviceFamily];
-            for (let model of deviceFeature.models) {
-                //Switch regions JP = Japan, EU = Europe, US = United States, everything else is Unknown
-                let region = 'Unknown';
-                if (model.includes('JP')) region = 'JP';
-                if (model.includes('EU')) region = 'EU';
-                if (model.includes('US')) region = 'US';
-                let sqlStatement = `INSERT INTO \`devices\`(\`app\`, \`type\`, \`deviceFamily\`, \`connectionType\`, \`deviceRegion\`) VALUES ('veSync', '${model}', '${deviceFamily}', 'wifi-air', '${region}')`;
-                sqlStatements.push(sqlStatement);
-            }
-        }
-        return sqlStatements;
-    }
 }

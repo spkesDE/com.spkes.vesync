@@ -4,7 +4,6 @@ import VeSyncPurifier from "./tsvesync/veSyncPurifier";
 import VeSyncHumidifier from "./tsvesync/veSyncHumidifier";
 import axiosRetry from "axios-retry";
 import axios from "axios";
-import LogRift from "./logrift/LogRift.js";
 
 export default class VeSyncApp extends Homey.App {
     veSync: VeSync = new VeSync();

@@ -68,7 +68,7 @@ export default class VeSyncDeviceBase {
         if (!result.msg) return false;
         switch (result.msg.toLowerCase()) {
             case 'request success':
-                if (this.connectionStatus == "offline")
+                if (this.connectionStatus != "online")
                     this.connectionStatus = "online";
                 return true;
             case 'device offline':
@@ -76,7 +76,6 @@ export default class VeSyncDeviceBase {
                 this.connectionStatus = "offline";
                 return false;
             default:
-                if(VeSync.debugMode) VeSync.logRift.error(`Unknown Response for ${this.deviceType}. ` + JSON.stringify(result));
                 return false;
         }
     }

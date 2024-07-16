@@ -1,0 +1,12 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Oscillation",
+    "de": "Schwenken"
+  },
+  "getable": true,
+  "setable": true,
+  "uiQuickAction": false,
+  "uiComponent": "button",
+  "icon": "/assets/capability_icons/display_toggle.svg"
+}
