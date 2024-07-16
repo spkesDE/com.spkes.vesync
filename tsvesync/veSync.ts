@@ -117,9 +117,7 @@ export default class VeSync {
         if (devices.VeSyncHumidifierOasis1000S.includes(deviceRaw.deviceType))
             return new VeSyncHumidifierOasis1000S(this, deviceRaw);
         if (devices.VeSyncFan.includes(deviceRaw.deviceType)){
-            const fan = new VeSyncTowerFan(this, deviceRaw);
-            void fan.toggleSwitch(true);
-            return fan;
+            return new VeSyncTowerFan(this, deviceRaw);
         }
         console.error("Device not supported found: " + JSON.stringify(deviceRaw));
         return new VeSyncDeviceBase(this, deviceRaw);
