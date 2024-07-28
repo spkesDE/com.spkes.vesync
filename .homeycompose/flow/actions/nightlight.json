@@ -1,0 +1,48 @@
+{
+  "title": {
+    "en": "Set nightlight to...",
+    "de": "Setzte Nachtlicht zu..."
+  },
+  "titleFormatted": {
+    "en": "Set nightlight to [[level]]",
+    "de": "Setzte Nachtlicht zu [[level]]"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=core200s"
+    },
+    {
+      "type": "dropdown",
+      "name": "level",
+      "title": {
+        "en": "On/Dim/Off",
+        "de": "An/Schwach/Aus"
+      },
+      "values": [
+        {
+          "id": "on",
+          "title": {
+            "en": "On",
+            "de": "An"
+          }
+        },
+        {
+          "id": "dim",
+          "title": {
+            "en": "Dim",
+            "de": "Schwach"
+          }
+        },
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        }
+      ]
+    }
+  ]
+}

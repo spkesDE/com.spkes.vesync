@@ -1,0 +1,35 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Mode",
+    "de": "Modus"
+  },
+  "values": [
+    {
+      "id": "off",
+      "title": {
+        "en": "Off",
+        "de": "Aus"
+      }
+    },
+    {
+      "id": "sleep",
+      "title": {
+        "en": "Sleep Mode",
+        "de": "Schlaf Modus"
+      }
+    },
+    {
+      "id": "manual",
+      "title": {
+        "en": "Manual Mode",
+        "de": "Manueller Modus"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "uiQuickAction": true,
+  "icon": "/assets/icon.svg"
+}

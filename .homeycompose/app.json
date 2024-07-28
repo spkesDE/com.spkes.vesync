@@ -1,0 +1,57 @@
+{
+  "id": "com.spkes.vesync",
+  "version": "0.5.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "brandColor": "#11c8bd",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "VeSync"
+  },
+  "description": {
+    "en": "Experience cleaner air, experience a better life."
+  },
+  "category": [
+    "appliances"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Julian Suhl",
+    "email": "julian@suhl.de"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "IconPark"
+      },
+      {
+        "name": "Etn Ccis"
+      }
+    ],
+    "translators": [
+      {
+        "name": "spkesDE"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "spikes022"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/spkesDE/com.spkes.vesync/issues"
+  },
+  "source": "https://github.com/spkesDE/com.spkes.vesync",
+  "support": "https://github.com/spkesDE",
+  "homeyCommunityTopicId": 71369
+}

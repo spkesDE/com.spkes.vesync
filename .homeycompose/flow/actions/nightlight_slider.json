@@ -1,0 +1,31 @@
+{
+  "title": {
+    "en": "Set nightlight to...",
+    "de": "Setzte Nachtlicht zu..."
+  },
+  "titleFormatted": {
+    "en": "Set nightlight to [[brightness]]",
+    "de": "Setzte Nachtlicht zu [[brightness]]"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=classic300s"
+    },
+    {
+      "type": "range",
+      "name": "brightness",
+      "title": {
+        "en": "Brightness",
+        "de": "Helligkeit"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "%",
+      "labelMultiplier": 1,
+      "labelDecimals": 0
+    }
+  ]
+}

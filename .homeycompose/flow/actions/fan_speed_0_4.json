@@ -1,0 +1,55 @@
+{
+  "title": {
+    "en": "Set fan level",
+    "de": "Lüftergeschwindigkeit"
+  },
+  "titleFormatted": {
+    "en": "Set fan level to [[level]]",
+    "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=core400s|vital200s|vital100s|core600s"
+    },
+    {
+      "type": "dropdown",
+      "name": "level",
+      "title": {
+        "en": "Level",
+        "de": "Lüftergeschwindigkeit"
+      },
+      "values": [
+        {
+          "id": "1",
+          "title": {
+            "en": "Fan Speed 1",
+            "de": "Geschwindigkeit 1"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Fan Speed 2",
+            "de": "Geschwindigkeit 2"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "Fan Speed 3",
+            "de": "Geschwindigkeit 3"
+          }
+        },
+        {
+          "id": "4",
+          "title": {
+            "en": "Fan Speed 4",
+            "de": "Geschwindigkeit 4"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Mode",
+    "de": "Modus"
+  },
+  "values": [
+    {
+      "id": "off",
+      "title": {
+        "en": "Off",
+        "de": "Aus"
+      }
+    },
+    {
+      "id": "advancedSleep",
+      "title": {
+        "en": "Advanced Sleep",
+        "de": "Erweitertes Schlafen"
+      }
+    },
+    {
+      "id": "auto",
+      "title": {
+        "en": "Auto",
+        "de": "Automatisch"
+      }
+    },
+    {
+      "id": "turbo",
+      "title": {
+        "en": "Turbo",
+        "de": "Turbo"
+      }
+    },
+    {
+      "id": "normal",
+      "title": {
+        "en": "Normal",
+        "de": "Normal"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "uiQuickAction": true,
+  "icon": "/assets/icon.svg"
+}

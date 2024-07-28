@@ -1,0 +1,61 @@
+{
+  "actions": [
+    {
+      "id": "setModeF422S",
+      "title": {
+        "en": "Set mode",
+        "de": "Setzte modus"
+      },
+      "titleFormatted": {
+        "en": "Set mode [[mode]]",
+        "de": "Setzte modus [[mode]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "mode",
+          "title": {
+            "en": "Mode"
+          },
+          "values": [
+            {
+              "id": "off",
+              "title": {
+                "en": "Off",
+                "de": "Aus"
+              }
+            },
+            {
+              "id": "advancedSleep",
+              "title": {
+                "en": "Advanced Sleep",
+                "de": "Erweitertes Schlafen"
+              }
+            },
+            {
+              "id": "auto",
+              "title": {
+                "en": "Auto",
+                "de": "Automatisch"
+              }
+            },
+            {
+              "id": "turbo",
+              "title": {
+                "en": "Turbo",
+                "de": "Turbo"
+              }
+            },
+            {
+              "id": "normal",
+              "title": {
+                "en": "Normal",
+                "de": "Normal"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

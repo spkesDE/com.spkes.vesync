@@ -1,0 +1,197 @@
+{
+  "0.0.1": {
+    "en": "First Test version for Core200S"
+  },
+  "0.0.2": {
+    "en": "Changed login"
+  },
+  "0.0.3": {
+    "en": "Core200S device Flows"
+  },
+  "0.0.4": {
+    "en": "Fixed Capability"
+  },
+  "0.0.5": {
+    "en": "Added icon for core200s"
+  },
+  "0.0.6": {
+    "en": "Updated readme"
+  },
+  "0.0.7": {
+    "en": "Updated app.json"
+  },
+  "0.0.8": {
+    "en": "Support for Classic300s and Dual200S (Testing)"
+  },
+  "0.0.9": {
+    "en": "Updated driver configs"
+  },
+  "0.0.10": {
+    "en": "Changed API handling"
+  },
+  "0.0.11": {
+    "en": "Fixed API"
+  },
+  "0.0.12": {
+    "en": "Fixed API"
+  },
+  "0.0.13": {
+    "en": "More debugging"
+  },
+  "0.0.14": {
+    "en": "fixed Dual200s"
+  },
+  "0.0.15": {
+    "en": "Temp fix for issue"
+  },
+  "0.0.16": {
+    "en": "Temp fix for issue 2"
+  },
+  "0.0.17": {
+    "en": "Handle offline devices (e.g. no wifi or no power)"
+  },
+  "0.0.18": {
+    "en": "Classic300s icon"
+  },
+  "0.0.19": {
+    "en": "Updated icons"
+  },
+  "0.0.20": {
+    "en": "Fixed logic in api"
+  },
+  "0.0.21": {
+    "en": "Fixed undefined error"
+  },
+  "0.0.22": {
+    "en": "Bug Fixes & Neue Icons"
+  },
+  "0.0.23": {
+    "en": "Fixed Issue with Classic300S pairing"
+  },
+  "0.0.24": {
+    "en": "Fixed filter for pairing"
+  },
+  "0.0.25": {
+    "en": "Added Core300s, Core400s, LV600S. Code Cleanup. Following updates may contain breaking changes."
+  },
+  "0.0.26": {
+    "en": "Added Core300s, Core400s, LV600S. Code Cleanup. Following updates may contain breaking changes."
+  },
+  "0.0.27": {
+    "en": "Added Core300s, Core400s, LV600S. Code Cleanup. Following updates may contain breaking changes."
+  },
+  "0.0.28": {
+    "en": "Fixed Classic300s. API fixes"
+  },
+  "0.0.29": {
+    "en": "Bug fixes. Translation fixes"
+  },
+  "0.0.30": {
+    "en": "Please re-add your devices if you have any issues. Using Sliders now for fan speed. Code improvements. Following updates may contain breaking changes."
+  },
+  "0.1.0": {
+    "en": "First Release Candidate - Added support for Classic300s, Core300s, Core400s, Dual200s, LV600s. "
+  },
+  "0.1.1": {
+    "en": "First Release Candidate - Added support for Classic300s, Core300s, Core400s, Dual200s, LV600s."
+  },
+  "0.1.2": {
+    "en": "Second Release Candidate - Added support for Classic300s, Core300s, Core400s, Dual200s, LV600s."
+  },
+  "0.1.3": {
+    "en": "Fixed Trigger flows"
+  },
+  "0.1.4": {
+    "en": "Fixed flows"
+  },
+  "0.1.5": {
+    "en": "Switched API client to axios for better request stabillity"
+  },
+  "0.1.6": {
+    "en": "Fix for 300s"
+  },
+  "0.1.7": {
+    "en": "Better error handling"
+  },
+  "0.1.8": {
+    "en": "Fixed error handling"
+  },
+  "0.1.9": {
+    "en": "Debugging"
+  },
+  "0.2.0": {
+    "en": "Fixed an issue with Dual200S"
+  },
+  "0.2.1": {
+    "en": "Fixed an issue with the Dual200s. Disabled adv. debugging"
+  },
+  "0.2.2": {
+    "en": "Bug fixes"
+  },
+  "0.2.3": {
+    "en": "Bug fixes"
+  },
+  "0.2.4": {
+    "en": "Bug fix"
+  },
+  "0.3.0": {
+    "en": "Core600S Support (Untested)"
+  },
+  "0.3.1": {
+    "en": "Added Core600s icon"
+  },
+  "0.3.2": {
+    "en": "Added untested Vital 200s & Vital 100s support."
+  },
+  "0.3.3": {
+    "en": "Added experimental Classic200S support."
+  },
+  "0.3.4": {
+    "en": "Added Support for LV131S, Added untested support for Oasis450s and Oasis1000s"
+  },
+  "0.3.5": {
+    "en": "Debugging"
+  },
+  "0.3.6": {
+    "en": "Added LUH-M101S-WEUR"
+  },
+  "0.3.7": {
+    "en": "Fixed LUH-M101S-WEUR"
+  },
+  "0.3.8": {
+    "en": "Added Icons"
+  },
+  "0.3.9": {
+    "en": "Added more debugging"
+  },
+  "0.3.10": {
+    "en": "Bug fixes"
+  },
+  "0.3.11": {
+    "en": "Bug fixes"
+  },
+  "0.3.12": {
+    "en": "Fixed Oasis1000s Status"
+  },
+  "0.3.13": {
+    "en": "Workiong Oasis1000s"
+  },
+  "0.3.14": {
+    "en": "Oasis1000s Support"
+  },
+  "0.4.0": {
+    "en": "Support for Levoit LV131, Oasis1000s, Classic200s. Experimental support for Vital 100s & 200s and Oasis450s"
+  },
+  "0.4.1": {
+    "en": "Bug fixes for flows and Oasis1000s"
+  },
+  "0.4.2": {
+    "en": "Bug fixes"
+  },
+  "0.4.3": {
+    "en": "Bug fixes for 450s Series"
+  },
+  "0.5.0": {
+    "en": "Added support for Levoit Smart Fan Tower (F422S)"
+  }
+}

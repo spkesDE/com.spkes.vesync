@@ -1,0 +1,47 @@
+{
+  "actions": [
+    {
+      "id": "setModeCore200s",
+      "title": {
+        "en": "Set mode",
+        "de": "Setzte modus"
+      },
+      "titleFormatted": {
+        "en": "Set mode [[mode]]",
+        "de": "Setzte modus [[mode]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "mode",
+          "title": {
+            "en": "Mode"
+          },
+          "values": [
+            {
+              "id": "off",
+              "label": {
+                "en": "Off",
+                "de": "Aus"
+              }
+            },
+            {
+              "id": "sleep",
+              "label": {
+                "en": "Sleep Mode",
+                "de": "Schlaf Modus"
+              }
+            },
+            {
+              "id": "manual",
+              "label": {
+                "en": "Manual Mode",
+                "de": "Manualler Modus"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

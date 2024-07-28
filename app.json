@@ -1,0 +1,3342 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.spkes.vesync",
+  "version": "0.5.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "brandColor": "#11c8bd",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "VeSync"
+  },
+  "description": {
+    "en": "Experience cleaner air, experience a better life."
+  },
+  "category": [
+    "appliances"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Julian Suhl",
+    "email": "julian@suhl.de"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "IconPark"
+      },
+      {
+        "name": "Etn Ccis"
+      }
+    ],
+    "translators": [
+      {
+        "name": "spkesDE"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "spikes022"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/spkesDE/com.spkes.vesync/issues"
+  },
+  "source": "https://github.com/spkesDE/com.spkes.vesync",
+  "support": "https://github.com/spkesDE",
+  "homeyCommunityTopicId": 71369,
+  "flow": {
+    "triggers": [
+      {
+        "id": "filter_life_low",
+        "title": {
+          "en": "Filter life low",
+          "de": "Filterlebensdauer niedrig"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|lv131s|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "water_lacks",
+        "title": {
+          "en": "Water Lacks",
+          "de": "Wasserstand zu niedrig"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s|dual200s|classic200s|classic300s|oasis450s|oasis1000s"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "title": {
+          "en": "Set Display to...",
+          "de": "Setzte Display zu..."
+        },
+        "titleFormatted": {
+          "en": "Set display to [[checkbox]]",
+          "de": "Setzte Display zu [[checkbox]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|core200s|core400s|core600s|dual200s|lv131s|lv600s|oasis1000s|oasis450s|vital100s|vital200s"
+          },
+          {
+            "type": "checkbox",
+            "name": "checkbox",
+            "title": {
+              "en": "On/Off",
+              "de": "An/Aus"
+            }
+          }
+        ],
+        "id": "display_toggle"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|dual200s|lv131s|lv600s|oasis450s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_3"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core400s|vital200s|vital100s|core600s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "4",
+                "title": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_4"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core300s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "4",
+                "title": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              },
+              {
+                "id": "5",
+                "title": {
+                  "en": "Fan Speed 5",
+                  "de": "Geschwindigkeit 5"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_5"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s|classic300s|classic200s|oasis1000s|oasis450s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "4",
+                "title": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              },
+              {
+                "id": "5",
+                "title": {
+                  "en": "Fan Speed 5",
+                  "de": "Geschwindigkeit 5"
+                }
+              },
+              {
+                "id": "6",
+                "title": {
+                  "en": "Fan Speed 6",
+                  "de": "Geschwindigkeit 6"
+                }
+              },
+              {
+                "id": "7",
+                "title": {
+                  "en": "Fan Speed 7",
+                  "de": "Geschwindigkeit 7"
+                }
+              },
+              {
+                "id": "8",
+                "title": {
+                  "en": "Fan Speed 8",
+                  "de": "Geschwindigkeit 8"
+                }
+              },
+              {
+                "id": "9",
+                "title": {
+                  "en": "Fan Speed 9",
+                  "de": "Geschwindigkeit 9"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_9"
+      },
+      {
+        "title": {
+          "en": "Set nightlight to...",
+          "de": "Setzte Nachtlicht zu..."
+        },
+        "titleFormatted": {
+          "en": "Set nightlight to [[level]]",
+          "de": "Setzte Nachtlicht zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "On/Dim/Off",
+              "de": "An/Schwach/Aus"
+            },
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "On",
+                  "de": "An"
+                }
+              },
+              {
+                "id": "dim",
+                "title": {
+                  "en": "Dim",
+                  "de": "Schwach"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "nightlight"
+      },
+      {
+        "title": {
+          "en": "Set nightlight to...",
+          "de": "Setzte Nachtlicht zu..."
+        },
+        "titleFormatted": {
+          "en": "Set nightlight to [[brightness]]",
+          "de": "Setzte Nachtlicht zu [[brightness]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic300s"
+          },
+          {
+            "type": "range",
+            "name": "brightness",
+            "title": {
+              "en": "Brightness",
+              "de": "Helligkeit"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "%",
+            "labelMultiplier": 1,
+            "labelDecimals": 0
+          }
+        ],
+        "id": "nightlight_slider"
+      },
+      {
+        "title": {
+          "en": "Set Heating Level",
+          "de": "Setze Heizstufe"
+        },
+        "titleFormatted": {
+          "en": "Set heating level to [[level]]",
+          "de": "Setzte Heizstufe zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Heating Level",
+              "de": "Heizstufe"
+            },
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "Heating Off",
+                  "de": "Heizstufe Aus"
+                }
+              },
+              {
+                "id": "1",
+                "title": {
+                  "en": "Heating Level 1",
+                  "de": "Heizstufe 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Heating Level 2",
+                  "de": "Heizstufe 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Heating Level 3",
+                  "de": "Heizstufe 3"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "warm_fan_speed_0_3"
+      },
+      {
+        "id": "setModeClassic200s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeClassic300s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic300s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeCore200s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeCore300s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core300s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeCore400s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core400s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeCore600s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core600s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeDual200s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dual200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeF422S",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=f422s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "advancedSleep",
+                "title": {
+                  "en": "Advanced Sleep",
+                  "de": "Erweitertes Schlafen"
+                }
+              },
+              {
+                "id": "auto",
+                "title": {
+                  "en": "Auto",
+                  "de": "Automatisch"
+                }
+              },
+              {
+                "id": "turbo",
+                "title": {
+                  "en": "Turbo",
+                  "de": "Turbo"
+                }
+              },
+              {
+                "id": "normal",
+                "title": {
+                  "en": "Normal",
+                  "de": "Normal"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeLV131S",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv131s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeLV600S",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lv600s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeOasis1000S",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=oasis1000s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeOasis450S",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=oasis450s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeVital100s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vital100s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "pet",
+                "label": {
+                  "en": "Pet Mode",
+                  "de": "Tier Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeVital200s",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vital200s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "pet",
+                "label": {
+                  "en": "Pet Mode",
+                  "de": "Tier Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Classic200s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "classic200sCapability",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "fanSpeed0to9",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/classic200s/assets/images/small.png",
+        "large": "/drivers/classic200s/assets/images/large.png",
+        "xlarge": "/drivers/classic200s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "classic200s",
+      "settings": [
+        {
+          "id": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Target Humidity",
+            "de": "Zielfeuchtigkeit"
+          },
+          "value": 45,
+          "min": 30,
+          "max": 80,
+          "units": {
+            "en": "%"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Classic300s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "classic300sCapability",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "fanSpeed0to9",
+        "display_toggle",
+        "nightlight_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/classic300s/assets/images/small.png",
+        "large": "/drivers/classic300s/assets/images/large.png",
+        "xlarge": "/drivers/classic300s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "classic300s",
+      "settings": [
+        {
+          "id": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Target Humidity",
+            "de": "Zielfeuchtigkeit"
+          },
+          "value": 45,
+          "min": 30,
+          "max": 80,
+          "units": {
+            "en": "%"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Core200s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "core200sCapability",
+        "fanSpeed0to3",
+        "onoff",
+        "measure_filter_life",
+        "alarm_filter_life",
+        "display_toggle",
+        "nightlight_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/core200s/assets/images/small.png",
+        "large": "/drivers/core200s/assets/images/large.png",
+        "xlarge": "/drivers/core200s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "core200s"
+    },
+    {
+      "name": {
+        "en": "Core300s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "core300sCapability",
+        "onoff",
+        "fanSpeed0to5",
+        "measure_pm25",
+        "alarm_pm25",
+        "measure_filter_life",
+        "alarm_filter_life"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/core300s/assets/images/small.png",
+        "large": "/drivers/core300s/assets/images/large.png",
+        "xlarge": "/drivers/core300s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "core300s"
+    },
+    {
+      "name": {
+        "en": "Core400s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "core400sCapability",
+        "fanSpeed0to4",
+        "onoff",
+        "measure_pm25",
+        "alarm_pm25",
+        "measure_filter_life",
+        "alarm_filter_life",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/core400s/assets/images/small.png",
+        "large": "/drivers/core400s/assets/images/large.png",
+        "xlarge": "/drivers/core400s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "core400s"
+    },
+    {
+      "name": {
+        "en": "Core600s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "core600sCapability",
+        "fanSpeed0to4",
+        "onoff",
+        "measure_pm25",
+        "alarm_pm25",
+        "measure_filter_life",
+        "alarm_filter_life",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/core600s/assets/images/small.png",
+        "large": "/drivers/core600s/assets/images/large.png",
+        "xlarge": "/drivers/core600s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "core600s"
+    },
+    {
+      "name": {
+        "en": "Dual200s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "dual200sCapability",
+        "fanSpeed0to3",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/dual200s/assets/images/small.png",
+        "large": "/drivers/dual200s/assets/images/large.png",
+        "xlarge": "/drivers/dual200s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "dual200s",
+      "settings": [
+        {
+          "id": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Target Humidity",
+            "de": "Zielfeuchtigkeit"
+          },
+          "value": 45,
+          "min": 30,
+          "max": 80,
+          "units": {
+            "en": "%"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "F422S"
+      },
+      "class": "fan",
+      "capabilities": [
+        "measure_temperature",
+        "onoff",
+        "display_toggle",
+        "f422sCapability",
+        "oscillation_toggle",
+        "fanSpeed0to12",
+        "mute_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/f422s/assets/images/small.png",
+        "large": "/drivers/f422s/assets/images/large.png",
+        "xlarge": "/drivers/f422s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "f422s"
+    },
+    {
+      "name": {
+        "en": "LV131S"
+      },
+      "class": "fan",
+      "capabilities": [
+        "lv131sCapability",
+        "onoff",
+        "fanSpeed0to3",
+        "sensor_air_quality",
+        "measure_filter_life",
+        "alarm_filter_life",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/lv131s/assets/images/small.png",
+        "large": "/drivers/lv131s/assets/images/large.png",
+        "xlarge": "/drivers/lv131s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "lv131s"
+    },
+    {
+      "name": {
+        "en": "LV600s"
+      },
+      "class": "fan",
+      "capabilities": [
+        "lv600sCapability",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "fanSpeed0to9",
+        "warmFanSpeed0to3",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/lv600s/assets/images/small.png",
+        "large": "/drivers/lv600s/assets/images/large.png",
+        "xlarge": "/drivers/lv600s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "lv600s",
+      "settings": [
+        {
+          "id": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Target Humidity",
+            "de": "Zielfeuchtigkeit"
+          },
+          "value": 45,
+          "min": 30,
+          "max": 80,
+          "units": {
+            "en": "%"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Oasis1000S"
+      },
+      "class": "fan",
+      "capabilities": [
+        "oasis1000sCapability",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "fanSpeed0to9",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/oasis1000s/assets/images/small.png",
+        "large": "/drivers/oasis1000s/assets/images/large.png",
+        "xlarge": "/drivers/oasis1000s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "oasis1000s",
+      "settings": [
+        {
+          "id": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Target Humidity",
+            "de": "Zielfeuchtigkeit"
+          },
+          "value": 45,
+          "min": 30,
+          "max": 80,
+          "units": {
+            "en": "%"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Oasis450S (Experimental)"
+      },
+      "class": "fan",
+      "capabilities": [
+        "oasis450sCapability",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "fanSpeed0to9",
+        "warmFanSpeed0to3",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/oasis450s/assets/images/small.png",
+        "large": "/drivers/oasis450s/assets/images/large.png",
+        "xlarge": "/drivers/oasis450s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "oasis450s",
+      "settings": [
+        {
+          "id": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Target Humidity",
+            "de": "Zielfeuchtigkeit"
+          },
+          "value": 45,
+          "min": 30,
+          "max": 80,
+          "units": {
+            "en": "%"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Vital 100s (Experimental)"
+      },
+      "class": "fan",
+      "capabilities": [
+        "vital100sCapability",
+        "fanSpeed0to4",
+        "onoff",
+        "measure_pm25",
+        "alarm_pm25",
+        "measure_filter_life",
+        "alarm_filter_life",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/vital100s/assets/images/small.png",
+        "large": "/drivers/vital100s/assets/images/large.png",
+        "xlarge": "/drivers/vital100s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "vital100s"
+    },
+    {
+      "name": {
+        "en": "Vital 200s (Experimental)"
+      },
+      "class": "fan",
+      "capabilities": [
+        "vital200sCapability",
+        "fanSpeed0to4",
+        "onoff",
+        "measure_pm25",
+        "alarm_pm25",
+        "measure_filter_life",
+        "alarm_filter_life",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/vital200s/assets/images/small.png",
+        "large": "/drivers/vital200s/assets/images/large.png",
+        "xlarge": "/drivers/vital200s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "vital200s"
+    }
+  ],
+  "capabilities": {
+    "alarm_filter_life": {
+      "type": "boolean",
+      "title": {
+        "en": "Filter life low",
+        "de": "Filterlebensdauer niedrig"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/alarm_filter_life.svg"
+    },
+    "alarm_water_lacks": {
+      "type": "boolean",
+      "title": {
+        "en": "Water lacks",
+        "de": "Wasserstand zu niedrig"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/alarm_water_lacks.svg"
+    },
+    "classic200sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "classic300sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Sleep Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "core200sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "core300sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "core400sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "core600sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "display_toggle": {
+      "type": "boolean",
+      "title": {
+        "en": "Display",
+        "de": "Display"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/display_toggle.svg"
+    },
+    "dual200sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "f422sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "advancedSleep",
+          "title": {
+            "en": "Advanced Sleep",
+            "de": "Erweitertes Schlafen"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto",
+            "de": "Automatisch"
+          }
+        },
+        {
+          "id": "turbo",
+          "title": {
+            "en": "Turbo",
+            "de": "Turbo"
+          }
+        },
+        {
+          "id": "normal",
+          "title": {
+            "en": "Normal",
+            "de": "Normal"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "fanSpeed0to12": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "fanSpeed0to3": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "fanSpeed0to4": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "fanSpeed0to5": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "fanSpeed0to9": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Lüfter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 9,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "lv131sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "lv600sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "measure_filter_life": {
+      "type": "number",
+      "title": {
+        "en": "Filter life",
+        "de": "Filterlebensdauer"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "%",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/filter_life.svg"
+    },
+    "mute_toggle": {
+      "type": "boolean",
+      "title": {
+        "en": "Mute",
+        "de": "Stumm"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/display_toggle.svg"
+    },
+    "nightlight_toggle": {
+      "type": "boolean",
+      "title": {
+        "en": "Nightlight",
+        "de": "Nachtlicht"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/nightlight_toggle.svg"
+    },
+    "oasis1000sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Sleep Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "oasis450sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "oscillation_toggle": {
+      "type": "boolean",
+      "title": {
+        "en": "Oscillation",
+        "de": "Schwenken"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/display_toggle.svg"
+    },
+    "sensor_air_quality": {
+      "type": "string",
+      "title": {
+        "en": "Air Quality",
+        "de": "Luftqualität"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/air_quality.svg"
+    },
+    "vital100sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "pet",
+          "title": {
+            "en": "Pet Mode",
+            "de": "Tier Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "vital200sCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "pet",
+          "title": {
+            "en": "Pet Mode",
+            "de": "Tier Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "warmFanSpeed0to3": {
+      "type": "number",
+      "title": {
+        "en": "Heating Level",
+        "de": "Heizstufe"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    }
+  }
+}

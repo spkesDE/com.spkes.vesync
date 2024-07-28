@@ -1,0 +1,8 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/easy-i18n.xml
+/i18nSettings.xml
+/inspectionProfiles/profiles_settings.xml
