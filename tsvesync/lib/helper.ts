@@ -107,7 +107,7 @@ export default class Helper {
         return Math.random().toString(36).substring(2, len);
     }
 
-    static async callApi<T>(api: VeSync, path: string, method: string, requestBody: {}, header: {} = this.buildHeaders(api)): Promise<IApiResponse<T>> {
+    static async callApi<T>(api: VeSync, path: string, method: string, requestBody: {}, header: {} = this.buildHeaders(api)): Promise<IApiResponse<T> | any> {
         let options = {
             method: method.toUpperCase(),
             headers: header
@@ -125,7 +125,7 @@ export default class Helper {
     static bypassBodyV2(api: VeSync) {
         return {
             ...this.requestBody(api, BodyTypes.BYPASS_V2),
-            'debugMode': false,
+            'debugMode': true,
         }
     }
 

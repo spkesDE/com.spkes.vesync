@@ -40,14 +40,24 @@ export default class BasicDevice {
         if (!this.hasMethod(method)) {
             throw new Error(`Invalid method: ${method}`);
         }
+
+        // Convert booleans to 0 or 1
+        for (const key in requestBody) {
+            if (typeof requestBody[key] === 'boolean') {
+                requestBody[key] = requestBody[key] ? 1 : 0;
+            }
+        }
+
         return Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', {
             ...Helper.bypassBodyV2(this.api),
             cid: this.device.cid,
+            deviceId: this.device.cid,
+            configModel: this.device.configModule,
             configModule: this.device.configModule,
             payload: {
-                data: requestBody,
                 method: method,
-                source: 'APP'
+                source: 'APP',
+                data: requestBody
             }
         });
     }
