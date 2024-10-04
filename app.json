@@ -3102,7 +3102,7 @@
       "setable": true,
       "uiQuickAction": false,
       "uiComponent": "button",
-      "icon": "/assets/capability_icons/display_toggle.svg"
+      "icon": "/assets/capability_icons/mute.svg"
     },
     "nightlight_toggle": {
       "type": "boolean",
@@ -3210,7 +3210,7 @@
       "setable": true,
       "uiQuickAction": false,
       "uiComponent": "button",
-      "icon": "/assets/capability_icons/display_toggle.svg"
+      "icon": "/assets/capability_icons/oscilate.svg"
     },
     "sensor_air_quality": {
       "type": "string",

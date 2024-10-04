@@ -37,7 +37,7 @@ class Core200S extends PurifierDeviceBase {
     }
 
     async setMode(mode: string) {
-        if (!this.device.isConnected()) {
+        if (!this.device.status) {
             this.error("Core200S is not connected");
             return;
         }
@@ -46,14 +46,14 @@ class Core200S extends PurifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice().catch(this.error);
-        if (this.device.isConnected() && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+        if (this.device.status && this.getAvailable()) {
+            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
             if (this.hasCapability("core200sCapability")) {
-                if (this.device.mode === "manual")
+                if (this.device.status.mode === "manual")
                     this.setCapabilityValue("core200sCapability", "manual").catch(this.error);
-                if (this.device.mode === "sleep")
+                if (this.device.status.mode === "sleep")
                     this.setCapabilityValue('core200sCapability', "sleep").catch(this.error);
-                if (!this.device.isOn())
+                if (!this.device.status.enabled)
                     this.setCapabilityValue('core200sCapability', "off").catch(this.error);
             }
         }

@@ -36,7 +36,7 @@ class Dual200s extends HumidifierDeviceBase {
     }
 
     async setMode(value: string) {
-        if (!this.device.isConnected()) {
+        if (!this.device.status) {
             this.error("Dual200S is not connected");
             return;
         }
@@ -45,16 +45,16 @@ class Dual200s extends HumidifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.isConnected() && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+        if (this.device.status && this.getAvailable()) {
+            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
             if (this.hasCapability("dual200sCapability")) {
-                if (this.device.mode === "manual")
+                if (this.device.status.mode === "manual")
                     this.setCapabilityValue('dual200sCapability', "manual").catch(this.error);
-                if (this.device.mode === "sleep")
+                if (this.device.status.mode === "sleep")
                     this.setCapabilityValue('dual200sCapability', "sleep").catch(this.error);
-                if (this.device.mode === "auto")
+                if (this.device.status.mode === "auto")
                     this.setCapabilityValue('dual200sCapability', "auto").catch(this.error);
-                if (!this.device.isOn())
+                if (!this.device.status.enabled)
                     this.setCapabilityValue('dual200sCapability', "off").catch(this.error);
             }
         }

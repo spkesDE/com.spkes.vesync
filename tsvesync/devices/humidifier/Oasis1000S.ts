@@ -13,4 +13,5 @@ export default class Oasis1000S extends BasicHumidifier {
     protected hasMethod(method: string): boolean {
         return Oasis1000S.methods.includes(method);
     }
+
 }

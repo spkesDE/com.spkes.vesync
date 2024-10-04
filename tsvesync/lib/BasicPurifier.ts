@@ -16,10 +16,10 @@ export default class BasicPurifier extends BasicDevice {
         return this.levels.includes(level);
     }
 
-    status: IGetPurifierStatus | null = null;
+    status: IGetPurifierStatus | any | null = null;
 
-    public async getPurifierStatus(): Promise<IApiResponse<IGetPurifierStatus>> {
-        const status =  await this.post<IGetPurifierStatus>('getPurifierStatus', {});
+    public async getPurifierStatus(): Promise<IApiResponse<any>> {
+        const status =  await this.post<any>('getPurifierStatus', {});
         this.status = status.result.result;
         return status;
     }

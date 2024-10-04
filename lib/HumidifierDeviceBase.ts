@@ -36,7 +36,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         }
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
-            if (this.device.mode !== "manual")
+            if (this.device.status.mode !== "manual")
                 await this.device.setHumidityMode("manual").catch(this.error);
             this.device?.setMistLevel(level).catch(this.error);
             return;
@@ -47,13 +47,13 @@ export default class HumidifierDeviceBase extends Homey.Device {
             return;
         }
         if (value === "auto") {
-            if (!this.device.isOn())
+            if (!this.device.status.enabled)
                 await this.device?.on().catch(this.error);
             this.device?.setHumidityMode('auto').catch(this.error);
             return;
         }
         if (value === "manual") {
-            if (this.device.mode !== "manual")
+            if (this.device.status.mode !== "manual")
                 await this.device.setHumidityMode("manual").catch(this.error);
             this.device?.setMistLevel(this.device.mist_level ?? 1).catch(this.error);
             return;
@@ -81,7 +81,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 return reject("Device is undefined or is not a VeSyncHumidifier");
             }
             this.device = device as BasicHumidifier;
-            if (this.device.isConnected()) {
+            if (this.device.status) {
                 await this.setAvailable().catch(this.error);
                 return resolve();
             }
@@ -108,7 +108,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
                     return;
             }
         });
-        if (this.device.isConnected()) {
+        if (this.device.status) {
             if (!this.getAvailable())
                 await this.setAvailable().catch(this.error);
             if (this.hasCapability("fanSpeed0to3"))

@@ -63,21 +63,21 @@ class LV600S extends HumidifierDeviceBase {
     }
 
     async setMode(value: string) {
-        if (!this.device.isConnected()) {
+        if (!this.device.status) {
             this.error("LV600S is not connected");
             return;
         }
         if (value.startsWith("fan_speed_")) {
             this.log("Mode: " + value);
             let level = Number(value.replace("fan_speed_", ""));
-            if (this.device.mode === "sleep")
+            if (this.device.status.mode === "sleep")
                 await this.device.setHumidityMode("humidity").catch(this.error);
             this.device.setMistLevel(level).catch(this.error);
             return;
         }
         if (value === "auto") {
             this.log("Mode: " + value);
-            if (!this.device.isOn())
+            if (!this.device.status.enabled)
                 await this.device.on().catch(this.error);
             this.device.setHumidityMode("humidity").catch(this.error);
             return;
@@ -87,19 +87,19 @@ class LV600S extends HumidifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.isConnected() && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+        if (this.device.status && this.getAvailable()) {
+            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
             if (this.hasCapability("lv600sCapability")) {
-                if (this.device.mode === "manual")
+                if (this.device.status.mode === "manual")
                     this.setCapabilityValue('lv600sCapability', "manual").catch(this.error);
-                if (this.device.mode === "sleep")
+                if (this.device.status.mode === "sleep")
                     this.setCapabilityValue('lv600sCapability', "sleep").catch(this.error);
-                if (this.device.mode === "auto" || this.device.mode === "humidity")
+                if (this.device.status.mode === "auto" || this.device.status.mode === "humidity")
                     this.setCapabilityValue('lv600sCapability', "auto").catch(this.error);
-                if (!this.device.isOn())
+                if (!this.device.status.enabled)
                     this.setCapabilityValue('lv600sCapability', "off").catch(this.error);
             }
-            if (this.hasCapability("lv600sWarmCapability") && this.device.isOn()) {
+            if (this.hasCapability("lv600sWarmCapability") && this.device.status.enabled) {
                 this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
             }
             this.log("Device has been updated!");

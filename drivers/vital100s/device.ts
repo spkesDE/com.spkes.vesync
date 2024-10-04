@@ -40,7 +40,7 @@ class Vital100s extends PurifierDeviceBase {
     }
 
     async setMode(value: string) {
-        if (!this.device.isConnected()) {
+        if (!this.device.status) {
             this.error("Vital100s is not connected");
             return;
         }
@@ -66,18 +66,18 @@ class Vital100s extends PurifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.isConnected() && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+        if (this.device.status && this.getAvailable()) {
+            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
             if (this.hasCapability("vital100sCapability")) {
-                if (this.device.mode === "manual")
+                if (this.device.status.mode === "manual")
                     this.setCapabilityValue('vital100sCapability', "manual").catch(this.error);
-                if (this.device.mode === "sleep")
+                if (this.device.status.mode === "sleep")
                     this.setCapabilityValue('vital100sCapability', "sleep").catch(this.error);
-                if (this.device.mode === "auto")
+                if (this.device.status.mode === "auto")
                     this.setCapabilityValue('vital100sCapability', "auto").catch(this.error)
-                if (this.device.mode === "pet")
+                if (this.device.status.mode === "pet")
                     this.setCapabilityValue('vital100sCapability', "pet").catch(this.error)
-                if (!this.device.isOn())
+                if (!this.device.status.enabled)
                     this.setCapabilityValue('vital100sCapability', "off").catch(this.error);
             }
 

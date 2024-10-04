@@ -1,9 +1,9 @@
 import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
-import VeSyncHumidifierOasis1000S from "../../tsvesync/veSyncHumidifierOasis1000S.js";
+import Oasis1000SDevice from "../../tsvesync/devices/humidifier/Oasis1000S";
 
 
 class Oasis1000S extends HumidifierDeviceBase {
-    device!: VeSyncHumidifierOasis1000S;
+    device!: Oasis1000SDevice;
     private capabilitiesAddition: string[] = [
         "oasis1000sCapability",
         "onoff",
@@ -42,7 +42,7 @@ class Oasis1000S extends HumidifierDeviceBase {
     }
 
     async setMode(value: string) {
-        if (!this.device.isConnected()) {
+        if (!this.device.device) {
             this.error("Oasis1000S is not connected");
             return;
         }
@@ -51,16 +51,16 @@ class Oasis1000S extends HumidifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.isConnected() && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+        if (this.device.device && this.getAvailable()) {
+            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
             if (this.hasCapability("oasis1000sCapability")) {
-                if (this.device.mode === "manual")
+                if (this.device.status.mode === "manual")
                     this.setCapabilityValue("oasis1000sCapability", "manual").catch(this.error);
-                if (this.device.mode === "sleep")
+                if (this.device.status.mode === "sleep")
                     this.setCapabilityValue('oasis1000sCapability', "sleep").catch(this.error);
-                if (this.device.mode === "auto")
+                if (this.device.status.mode === "auto")
                     this.setCapabilityValue('oasis1000sCapability', "auto").catch(this.error);
-                if (!this.device.isOn())
+                if (!this.device.status.enabled)
                     this.setCapabilityValue('oasis1000sCapability', "off").catch(this.error);
             }
         }

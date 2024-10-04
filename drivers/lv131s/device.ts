@@ -1,8 +1,8 @@
 import PurifierDeviceBase from "../../lib/PurifierDeviceBase";
-import VeSyncPurifierLV131 from "../../tsvesync/veSyncPurifierLV131.js";
+import LV131Sdevice from "../../tsvesync/devices/purifier/LV131S";
 
 class LV131S extends PurifierDeviceBase {
-    device!: VeSyncPurifierLV131;
+    device!: LV131Sdevice;
     private capabilitiesAddition: string[] = [
         "lv131sCapability",
         "onoff",
@@ -40,7 +40,7 @@ class LV131S extends PurifierDeviceBase {
     }
 
     async setMode(value: string) {
-        if (!this.device.isConnected()) {
+        if (!this.device.status) {
             this.error("LV131S is not connected");
             return;
         }
@@ -65,20 +65,20 @@ class LV131S extends PurifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.isConnected() && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+        if (this.device.status && this.getAvailable()) {
+            this.setCapabilityValue('onoff', this.device.status.mode != "off").catch(this.error);
             if (this.hasCapability("lv131sCapability")) {
-                if (this.device.mode === "manual")
+                if (this.device.status.mode === "manual")
                     this.setCapabilityValue('lv131sCapability', "manual").catch(this.error);
-                if (this.device.mode === "sleep")
+                if (this.device.status.mode === "sleep")
                     this.setCapabilityValue('lv131sCapability', "sleep").catch(this.error);
-                if (this.device.mode === "auto")
+                if (this.device.status.mode === "auto")
                     this.setCapabilityValue('lv131sCapability', "auto").catch(this.error)
-                if (!this.device.isOn())
+                if (this.device.status.mode === "off")
                     this.setCapabilityValue('lv131sCapability', "off").catch(this.error);
             }
             if(this.hasCapability("sensor_air_quality")){
-                this.setCapabilityValue("sensor_air_quality", this.device.air_quality_as_string).catch(this.error);
+                this.setCapabilityValue("sensor_air_quality", this.device.status.airQuality).catch(this.error);
             }
         }
         this.log("Updating device status!");

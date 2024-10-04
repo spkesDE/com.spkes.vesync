@@ -74,13 +74,13 @@ class Vital200s extends PurifierDeviceBase {
             if (this.hasCapability("vital200sCapability")) {
                 if (this.device.status?.mode === "manual")
                     this.setCapabilityValue('vital200sCapability', "manual").catch(this.error);
-                if (this.device.mode === "sleep")
+                if (this.device.status.mode === "sleep")
                     this.setCapabilityValue('vital200sCapability', "sleep").catch(this.error);
-                if (this.device.mode === "auto")
+                if (this.device.status.mode === "auto")
                     this.setCapabilityValue('vital200sCapability', "auto").catch(this.error)
-                if (this.device.mode === "pet")
+                if (this.device.status.mode === "pet")
                     this.setCapabilityValue('vital200sCapability', "pet").catch(this.error)
-                if (!this.device.isOn())
+                if (!this.device.status.enabled)
                     this.setCapabilityValue('vital200sCapability', "off").catch(this.error);
             }
 

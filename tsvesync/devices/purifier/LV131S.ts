@@ -16,7 +16,7 @@ import ISetSwitchPayload from "../../models/purifier/ISetSwitchPayload";
 import ISetDisplayPayload from "../../models/purifier/ISetDisplayPayload";
 
 
-export default class LV131S extends BasicDevice {
+export default class LV131S extends BasicPurifier {
     static deviceModels = ['LV-PUR131S', 'LV-RH131S'];
     static methods = ['getPurifierStatus', 'setSwitch', 'setNightLight', 'setLevel', 'setPurifierMode', 'setDisplay', 'setChildLock', 'setIndicatorLight'];
     static modes = [DeviceModes.Auto, DeviceModes.Manual, DeviceModes.Sleep];
