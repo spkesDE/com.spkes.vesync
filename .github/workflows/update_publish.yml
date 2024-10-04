@@ -1,0 +1,71 @@
+name: Update and Publish Homey App
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      version:
+        type: choice
+        description: Version
+        required: true
+        default: patch
+        options:
+          - major
+          - minor
+          - patch
+      changelog:
+        type: string
+        description: Changelog
+        required: true
+
+jobs:
+  update_and_publish:
+    name: Update Version and Publish App
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get PR title
+        if: github.event_name == 'pull_request'
+        run: echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+
+      - name: Determine version increment
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "INCREMENT=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "INCREMENT=patch" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update App Version
+        uses: athombv/github-action-homey-app-version@master
+        id: update_app_version
+        with:
+          version: ${{ steps.version.outputs.INCREMENT }}
+          changelog: ${{ github.event_name == 'pull_request' && env.PR_TITLE || github.event.inputs.changelog }}
+
+      - name: Commit & Push
+        run: |
+          git config --local user.email "sysadmin+githubactions@athom.com"
+          git config --local user.name "Homey Github Actions Bot"
+          git add -A
+          git commit -m "Update Homey App Version to v${{ steps.update_app_version.outputs.version }}"
+          git tag "v${{ steps.update_app_version.outputs.version }}"
+          git push origin HEAD --tags
+
+      - name: Homey App — Publish
+        uses: athombv/github-action-homey-app-publish@v1
+        id: publish
+        with:
+          personal_access_token: ${{ secrets.HOMEY_PAT }}
+
+      - name: URL
+        run: |
+          echo "Manage your app at ${{ steps.publish.outputs.url }}." >> $GITHUB_STEP_SUMMARY
