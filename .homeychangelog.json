@@ -196,5 +196,8 @@
   },
   "0.5.1": {
     "en": "Test of Github Actions"
+  },
+  "0.5.2": {
+    "en": "Create update_publish.yml"
   }
 }
