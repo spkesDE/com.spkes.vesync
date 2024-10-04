@@ -199,5 +199,8 @@
   },
   "0.5.2": {
     "en": "Create update_publish.yml"
+  },
+  "0.5.3": {
+    "en": "Added Debugging for Dual200s"
   }
 }
