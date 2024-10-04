@@ -12,7 +12,7 @@ interface DeviceFeatures {
     method: string[]
 }
 export default class VeSyncHumidifier extends VeSyncDeviceBase {
-
+            // Hell owrld
     //region Device Features
     Device_Features: { [key: string]: DeviceFeatures } = {
         Classic300S: {
