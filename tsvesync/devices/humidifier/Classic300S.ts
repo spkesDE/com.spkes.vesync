@@ -4,6 +4,7 @@ import DeviceModes from "../../enum/DeviceModes";
 export default class Classic300S extends BasicHumidifier {
     static deviceModels = ['Classic300S'];
     static methods = ['getHumidifierStatus', 'setAutomaticStop', 'setSwitch', 'setVirtualLevel', 'setTargetHumidity', 'setHumidityMode', 'setIndicatorLightSwitch'];
+    static features = [];
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     static modes = [DeviceModes.Auto, DeviceModes.Manual];
 
