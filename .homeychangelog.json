@@ -202,5 +202,8 @@
   },
   "0.5.3": {
     "en": "Added Debugging for Dual200s"
+  },
+  "0.5.4": {
+    "en": "Added Debugging"
   }
 }
