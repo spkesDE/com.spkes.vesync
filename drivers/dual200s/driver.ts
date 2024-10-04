@@ -40,6 +40,7 @@ class Dual200sDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
+                if(d instanceof VeSyncHumidifier) console.log("Dual200sDriver: ", d, (d as VeSyncHumidifier).Device_Features)
                 return d instanceof VeSyncHumidifier &&
                     (d as VeSyncHumidifier).Device_Features.Dual200S.models.includes(d.deviceType)
             })
