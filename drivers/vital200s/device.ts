@@ -1,4 +1,7 @@
 import PurifierDeviceBase from "../../lib/PurifierDeviceBase";
+import BasicPurifier from "../../tsvesync/lib/BasicPurifier";
+import BasicPurifierV2 from "../../tsvesync/lib/BasicPurifierV2";
+import Vital200S from "../../tsvesync/devices/purifier/Vital200S";
 
 class Vital200s extends PurifierDeviceBase {
     private capabilitiesAddition: string[] = [
@@ -40,10 +43,6 @@ class Vital200s extends PurifierDeviceBase {
     }
 
     async setMode(value: string) {
-        if (!this.device.isConnected()) {
-            this.error("Vital200s is not connected");
-            return;
-        }
         await super.setMode(value);
     }
 
@@ -66,10 +65,14 @@ class Vital200s extends PurifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.isConnected() && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.isOn()).catch(this.error);
+        if(this.device instanceof Vital200S && this.device.status) {
+            if(this.hasCapability("vital200sCapability")) {
+                this.setCapabilityValue("vital200sCapability", this.device.status).catch(this.error);
+            }
+        }
+        if (this.device.status && this.getAvailable()) {
             if (this.hasCapability("vital200sCapability")) {
-                if (this.device.mode === "manual")
+                if (this.device.status?.mode === "manual")
                     this.setCapabilityValue('vital200sCapability', "manual").catch(this.error);
                 if (this.device.mode === "sleep")
                     this.setCapabilityValue('vital200sCapability', "sleep").catch(this.error);

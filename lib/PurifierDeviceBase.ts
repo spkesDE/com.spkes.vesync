@@ -118,6 +118,8 @@ export default class PurifierDeviceBase extends Homey.Device {
         }
         if (!this.getAvailable())
             await this.setAvailable().catch(this.error);
+        if(this.hasCapability("onoff"))
+            this.setCapabilityValue("onoff", status.result.result.enabled).catch(this.error);
         if (this.hasCapability("fanSpeed0to3"))
             this.setCapabilityValue('fanSpeed0to3', status.result.result.level ?? 0).catch(this.error);
         if (this.hasCapability("fanSpeed0to4"))

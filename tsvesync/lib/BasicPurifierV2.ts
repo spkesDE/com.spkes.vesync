@@ -5,8 +5,9 @@ import ISetChildLockPayload from "../models/purifier/v2/ISetChildLockPayload";
 import ISetLevelPayload from "../models/purifier/v2/ISetLevelPayload";
 import ISetPurifierModePayload from "../models/purifier/v2/ISetPurifierModePayload";
 import ISetDisplayPayload from "../models/purifier/v2/ISetDisplayPayload";
+import BasicPurifier from "./BasicPurifier";
 
-export default class BasicPurifierV2 extends BasicDevice {
+export default class BasicPurifierV2 extends BasicPurifier {
     static levels: number[] = [];
 
     static hasLevel(level: number): boolean {
