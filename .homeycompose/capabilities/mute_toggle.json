@@ -8,5 +8,5 @@
   "setable": true,
   "uiQuickAction": false,
   "uiComponent": "button",
-  "icon": "/assets/capability_icons/display_toggle.svg"
+  "icon": "/assets/capability_icons/mute.svg"
 }
