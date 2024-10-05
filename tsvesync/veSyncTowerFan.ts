@@ -220,18 +220,11 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
     }
 
 
-    /**
-     * Convert temperature from raw value to Celsius. Some crazy math here. I have no idea how the raw value is calculated and how VeSync converts it to Celsius.
-     * This should be a good approximation. If you have a better way to convert it, please let me know.
-     * @param temperature
-     * @private
-     */
-    private convertTemperature(temperature: number): number {
-        const a = 0.0326;
-        const b = 2.1;
-        let temp = temperature * a - b;
-        // Round to 1 decimal place
-        return Math.round(temp * 10) / 10;
+    private convertTemperature(temperature: number, toCelsius: boolean = true): number {
+        // The input temperature is given as e.g., 656, representing 65.6°F or 65.6°C
+        const actualTemperature = temperature / 10;
+        return toCelsius ? (5 / 9) * (actualTemperature - 32) : actualTemperature
     }
+
 
 }
