@@ -1,6 +1,5 @@
 import Homey from 'homey';
 import {Utils} from "../../utils";
-import VeSyncHumidifier from "../../tsvesync/veSyncHumidifier";
 import VeSync from "../../tsvesync/veSync";
 import VeSyncHumidifierOasis1000S from "../../tsvesync/veSyncHumidifierOasis1000S.js";
 
@@ -41,7 +40,7 @@ class Oasis1000SDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncHumidifierOasis1000S &&
+                return d instanceof VeSyncHumidifierOasis1000S && d.constructor === VeSyncHumidifierOasis1000S &&
                     (d as VeSyncHumidifierOasis1000S).Device_Features.OasisMist1000S.models.includes(d.deviceType)
             })
                 .forEach((d) => {

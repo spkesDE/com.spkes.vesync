@@ -219,19 +219,18 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
         });
     }
 
-
     /**
-     * Convert temperature from raw value to Celsius. Some crazy math here. I have no idea how the raw value is calculated and how VeSync converts it to Celsius.
-     * This should be a good approximation. If you have a better way to convert it, please let me know.
-     * @param temperature
-     * @private
+     * Converts a given temperature from Fahrenheit to Celsius or returns it as is.
+     *
+     * @param {number} temperature - The input temperature, represented as an integer (e.g., 656 for 65.6°F).
+     * @param {boolean} [toCelsius=true] - A flag indicating whether to convert the temperature to Celsius. Defaults to true.
+     * @returns {number} - The converted temperature in Celsius, or the original temperature if `toCelsius` is false.
      */
-    private convertTemperature(temperature: number): number {
-        const a = 0.0326;
-        const b = 2.1;
-        let temp = temperature * a - b;
-        // Round to 1 decimal place
-        return Math.round(temp * 10) / 10;
+    private convertTemperature(temperature: number, toCelsius: boolean = true): number {
+        // The input temperature is given as e.g., 656, representing 65.6°F
+        const actualTemperature = temperature / 10;
+        return toCelsius ? (5 / 9) * (actualTemperature - 32) : actualTemperature;
     }
+
 
 }
