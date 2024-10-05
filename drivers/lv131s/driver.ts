@@ -40,7 +40,7 @@ class LV131SDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncPurifierLV131 &&
+                return d instanceof VeSyncPurifierLV131 && d.constructor === VeSyncPurifierLV131 &&
                     (d as VeSyncPurifierLV131).Device_Features.LV131S.models.includes(d.deviceType)
             })
                 .forEach((d) => {

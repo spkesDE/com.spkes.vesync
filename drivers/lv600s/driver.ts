@@ -39,7 +39,7 @@ class LV600SDriver extends Homey.Driver {
       let devices = await veSync.getDevices();
       let devicesList: any = [];
       devices.filter(d => {
-        return d instanceof VeSyncHumidifier &&
+        return d instanceof VeSyncHumidifier && d.constructor === VeSyncHumidifier &&
             (d as VeSyncHumidifier).Device_Features.LV600S.models.includes(d.deviceType)
       })
           .forEach((d) => {

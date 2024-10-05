@@ -40,7 +40,7 @@ class Core400SDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncPurifier &&
+                return d instanceof VeSyncPurifier && d.constructor === VeSyncPurifier &&
                     (d as VeSyncPurifier).Device_Features.Core400S.models.includes(d.deviceType)
             }).forEach((d) => {
                 if (d instanceof VeSyncPurifier) {

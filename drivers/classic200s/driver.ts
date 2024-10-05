@@ -40,7 +40,8 @@ class Classic200sDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncHumidifier && (d as VeSyncHumidifier).Device_Features.Classic200S.models.includes(d.deviceType)
+                return d instanceof VeSyncHumidifier && d.constructor === VeSyncHumidifier &&
+                    (d as VeSyncHumidifier).Device_Features.Classic200S.models.includes(d.deviceType)
             })
                 .forEach((d) => {
                     if (d instanceof VeSyncHumidifier) {
