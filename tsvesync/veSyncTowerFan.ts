@@ -219,11 +219,17 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
         });
     }
 
-
+    /**
+     * Converts a given temperature from Fahrenheit to Celsius or returns it as is.
+     *
+     * @param {number} temperature - The input temperature, represented as an integer (e.g., 656 for 65.6°F).
+     * @param {boolean} [toCelsius=true] - A flag indicating whether to convert the temperature to Celsius. Defaults to true.
+     * @returns {number} - The converted temperature in Celsius, or the original temperature if `toCelsius` is false.
+     */
     private convertTemperature(temperature: number, toCelsius: boolean = true): number {
-        // The input temperature is given as e.g., 656, representing 65.6°F or 65.6°C
+        // The input temperature is given as e.g., 656, representing 65.6°F
         const actualTemperature = temperature / 10;
-        return toCelsius ? (5 / 9) * (actualTemperature - 32) : actualTemperature
+        return toCelsius ? (5 / 9) * (actualTemperature - 32) : actualTemperature;
     }
 
 
