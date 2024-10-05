@@ -105,13 +105,13 @@ export default class PurifierDeviceBase extends Homey.Device {
             if (!this.getAvailable())
                 await this.setAvailable().catch(this.error);
             if (this.hasCapability("fanSpeed0to3"))
-                this.setCapabilityValue('fanSpeed0to3', this.device.fan_level ?? 0).catch(this.error);
+                this.setCapabilityValue('fanSpeed0to3', Number(this.device.fan_level ?? 0)).catch(this.error);
             if (this.hasCapability("fanSpeed0to4"))
-                this.setCapabilityValue('fanSpeed0to4', this.device.fan_level ?? 0).catch(this.error);
+                this.setCapabilityValue('fanSpeed0to4', Number(this.device.fan_level ?? 0)).catch(this.error);
             if (this.hasCapability("fanSpeed0to5"))
-                this.setCapabilityValue('fanSpeed0to5', this.device.fan_level ?? 0).catch(this.error);
+                this.setCapabilityValue('fanSpeed0to5', Number(this.device.fan_level ?? 0)).catch(this.error);
             if (this.hasCapability("fanSpeed0to9"))
-                this.setCapabilityValue('fanSpeed0to9', this.device.fan_level ?? 0).catch(this.error);
+                this.setCapabilityValue('fanSpeed0to9', Number(this.device.fan_level ?? 0)).catch(this.error);
             if (this.hasCapability("measure_pm25"))
                 await this.setCapabilityValue('measure_pm25', this.device.air_quality_value ?? 0)
             if (this.hasCapability("alarm_pm25"))

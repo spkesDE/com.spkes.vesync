@@ -228,8 +228,9 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
      */
     private convertTemperature(temperature: number): number {
         const a = 0.0326;
-        let temp = temperature * a - 0.1896;
-        // Round to 1 decimal places
+        const b = 2.1;
+        let temp = temperature * a - b;
+        // Round to 1 decimal place
         return Math.round(temp * 10) / 10;
     }
 

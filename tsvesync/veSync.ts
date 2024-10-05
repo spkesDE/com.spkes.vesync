@@ -11,7 +11,7 @@ import VeSyncTowerFan from "./veSyncTowerFan";
 
 export default class VeSync {
 
-    static debugMode: boolean = true;
+    static debugMode: boolean = false;
     username: string = "";
     password: string = "";
     time_zone: string = 'Europe/Berlin';
