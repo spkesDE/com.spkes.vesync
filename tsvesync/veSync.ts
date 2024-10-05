@@ -73,7 +73,7 @@ export default class VeSync {
     private processDevices(list: any) {
         const deviceTypes: string[] = [];
         for (let deviceRaw of list as any) {
-            if (VeSync.debugMode) console.info("Raw Device: " + deviceRaw)
+            if (VeSync.debugMode) console.info("Raw Device: ", deviceRaw)
             let device = this.getDeviceObject(deviceRaw);
             if (device === undefined) continue;
             this.devices.push(device);

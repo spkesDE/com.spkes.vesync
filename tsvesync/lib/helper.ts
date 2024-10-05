@@ -12,11 +12,11 @@ export default class Helper {
     static DEFAULT_TZ = 'America/New_York'
     static DEFAULT_REGION = 'US'
 
-    static APP_VERSION = '2.8.6'
+    static APP_VERSION = '5.4.36'
     static PHONE_BRAND = 'SM N9005'
     static PHONE_OS = 'Android'
     static USER_TYPE = '1'
-    static BYPASS_APP_V = "VeSync 3.0.51"
+    static BYPASS_APP_V = "VeSync 5.4.36"
 
     static requestBody(api: VeSync, type: BodyTypes): {} {
         switch (type) {
