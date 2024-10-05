@@ -11,7 +11,7 @@ import VeSyncTowerFan from "./veSyncTowerFan";
 
 export default class VeSync {
 
-    static debugMode: boolean = true;
+    static debugMode: boolean = false;
     username: string = "";
     password: string = "";
     time_zone: string = 'Europe/Berlin';
@@ -73,7 +73,7 @@ export default class VeSync {
     private processDevices(list: any) {
         const deviceTypes: string[] = [];
         for (let deviceRaw of list as any) {
-            if (VeSync.debugMode) console.info("Raw Device: " + deviceRaw)
+            if (VeSync.debugMode) console.info("Raw Device: ", deviceRaw)
             let device = this.getDeviceObject(deviceRaw);
             if (device === undefined) continue;
             this.devices.push(device);
