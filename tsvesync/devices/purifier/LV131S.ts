@@ -3,7 +3,7 @@ import DeviceModes from "../../enum/DeviceModes";
 import BasicPurifier from "../../lib/BasicPurifier";
 import IApiResponse from "../../models/IApiResponse";
 import ApiHelper from "../../lib/ApiHelper";
-import {BodyTypes} from "../../enum/bodyTypes";
+import {BodyTypes} from "../../enum/BodyTypes";
 import {IGetLV131PurifierStatus} from "../../models/purifier/IGetLV131PurifierStatus";
 
 

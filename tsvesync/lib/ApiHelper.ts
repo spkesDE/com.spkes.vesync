@@ -1,7 +1,7 @@
 import VeSync from "../VeSync";
 import VeSyncDeviceBase from "../old/veSyncDeviceBase";
 import axios, {AxiosError} from "axios";
-import {BodyTypes} from "../enum/bodyTypes";
+import {BodyTypes} from "../enum/BodyTypes";
 import IApiResponse from "../models/IApiResponse";
 
 export default class ApiHelper {

@@ -1,5 +1,5 @@
 import ApiHelper from "./ApiHelper";
-import {ApiCalls} from "../enum/apiCalls";
+import {ApiCalls} from "../enum/ApiCalls";
 import IApiResponse from "../models/IApiResponse";
 import DeviceModes from "../enum/DeviceModes";
 import {IDevice} from "../models/IDevice";
@@ -7,18 +7,12 @@ import VeSync from "../VeSync";
 import BasicPurifier from "./BasicPurifier";
 
 export default class BasicDevice {
+
+    // Static properties
     static deviceModels: string[] = [];
     static features: string[] = [];
     static methods: string[] = [];
     static modes: DeviceModes[] = [];
-
-    protected device: IDevice;
-    protected api: VeSync;
-
-    constructor(api: VeSync, device: IDevice) {
-        this.api = api;
-        this.device = device;
-    }
 
     // Static method checks
     static hasModel(model: string): boolean {
@@ -33,7 +27,19 @@ export default class BasicDevice {
         return this.modes.includes(mode as DeviceModes);
     }
 
-    // Common API methods, will use callApi
+    protected device: IDevice;
+    protected api: VeSync;
+
+    constructor(api: VeSync, device: IDevice) {
+        this.api = api;
+        this.device = device;
+    }
+
+    protected hasMethod(method: string): boolean {
+        const methods = (this.constructor as typeof BasicPurifier).methods;
+        return methods.includes(method);
+    }
+
     async post<T>(method: string, payload: any): Promise<IApiResponse<T>> {
         return this.callApi<T>(method, payload, 'post');
     }
@@ -46,12 +52,7 @@ export default class BasicDevice {
         return this.callApi<T>(method, payload, 'put');
     }
 
-    protected hasMethod(method: string): boolean {
-        const methods = (this.constructor as typeof BasicPurifier).methods;
-        return methods.includes(method);
-    }
 
-    // ApiHelper method for API calls, reduce redundancy
     protected async callApi<T>(method: string, payload: any, type: 'post' | 'get' | 'put' = 'post'): Promise<IApiResponse<T>> {
         if (!this.hasMethod(method)) {
             throw new Error(`Invalid method: ${method}`);

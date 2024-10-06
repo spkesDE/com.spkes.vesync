@@ -1,6 +1,6 @@
 import ApiHelper from "../lib/ApiHelper";
 import VeSync from "../VeSync";
-import {ApiCalls} from "../enum/apiCalls";
+import {ApiCalls} from "../enum/ApiCalls";
 import VeSyncHumidifier from "./veSyncHumidifier.js";
 
 interface DeviceFeatures {

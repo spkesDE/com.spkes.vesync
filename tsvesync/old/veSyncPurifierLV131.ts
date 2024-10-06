@@ -1,7 +1,7 @@
 import ApiHelper from "../lib/ApiHelper";
 import VeSync from "../VeSync";
 import VeSyncPurifier from "./veSyncPurifier";
-import {BodyTypes} from "../enum/bodyTypes";
+import {BodyTypes} from "../enum/BodyTypes";
 
 interface DeviceFeatures {
     models: string[],

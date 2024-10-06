@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
 import ApiHelper from "./lib/ApiHelper";
-import {ApiCalls} from "./enum/apiCalls";
-import {BodyTypes} from "./enum/bodyTypes";
+import {ApiCalls} from "./enum/ApiCalls";
+import {BodyTypes} from "./enum/BodyTypes";
 import {IDevice} from "./models/IDevice";
 import DeviceTypeManager from "./DeviceTypeManager";
 import BasicDevice from "./lib/BasicDevice";

@@ -1,7 +1,7 @@
 import ApiHelper from "../lib/ApiHelper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
 import VeSync from "../VeSync";
-import {ApiCalls} from "../enum/apiCalls";
+import {ApiCalls} from "../enum/ApiCalls";
 
 interface DeviceFeatures {
     models: string[],
