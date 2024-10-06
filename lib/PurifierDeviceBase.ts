@@ -117,9 +117,11 @@ export default class PurifierDeviceBase extends Homey.Device {
             }
         };
 
+        console.log(`Current Device ${this.device.device.deviceName}: `, status.result.result);
+
         // Update device status values
         const level = status.result.result.level ?? 0;
-        await updateCapability('onoff', status.result.result.enabled);
+        await updateCapability('onoff', status.result.result.enabled ?? false);
         await updateCapability('fanSpeed0to3', level);
         await updateCapability('fanSpeed0to4', level);
         await updateCapability('fanSpeed0to5', level);

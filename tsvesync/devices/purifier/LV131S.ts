@@ -5,7 +5,6 @@ import IApiResponse from "../../models/IApiResponse";
 import ApiHelper from "../../lib/ApiHelper";
 import {BodyTypes} from "../../enum/BodyTypes";
 import {IGetLV131PurifierStatus} from "../../models/purifier/IGetLV131PurifierStatus";
-import IGetPurifierStatus from "../../models/purifier/IGetPurifierStatus";
 
 
 export default class LV131S extends BasicPurifier {
@@ -42,13 +41,13 @@ export default class LV131S extends BasicPurifier {
         return ApiHelper.callApi(this.api, "/131airPurifier/v1/device/updateMode", 'put', body)
     }
 
-    public async getPurifierStatus(): Promise<IApiResponse<IGetPurifierStatus>> {
+    public async getPurifierStatus(): Promise<IApiResponse<any>> {
         let body: any = {
             ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
             uuid: this.device.uuid
         }
         const status: IApiResponse<IGetLV131PurifierStatus> = await ApiHelper.callApi<IGetLV131PurifierStatus>(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
-
+        if (status.msg !== 'request success') return status;
         /*
         Raw Result:  {
               code: 0,

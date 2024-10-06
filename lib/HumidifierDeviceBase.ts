@@ -76,7 +76,8 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 return reject("Device is undefined or is not a VeSyncHumidifier");
             }
             this.device = device as BasicHumidifier;
-            if (this.device.status) {
+            const status = await this.device.getHumidifierStatus();
+            if (status.msg === "request success") {
                 await this.setAvailable().catch(this.error);
                 return resolve();
             }
@@ -87,7 +88,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
     async updateDevice(): Promise<void> {
         if (!this.device) {
-            this.log("Device is undefined");
+            this.log("Device is undefined", this.device);
             return;
         }
 
@@ -103,7 +104,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         });
 
         // If the status fetch failed, exit early
-        if (!status || !this.device.status) {
+        if (!status || status.msg !== "request success") {
             if (this.getAvailable()) {
                 await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
             }
@@ -123,17 +124,17 @@ export default class HumidifierDeviceBase extends Homey.Device {
         };
 
         // Fan speed updates
-        const fanSpeed = this.device.status.virtual_mist_level ?? this.device.status.mist_level ?? 0;
+        const fanSpeed = status.result.result.virtual_mist_level ?? status.result.result.mist_level ?? 0;
         await updateCapability('fanSpeed0to3', fanSpeed);
         await updateCapability('fanSpeed0to4', fanSpeed);
         await updateCapability('fanSpeed0to5', fanSpeed);
         await updateCapability('fanSpeed0to9', fanSpeed);
 
         // Humidity updates
-        await updateCapability('measure_humidity', this.device.status.humidity ?? 0);
+        await updateCapability('measure_humidity', status.result.result.humidity ?? 0);
 
         // Water lacks alarm
-        const waterLacks = this.device.status.water_lacks ?? false;
+        const waterLacks = status.result.result.water_lacks ?? false;
         await updateCapability('alarm_water_lacks', waterLacks);
         if (waterLacks) {
             await this.homey.flow.getDeviceTriggerCard("water_lacks").trigger(this).catch(this.error);
@@ -141,11 +142,11 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
 
         // Nightlight state
-        await updateCapability('nightlight_toggle', this.device.status.night_light_brightness > 0 ?? false);
+        await updateCapability('nightlight_toggle', status.result.result.night_light_brightness > 0 ?? false);
 
         // Update target humidity setting
         const currentSettingHumidity = this.getSetting("humidity");
-        const deviceHumidity = this.device.status.configuration.auto_target_humidity ?? 0;
+        const deviceHumidity = status.result.result.configuration.auto_target_humidity ?? 0;
         if (currentSettingHumidity != null && Number(currentSettingHumidity) !== deviceHumidity) {
             await this.setSettings({humidity: deviceHumidity}).catch(this.error);
         }

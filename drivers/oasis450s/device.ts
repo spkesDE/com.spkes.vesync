@@ -3,7 +3,15 @@ import Oasis450SDevice from "../../tsvesync/devices/humidifier/Oasis450S";
 import DeviceModes from "../../tsvesync/enum/DeviceModes";
 
 class Oasis450S extends HumidifierDeviceBase {
-    private capabilitiesAddition: string[] = []
+    private capabilitiesAddition: string[] = [
+        "oasis450sCapability",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "fanSpeed0to9",
+        "warmFanSpeed0to3",
+        "display_toggle"
+    ]
 
     device!: Oasis450SDevice
 

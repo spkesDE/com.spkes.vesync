@@ -15,7 +15,7 @@ export default class BasicPurifier extends BasicDevice {
     // Methods shared across all purifiers, leave some abstract if specific devices need custom implementations
     public async getPurifierStatus(): Promise<IApiResponse<IGetPurifierStatus>> {
         const status = await this.post<IGetPurifierStatus>('getPurifierStatus', {});
-        this.status = status.result.result;
+        if (status.msg === 'request success') this.status = status.result.result;
         return status;
     }
 

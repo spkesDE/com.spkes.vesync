@@ -1,5 +1,4 @@
 import PurifierDeviceBase from "../../lib/PurifierDeviceBase";
-import Vital200S from "../../tsvesync/devices/purifier/Vital200S";
 
 class Vital200s extends PurifierDeviceBase {
     private capabilitiesAddition: string[] = [
@@ -63,12 +62,7 @@ class Vital200s extends PurifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if(this.device instanceof Vital200S && this.device.status) {
-            if(this.hasCapability("vital200sCapability")) {
-                this.setCapabilityValue("vital200sCapability", this.device.status).catch(this.error);
-            }
-        }
-        if (this.device.status && this.getAvailable()) {
+        if (this.device.status) {
             if (this.hasCapability("vital200sCapability")) {
                 if (this.device.status?.mode === "manual")
                     this.setCapabilityValue('vital200sCapability', "manual").catch(this.error);
@@ -81,7 +75,6 @@ class Vital200s extends PurifierDeviceBase {
                 if (!this.device.status.enabled)
                     this.setCapabilityValue('vital200sCapability', "off").catch(this.error);
             }
-
         }
         this.log("Updating device status!");
     }

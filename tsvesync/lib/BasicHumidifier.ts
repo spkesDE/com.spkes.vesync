@@ -22,7 +22,7 @@ export default class BasicHumidifier extends BasicDevice {
 
     public async getHumidifierStatus(): Promise<IApiResponse<IGetHumidifierStatus>> {
         const status = await this.post<IGetHumidifierStatus>('getHumidifierStatus', {});
-        this.status = status.result.result;
+        if (status.msg === 'request success') this.status = status.result.result;
         return status;
     }
 

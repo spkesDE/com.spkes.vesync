@@ -2,7 +2,6 @@ import BasicHumidifier from "../../lib/BasicHumidifier";
 import DeviceModes from "../../enum/DeviceModes";
 import IGetOasis1000SStatus from "../../models/humidifier/IGetOasis1000SStatus";
 import IApiResponse from "../../models/IApiResponse";
-import IGetHumidifierStatus from "../../models/humidifier/IGetHumidifierStatus";
 
 export default class Oasis1000S extends BasicHumidifier {
     static deviceModels = ['LUH-M101S-WUS', 'LUH-M101S-WEUR'];
@@ -11,35 +10,39 @@ export default class Oasis1000S extends BasicHumidifier {
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     static modes = [DeviceModes.Auto, DeviceModes.Sleep, DeviceModes.Manual];
 
-    public async getHumidifierStatus(): Promise<IApiResponse<IGetHumidifierStatus>> {
+    public async getHumidifierStatus(): Promise<IApiResponse<any>> {
         const status = await this.post<IGetOasis1000SStatus>('getHumidifierStatus', {});
-        // Convert the status to the IGetHumidifierStatus format
-        this.status = {
-            humidity: status.result.result.humidity, // Direct mapping
-            enabled: status.result.result.powerSwitch === 1, // Convert to boolean
-            mode: status.result.result.workMode, // Mode mapping
-            mist_level: status.result.result.mistLevel, // Mist level mapping
-            virtual_mist_level: status.result.result.virtualLevel, // Virtual level mapping
-            warm_mist_enabled: false, // Assuming warm mist is not available; set accordingly
-            warm_mist_level: 0, // Set to 0 or retrieve if applicable
-            water_lacks: status.result.result.waterLacksState === 1, // Convert to boolean
-            humidity_high: false, // Implement logic to determine if humidity is high, if needed
-            water_tank_lifted: status.result.result.waterTankLifted === 1, // Convert to boolean
-            automatic_stop_reach_target: status.result.result.autoStopState === 1, // Convert to boolean
-            night_light_brightness: status.result.result.nightLight.brightness, // Night light brightness mapping
-            autoStopSwitch: status.result.result.autoStopSwitch === 1, // Convert to boolean
-            indicator_light_switch: status.result.result.screenSwitch === 1, // Convert to boolean
-            configuration: {
-                auto_target_humidity: status.result.result.targetHumidity // Configuration for auto target humidity
+        if (status.msg === 'request success') {
+            // Convert the status to the IGetHumidifierStatus format
+            this.status = {
+                humidity: status.result?.result.humidity, // Direct mapping
+                enabled: status.result.result.powerSwitch === 1, // Convert to boolean
+                mode: status.result.result.workMode, // Mode mapping
+                mist_level: status.result.result.mistLevel, // Mist level mapping
+                virtual_mist_level: status.result.result.virtualLevel, // Virtual level mapping
+                warm_mist_enabled: false, // Assuming warm mist is not available; set accordingly
+                warm_mist_level: 0, // Set to 0 or retrieve if applicable
+                water_lacks: status.result.result.waterLacksState === 1, // Convert to boolean
+                humidity_high: false, // Implement logic to determine if humidity is high, if needed
+                water_tank_lifted: status.result.result.waterTankLifted === 1, // Convert to boolean
+                automatic_stop_reach_target: status.result.result.autoStopState === 1, // Convert to boolean
+                night_light_brightness: status.result.result.nightLight.brightness, // Night light brightness mapping
+                autoStopSwitch: status.result.result.autoStopSwitch === 1, // Convert to boolean
+                indicator_light_switch: status.result.result.screenSwitch === 1, // Convert to boolean
+                configuration: {
+                    auto_target_humidity: status.result.result.targetHumidity // Configuration for auto target humidity
+                }
+            };
+            return {
+                ...status,
+                result: {
+                    traceId: status.result.traceId,
+                    code: status.result.code,
+                    result: this.status
+                }
             }
-        };
-        return {
-            ...status,
-            result: {
-                traceId: status.result.traceId,
-                code: status.result.code,
-                result: this.status
-            }
+        } else {
+            return status;
         }
     }
 

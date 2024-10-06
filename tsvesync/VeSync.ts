@@ -8,7 +8,7 @@ import BasicDevice from "./lib/BasicDevice";
 
 export default class VeSync {
 
-    static debugMode: boolean = false;
+    static debugMode: boolean = true;
     username: string = "";
     password: string = "";
     time_zone: string = 'Europe/Berlin';
