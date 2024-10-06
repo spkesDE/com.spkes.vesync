@@ -1,7 +1,7 @@
-import Helper from "./lib/helper";
+import ApiHelper from "../lib/ApiHelper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
-import VeSync from "./veSync";
-import {ApiCalls} from "./enum/apiCalls";
+import VeSync from "../VeSync";
+import {ApiCalls} from "../enum/apiCalls";
 
 interface DeviceFeatures {
     models: string[],
@@ -99,12 +99,12 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     public async toggleSwitch(toggle: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setSwitch', {enabled: toggle, id: 0}),
+                payload: ApiHelper.createPayload(this, 'setSwitch', {enabled: toggle, id: 0}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -128,16 +128,16 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
         return new Promise((resolve, reject) => {
             if (!this.getDeviceFeatures()?.modes.includes(mode) ?? false) reject(new Error(this.deviceType + ' don\'t accept mode: ' + mode));
             if (this.mode === mode) return reject(new Error("Same mode already"));
-            let payload = Helper.createPayload(this, 'setPurifierMode', {mode: mode})
+            let payload = ApiHelper.createPayload(this, 'setPurifierMode', {mode: mode})
             if (mode === "manual")
-                payload = Helper.createPayload(this, 'setLevel', {level: 1, id: 0, type: 'wind'});
+                payload = ApiHelper.createPayload(this, 'setLevel', {level: 1, id: 0, type: 'wind'});
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
                 payload: payload,
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) reject(new Error(result.msg ?? result))
@@ -154,14 +154,14 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
             if (!this.getDeviceFeatures()?.levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t accept level: ' + level);
             if (this.fan_level === level && this.mode === "manual") return reject("Fan level is the same");
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setLevel', {level: level, id: 0, type: 'wind'}),
+                payload: ApiHelper.createPayload(this, 'setLevel', {level: level, id: 0, type: 'wind'}),
             }
-            Helper.callApi(this.api,
+            ApiHelper.callApi(this.api,
                 ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader())
+                'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) reject(new Error(result.msg ?? result))
@@ -178,12 +178,12 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     public setChildLock(mode: boolean): Promise<string | boolean> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setChildLock', {child_lock: mode}),
+                payload: ApiHelper.createPayload(this, 'setChildLock', {child_lock: mode}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -198,12 +198,12 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     public getStatus(): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'getPurifierStatus', {}),
+                payload: ApiHelper.createPayload(this, 'getPurifierStatus', {}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result.result.result ?? result);
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
@@ -245,12 +245,12 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
     public setDisplay(state: boolean): Promise<boolean | string> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setDisplay', {state: state}),
+                payload: ApiHelper.createPayload(this, 'setDisplay', {state: state}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -269,12 +269,12 @@ export default class VeSyncPurifier extends VeSyncDeviceBase {
                 && mode.toLowerCase() !== 'dim')
                 return reject(Error(this.deviceType + ' don\'t accept setNightLight: ' + mode));
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setNightLight', {night_light: mode.toLowerCase()}),
+                payload: ApiHelper.createPayload(this, 'setNightLight', {night_light: mode.toLowerCase()}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))

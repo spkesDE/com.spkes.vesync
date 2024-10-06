@@ -2,7 +2,7 @@ import BasicDevice from "./lib/BasicDevice";
 import path from "node:path";
 import {glob} from "glob";
 
-export default class VeSyncDeviceTypeManager {
+export default class DeviceTypeManager {
 
     private devices: typeof BasicDevice[] = [];
 

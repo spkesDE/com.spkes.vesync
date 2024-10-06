@@ -1,9 +1,9 @@
 import * as crypto from "crypto";
-import Helper from "./lib/helper";
+import ApiHelper from "./lib/ApiHelper";
 import {ApiCalls} from "./enum/apiCalls";
 import {BodyTypes} from "./enum/bodyTypes";
 import {IDevice} from "./models/IDevice";
-import VeSyncDeviceTypeManager from "./veSyncDeviceTypeManager";
+import DeviceTypeManager from "./DeviceTypeManager";
 import BasicDevice from "./lib/BasicDevice";
 
 export default class VeSync {
@@ -16,18 +16,18 @@ export default class VeSync {
     private account_id: number = 0;
     private devices: BasicDevice[] = [];
     private loggedIn: boolean = false;
-    private typeManager!: VeSyncDeviceTypeManager;
+    private typeManager!: DeviceTypeManager;
 
     public async login(username: string, password: string, isHashedPassword: boolean = false): Promise<boolean> {
         this.username = username;
         this.password = isHashedPassword ? password : this.hashPassword(password);
-        let response = await Helper.callApi<any>(this, ApiCalls.LOGIN, 'post', Helper.requestBody(this, BodyTypes.LOGIN)).catch(console.error)
+        let response = await ApiHelper.callApi<any>(this, ApiCalls.LOGIN, 'post', ApiHelper.requestBody(this, BodyTypes.LOGIN)).catch(console.error)
         if(response === undefined) return false;
         try {
             this.account_id = response.result.accountID;
             this.token = response.result.token;
             this.loggedIn = true;
-            this.typeManager = new VeSyncDeviceTypeManager();
+            this.typeManager = new DeviceTypeManager();
             await this.typeManager.loadDevices();
             if (VeSync.debugMode) {
                 console.debug(`Account ID: ${response.result.accountID}`);
@@ -42,7 +42,7 @@ export default class VeSync {
     public async getDevices(): Promise<BasicDevice[]> {
         if (this.token === "") return [];
         this.devices = [];
-        let response = await Helper.callApi<any>(this, ApiCalls.DEVICES, 'post', Helper.requestBody(this, BodyTypes.DEVICE_LIST)).catch(console.error);
+        let response = await ApiHelper.callApi<any>(this, ApiCalls.DEVICES, 'post', ApiHelper.requestBody(this, BodyTypes.DEVICE_LIST)).catch(console.error);
         this.processDevices(response.result.list);
         return this.devices;
     }

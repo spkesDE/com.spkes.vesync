@@ -1,7 +1,7 @@
-import Helper from "./lib/helper";
+import ApiHelper from "../lib/ApiHelper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
-import VeSync from "./veSync";
-import {ApiCalls} from "./enum/apiCalls";
+import VeSync from "../VeSync";
+import {ApiCalls} from "../enum/apiCalls";
 
 interface DeviceFeatures {
     models: string[],
@@ -104,12 +104,12 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     public async toggleSwitch(toggle: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setSwitch', {enabled: toggle, id: 0}),
+                payload: ApiHelper.createPayload(this, 'setSwitch', {enabled: toggle, id: 0}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -134,12 +134,12 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             if (!this.getDeviceFeatures()?.modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mist modes: ' + mode);
             if (this.mode === mode) return;
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setHumidityMode', {mode: mode.toLowerCase()}),
+                payload: ApiHelper.createPayload(this, 'setHumidityMode', {mode: mode.toLowerCase()}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -156,12 +156,12 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             if (!this.getDeviceFeatures()?.features.includes('nightlight') ?? false) return reject(this.deviceType + ' don\'t accept nightlight');
             if (brightness < 0 || brightness > 100) return reject("Brightness value must be set between 0 and 100");
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setNightLightBrightness', {night_light_brightness: brightness}),
+                payload: ApiHelper.createPayload(this, 'setNightLightBrightness', {night_light_brightness: brightness}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -177,12 +177,12 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
         return new Promise((resolve, reject) => {
             if (humidity > 80 || humidity < 30) return reject("Humidity value must be set between 30 and 80");
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setTargetHumidity', {target_humidity: humidity}),
+                payload: ApiHelper.createPayload(this, 'setTargetHumidity', {target_humidity: humidity}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -197,12 +197,12 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     public getStatus(): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'getHumidifierStatus', {}),
+                payload: ApiHelper.createPayload(this, 'getHumidifierStatus', {}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -235,17 +235,17 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     public setDisplay(state: boolean): Promise<boolean | string> {
         return new Promise((resolve, reject) => {
             let payload = this.deviceType === 'Classic200S' ?
-                Helper.createPayload(this, 'setIndicatorLightSwitch', {state: state})
+                ApiHelper.createPayload(this, 'setIndicatorLightSwitch', {state: state})
                 :
-                Helper.createPayload(this, 'setDisplay', {state: state})
+                ApiHelper.createPayload(this, 'setDisplay', {state: state})
 
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
                 payload: payload,
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -260,12 +260,12 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
     public enableAutomaticStop(mode: boolean): Promise<boolean | string> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setAutomaticStop', {enabled: mode}),
+                payload: ApiHelper.createPayload(this, 'setAutomaticStop', {enabled: mode}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -282,18 +282,18 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
             if (!this.getDeviceFeatures()?.features.includes('warm_mist') ?? false) return reject(this.deviceType + ' don\'t support warm_mist');
             if (!this.getDeviceFeatures()?.warm_levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support warm_levels ' + level);
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setLevel', {
+                payload: ApiHelper.createPayload(this, 'setLevel', {
                     id: 0,
                     level: level,
                     type: 'warm'
                 }),
             }
-            Helper.callApi(this.api,
+            ApiHelper.callApi(this.api,
                 ApiCalls.BYPASS_V2,
-                'post', body, Helper.bypassHeader())
+                'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -322,16 +322,16 @@ export default class VeSyncHumidifier extends VeSyncDeviceBase {
         return new Promise((resolve, reject) => {
             if (!this.getDeviceFeatures()?.levels.includes(level) ?? false) return reject(this.deviceType + ' don\'t support mist level ' + level);
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setVirtualLevel', {
+                payload: ApiHelper.createPayload(this, 'setVirtualLevel', {
                     id: 0,
                     level: level,
                     type: 'mist'
                 }),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (VeSync.debugMode) console.log(result)
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))

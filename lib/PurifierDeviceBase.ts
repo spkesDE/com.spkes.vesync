@@ -1,5 +1,5 @@
 import Homey from "homey";
-import VeSync from "../tsvesync/veSync";
+import VeSync from "../tsvesync/VeSync";
 import VeSyncApp from "../app";
 import BasicPurifier from "../tsvesync/lib/BasicPurifier";
 import DeviceModes from "../tsvesync/enum/DeviceModes";

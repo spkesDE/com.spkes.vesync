@@ -1,7 +1,7 @@
-import Helper from "./lib/helper";
+import ApiHelper from "../lib/ApiHelper";
 import VeSyncDeviceBase from "./veSyncDeviceBase";
-import VeSync from "./veSync";
-import {ApiCalls} from "./enum/apiCalls";
+import VeSync from "../VeSync";
+import {ApiCalls} from "../enum/apiCalls";
 
 interface DeviceFeatures {
     models: string[],
@@ -47,12 +47,12 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
     public async toggleSwitch(toggle: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setSwitch', {powerSwitch: toggle ? 1 : 0, switchIdx: 0}),
+                payload: ApiHelper.createPayload(this, 'setSwitch', {powerSwitch: toggle ? 1 : 0, switchIdx: 0}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                     this.enabled = toggle;
@@ -82,12 +82,12 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
     public getStatus(): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'getTowerFanStatus', {}),
+                payload: ApiHelper.createPayload(this, 'getTowerFanStatus', {}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     /*
                         {
@@ -143,12 +143,12 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
     public async setOscillationSwitch(value: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setOscillationSwitch', {oscillationSwitch: value ? 1 : 0}),
+                payload: ApiHelper.createPayload(this, 'setOscillationSwitch', {oscillationSwitch: value ? 1 : 0}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                     this.oscillation_switch = value;
@@ -166,12 +166,12 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
         if(!this.Device_Features[this.deviceType].modes.includes(value)) return Promise.reject(this.deviceType + ' don\'t accept mode: ' + value);
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setTowerFanMode', {workMode: value}),
+                payload: ApiHelper.createPayload(this, 'setTowerFanMode', {workMode: value}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                     this.mode = value;
@@ -189,12 +189,16 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
         return new Promise((resolve, reject) => {
             if (!this.getDeviceFeatures()?.levels.includes(value) ?? false) return reject(this.deviceType + ' don\'t accept fan level: ' + value);
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setLevel', {manualSpeedLevel: value, levelType: 'wind', levelIdx: 0}),
+                payload: ApiHelper.createPayload(this, 'setLevel', {
+                    manualSpeedLevel: value,
+                    levelType: 'wind',
+                    levelIdx: 0
+                }),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                     console.log('setFanSpeed', result)
@@ -212,12 +216,12 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
     public async setDisplay(value: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setDisplay', {screenSwitch: value ? 1 : 0}),
+                payload: ApiHelper.createPayload(this, 'setDisplay', {screenSwitch: value ? 1 : 0}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                     this.display = value;
@@ -234,12 +238,12 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
     public async setMuteSwitch(value: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setMuteSwitch', {muteSwitch: value ? 1 : 0}),
+                payload: ApiHelper.createPayload(this, 'setMuteSwitch', {muteSwitch: value ? 1 : 0}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                     this.mute_switch = value;
@@ -262,10 +266,10 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
         return new Promise((resolve, reject) => {
             if (initFanSpeed < 1 || initFanSpeed > 12) return reject(new Error('initFanSpeed must be between 1 and 12'))
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setSleepPreference', {
+                payload: ApiHelper.createPayload(this, 'setSleepPreference', {
                     sleepPreferenceType: type,
                     oscillationSwitch: oscillation ? 1 : 0,
                     initFanSpeedLevel: initFanSpeed,
@@ -273,7 +277,7 @@ export default class VeSyncTowerFan extends VeSyncDeviceBase {
                     autoChangeFanLevelSwitch:  autoChangeFanLevelSwitch ? 1 : 0
                 }),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
                     return resolve(true);

@@ -1,5 +1,5 @@
 import Homey from 'homey';
-import VeSync from '../../tsvesync/veSync';
+import VeSync from '../../tsvesync/VeSync';
 import {Utils} from "../../utils";
 import Vital200S from "../../tsvesync/devices/purifier/Vital200S";
 

@@ -1,8 +1,7 @@
 import Homey from 'homey';
 import {Utils} from "../../utils";
-import VeSyncHumidifier from "../../tsvesync/veSyncHumidifier";
-import VeSync from "../../tsvesync/veSync";
-import VeSyncHumidifierOasis1000S from "../../tsvesync/veSyncHumidifierOasis1000S.js";
+import VeSync from "../../tsvesync/VeSync";
+import VeSyncHumidifierOasis1000S from "../../tsvesync/old/veSyncHumidifierOasis1000S.js";
 
 class Oasis1000SDriver extends Homey.Driver {
 

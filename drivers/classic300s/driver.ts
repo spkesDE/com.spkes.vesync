@@ -1,7 +1,7 @@
 import Homey from 'homey';
 import {Utils} from "../../utils";
-import VeSyncHumidifier from "../../tsvesync/veSyncHumidifier";
-import VeSync from "../../tsvesync/veSync";
+import VeSyncHumidifier from "../../tsvesync/old/veSyncHumidifier";
+import VeSync from "../../tsvesync/VeSync";
 
 class Classic300sDriver extends Homey.Driver {
 

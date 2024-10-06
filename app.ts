@@ -1,7 +1,7 @@
 import Homey from 'homey';
-import VeSync from './tsvesync/veSync';
-import VeSyncPurifier from "./tsvesync/veSyncPurifier";
-import VeSyncHumidifier from "./tsvesync/veSyncHumidifier";
+import VeSync from './tsvesync/VeSync';
+import VeSyncPurifier from "./tsvesync/old/veSyncPurifier";
+import VeSyncHumidifier from "./tsvesync/old/veSyncHumidifier";
 import axiosRetry from "axios-retry";
 import axios from "axios";
 

@@ -1,8 +1,7 @@
 import Homey from "homey";
-import VeSync from "../tsvesync/veSync";
+import VeSync from "../tsvesync/VeSync";
 import VeSyncApp from "../app";
-import VeSyncHumidifier from "../tsvesync/veSyncHumidifier";
-import {BasicHumidifier} from "../tsvesync/lib/BasicDevice";
+import BasicHumidifier from "../tsvesync/lib/BasicHumidifier";
 
 export default class HumidifierDeviceBase extends Homey.Device {
     device!: BasicHumidifier;

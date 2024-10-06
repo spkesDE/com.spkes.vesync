@@ -1,7 +1,7 @@
 import Homey from 'homey';
-import VeSync from '../../tsvesync/veSync';
+import VeSync from '../../tsvesync/VeSync';
 import {Utils} from "../../utils";
-import VeSyncPurifierLV131 from "../../tsvesync/veSyncPurifierLV131.js";
+import VeSyncPurifierLV131 from "../../tsvesync/old/veSyncPurifierLV131.js";
 
 class LV131SDriver extends Homey.Driver {
 

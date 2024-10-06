@@ -1,5 +1,5 @@
-import VeSync from "./veSync";
-import {IDevice} from "./models/IDevice";
+import VeSync from "../VeSync";
+import {IDevice} from "../models/IDevice";
 
 export default class VeSyncDeviceBase {
     deviceRegion: string = "";

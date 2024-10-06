@@ -1,6 +1,6 @@
 import Homey from 'homey';
-import VeSyncPurifier from '../../tsvesync/veSyncPurifier';
-import VeSync from '../../tsvesync/veSync';
+import VeSyncPurifier from '../../tsvesync/old/veSyncPurifier';
+import VeSync from '../../tsvesync/VeSync';
 import {Utils} from "../../utils";
 
 class Vital100sDriver extends Homey.Driver {

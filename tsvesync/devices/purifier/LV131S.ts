@@ -1,19 +1,10 @@
-
 import DeviceModes from "../../enum/DeviceModes";
 
 import BasicPurifier from "../../lib/BasicPurifier";
-import ISetLevelPayload from "../../models/purifier/ISetLevelPayload";
 import IApiResponse from "../../models/IApiResponse";
-import ISetPurifierModePayload from "../../models/purifier/ISetPurifierModePayload";
-import Helper from "../../lib/helper";
-import {ApiCalls} from "../../enum/apiCalls";
+import ApiHelper from "../../lib/ApiHelper";
 import {BodyTypes} from "../../enum/bodyTypes";
-import VeSync from "../../veSync";
-import IGetPurifierStatus from "../../models/purifier/IGetPurifierStatus";
 import {IGetLV131PurifierStatus} from "../../models/purifier/IGetLV131PurifierStatus";
-import BasicDevice from "../../lib/BasicDevice";
-import ISetSwitchPayload from "../../models/purifier/ISetSwitchPayload";
-import ISetDisplayPayload from "../../models/purifier/ISetDisplayPayload";
 
 
 export default class LV131S extends BasicPurifier {
@@ -25,62 +16,58 @@ export default class LV131S extends BasicPurifier {
 
     status: IGetLV131PurifierStatus | null = null;
 
-    protected hasMethod(method: string): boolean {
-        return LV131S.methods.includes(method);
-    }
-
-    public async setLevel(payload: ISetLevelPayload): Promise<IApiResponse<any>> {
+    public async setLevel(payload: number): Promise<IApiResponse<any>> {
         //Validate the level
-        if (!LV131S.levels.includes(payload.level)) {
-            throw new Error(`Invalid level: ${payload.level}`);
+        if (!LV131S.levels.includes(payload)) {
+            throw new Error(`Invalid level: ${payload}`);
         }
         let body: any = {
-            ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+            ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
             uuid: this.device.uuid,
-            level: payload.level
+            level: payload
         }
-        return Helper.callApi(this.api, "/131airPurifier/v1/device/updateSpeed", 'put', body)
+        return ApiHelper.callApi(this.api, "/131airPurifier/v1/device/updateSpeed", 'put', body)
     }
 
-    public async setPurifierMode(mode: ISetPurifierModePayload): Promise<IApiResponse<any>> {
+    public async setPurifierMode(mode: DeviceModes): Promise<IApiResponse<any>> {
         //Validate the mode
-        if (!LV131S.modes.includes(mode.mode)) {
-            throw new Error(`Invalid mode: ${mode.mode}`);
+        if (!LV131S.modes.includes(mode)) {
+            throw new Error(`Invalid mode: ${mode}`);
         }
         let body: any = {
-            ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+            ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
             uuid: this.device.uuid,
-            mode: mode.mode
+            mode: mode
         }
-        return Helper.callApi(this.api, "/131airPurifier/v1/device/updateMode", 'put', body)
+        return ApiHelper.callApi(this.api, "/131airPurifier/v1/device/updateMode", 'put', body)
     }
 
     public async getPurifierStatus(): Promise<IApiResponse<IGetLV131PurifierStatus>> {
         let body: any = {
-            ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+            ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
             uuid: this.device.uuid
         }
-        const status = await Helper.callApi<IGetLV131PurifierStatus>(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
+        const status = await ApiHelper.callApi<IGetLV131PurifierStatus>(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
         this.status = status.result.result;
         return status
     }
 
-    public async setSwitch(payload: ISetSwitchPayload): Promise<IApiResponse<any>> {
+    public async setSwitch(payload: boolean): Promise<IApiResponse<any>> {
         let body: any = {
-            ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+            ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
             uuid: this.device.uuid,
-            status: payload.enabled ? "on" : "off"
+            status: payload ? "on" : "off"
         }
-        return Helper.callApi(this.api, "/131airPurifier/v1/device/deviceStatus", 'put', body)
+        return ApiHelper.callApi(this.api, "/131airPurifier/v1/device/deviceStatus", 'put', body)
     }
 
-    public async setDisplay(payload: ISetDisplayPayload): Promise<IApiResponse<any>> {
+    public async setDisplay(payload: boolean): Promise<IApiResponse<any>> {
         let body: any = {
-            ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+            ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
             uuid: this.device.uuid,
-            status: payload.status ? "on" : "off"
+            status: payload ? "on" : "off"
         }
-        return Helper.callApi(this.api, "/131airPurifier/v1/device/updateScreen", 'put', body)
+        return ApiHelper.callApi(this.api, "/131airPurifier/v1/device/updateScreen", 'put', body)
     }
 
 

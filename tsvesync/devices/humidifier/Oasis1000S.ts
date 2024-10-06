@@ -1,9 +1,6 @@
 import BasicHumidifier from "../../lib/BasicHumidifier";
 import DeviceModes from "../../enum/DeviceModes";
 
-import VeSync from "../../veSync";
-import {IDevice} from "../../models/IDevice";
-
 export default class Oasis1000S extends BasicHumidifier {
     static deviceModels = ['LUH-M101S-WUS', 'LUH-M101S-WEUR'];
     static methods = ['getHumidifierStatus', 'setAutoStopSwitch', 'setSwitch', 'setVirtualLevel', 'setTargetHumidity', 'setHumidityMode', 'setDisplay', 'setNightLightBrightness'];

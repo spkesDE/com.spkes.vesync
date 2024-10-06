@@ -1,7 +1,7 @@
-import Helper from "./lib/helper";
-import VeSync from "./veSync";
+import ApiHelper from "../lib/ApiHelper";
+import VeSync from "../VeSync";
 import VeSyncPurifier from "./veSyncPurifier";
-import {BodyTypes} from "./enum/bodyTypes";
+import {BodyTypes} from "../enum/bodyTypes";
 
 interface DeviceFeatures {
     models: string[],
@@ -38,11 +38,11 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
     public async toggleSwitch(toggle: boolean): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+                ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
                 uuid: this.uuid,
                 status: toggle ? "on" : "off"
             }
-            Helper.callApi<any>(this.api, "/131airPurifier/v1/device/deviceStatus", 'put', body)
+            ApiHelper.callApi<any>(this.api, "/131airPurifier/v1/device/deviceStatus", 'put', body)
                 .catch(reject)
                 .then((result: any) => {
                     if (VeSync.debugMode) console.log(result);
@@ -57,10 +57,10 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
     public getStatus(): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.requestBody(this.api, BodyTypes.DEVICE_DETAIL),
+                ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_DETAIL),
                 uuid: this.uuid,
             }
-            Helper.callApi(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
+            ApiHelper.callApi(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
                 .then((result: any) => {
                     if (VeSync.debugMode) console.log("Raw Result: ", result);
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
@@ -114,14 +114,14 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
             if (!this.getDeviceFeatures()?.modes.includes(mode) ?? false) return reject(this.deviceType + ' don\'t accept mode: ' + mode);
             if (this.mode === mode) return;
             let body: any = {
-                ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+                ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
                 uuid: this.uuid,
                 mode: mode
             }
             if (mode == "manual") {
                 body = {...body, level: 1}
             }
-            Helper.callApi(this.api, "/131airPurifier/v1/device/updateMode", 'put', body)
+            ApiHelper.callApi(this.api, "/131airPurifier/v1/device/updateMode", 'put', body)
                 .then(result => {
                     if (VeSync.debugMode) console.log(result);
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
@@ -139,11 +139,11 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
             if (this.mode != "manual") await this.setMode("manual");
             if (this.fan_level == level) resolve(level)
             let body: any = {
-                ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+                ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
                 uuid: this.uuid,
                 level: level
             }
-            Helper.callApi(this.api, "/131airPurifier/v1/device/updateSpeed", 'put', body)
+            ApiHelper.callApi(this.api, "/131airPurifier/v1/device/updateSpeed", 'put', body)
                 .then(result => {
                     if (VeSync.debugMode) console.log(result);
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));
@@ -157,11 +157,11 @@ export default class VeSyncPurifierLV131 extends VeSyncPurifier {
     public setDisplay(state: boolean): Promise<boolean | string> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
+                ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
                 uuid: this.uuid,
                 status: state ? "on" : "off"
             }
-            Helper.callApi(this.api, "/131airPurifier/v1/device/updateScreen", 'put', body)
+            ApiHelper.callApi(this.api, "/131airPurifier/v1/device/updateScreen", 'put', body)
                 .then(result => {
                     if (VeSync.debugMode) console.log(result);
                     if (!this.validResponse(result)) return reject(new Error(result.msg ?? result));

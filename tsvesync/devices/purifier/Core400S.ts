@@ -2,8 +2,6 @@ import BasicPurifier from "../../lib/BasicPurifier";
 import DeviceModes from "../../enum/DeviceModes";
 
 import IApiResponse from "../../models/IApiResponse";
-import ISetLevelPayload from "../../models/purifier/ISetLevelPayload";
-import ISetPurifierModePayload from "../../models/purifier/ISetPurifierModePayload";
 
 
 export default class Core400S extends BasicPurifier {
@@ -13,22 +11,18 @@ export default class Core400S extends BasicPurifier {
     static levels = [1, 2, 3, 4];
     static features = ['air_quality']
 
-    protected hasMethod(method: string): boolean {
-        return Core400S.methods.includes(method);
-    }
-
-    public async setLevel(payload: ISetLevelPayload): Promise<IApiResponse<any>> {
+    public async setLevel(payload: number): Promise<IApiResponse<any>> {
         //Validate the level
-        if (!Core400S.levels.includes(payload.level)) {
-            throw new Error(`Invalid level: ${payload.level}`);
+        if (!Core400S.levels.includes(payload)) {
+            throw new Error(`Invalid level: ${payload}`);
         }
         return super.setLevel(payload);
     }
 
-    public async setPurifierMode(mode: ISetPurifierModePayload): Promise<IApiResponse<any>> {
+    public async setPurifierMode(mode: DeviceModes): Promise<IApiResponse<any>> {
         //Validate the mode
-        if (!Core400S.modes.includes(mode.mode)) {
-            throw new Error(`Invalid mode: ${mode.mode}`);
+        if (!Core400S.modes.includes(mode)) {
+            throw new Error(`Invalid mode: ${mode}`);
         }
         return super.setPurifierMode(mode);
     }

@@ -1,8 +1,6 @@
 import Homey from 'homey';
-import VeSync from '../../tsvesync/veSync';
+import VeSync from '../../tsvesync/VeSync';
 import {Utils} from "../../utils";
-import VeSyncPurifierLV131 from "../../tsvesync/veSyncPurifierLV131.js";
-import VeSyncTowerFan from "../../tsvesync/veSyncTowerFan";
 import F422S from "../../tsvesync/devices/towerfan/F422S";
 
 class F422SDriver extends Homey.Driver {

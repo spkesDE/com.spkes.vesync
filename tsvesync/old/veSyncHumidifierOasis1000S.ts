@@ -1,6 +1,6 @@
-import Helper from "./lib/helper";
-import VeSync from "./veSync";
-import {ApiCalls} from "./enum/apiCalls";
+import ApiHelper from "../lib/ApiHelper";
+import VeSync from "../VeSync";
+import {ApiCalls} from "../enum/apiCalls";
 import VeSyncHumidifier from "./veSyncHumidifier.js";
 
 interface DeviceFeatures {
@@ -44,12 +44,12 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
     public async getStatus(): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'getHumidifierStatus', {}),
+                payload: ApiHelper.createPayload(this, 'getHumidifierStatus', {}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (result.code === -11300030) {
@@ -114,12 +114,12 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
     public async setDisplay(mode: boolean): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setDisplay', {screenSwitch: mode ? 1 : 0}),
+                payload: ApiHelper.createPayload(this, 'setDisplay', {screenSwitch: mode ? 1 : 0}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -139,12 +139,12 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
     public async setHumidityMode(mode: string): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setHumidityMode', {workMode: mode.toLowerCase()}),
+                payload: ApiHelper.createPayload(this, 'setHumidityMode', {workMode: mode.toLowerCase()}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -187,16 +187,16 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
             // Validate level
             if (!this.Device_Features.OasisMist1000S.levels.includes(level)) return reject(new Error('Invalid level: ' + level))
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setVirtualLevel', {
+                payload: ApiHelper.createPayload(this, 'setVirtualLevel', {
                     levelIdx: 0,
                     virtualLevel: level,
                     levelType: 'mist'
                 }),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -221,15 +221,15 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
     public async toggleSwitch(toggle: boolean): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setSwitch', {
+                payload: ApiHelper.createPayload(this, 'setSwitch', {
                     powerSwitch: toggle ? 1 : 0,
                     switchIdx: 0
                 }),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -268,12 +268,12 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
             // Validate humidity between 30 and 80
             if (humidity < 30 || humidity > 80) return reject(new Error('Invalid humidity: ' + humidity))
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setTargetHumidity', {targetHumidity: humidity}),
+                payload: ApiHelper.createPayload(this, 'setTargetHumidity', {targetHumidity: humidity}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -296,12 +296,12 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
     public async setAutoStopSwitch(mode: boolean): Promise<any> {
         return new Promise((resolve, reject) => {
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setAutoStopSwitch', {autoStopSwitch: mode ? 1 : 0}),
+                payload: ApiHelper.createPayload(this, 'setAutoStopSwitch', {autoStopSwitch: mode ? 1 : 0}),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))
@@ -328,14 +328,14 @@ export default class VeSyncHumidifierOasis1000S extends VeSyncHumidifier {
             // Validate brightness
             if (brightness < 0 || brightness > 100) return reject(new Error('Invalid brightness: ' + brightness))
             let body = {
-                ...Helper.bypassBodyV2(this.api),
+                ...ApiHelper.bypassBodyV2(this.api),
                 cid: this.cid,
                 configModule: this.configModule,
-                payload: Helper.createPayload(this, 'setNightLightBrightness', {
+                payload: ApiHelper.createPayload(this, 'setNightLightBrightness', {
                     nightLightBrightness: brightness
                 }),
             }
-            Helper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, Helper.bypassHeader())
+            ApiHelper.callApi(this.api, ApiCalls.BYPASS_V2, 'post', body, ApiHelper.bypassHeader())
                 .then(result => {
                     try {
                         if (!this.validResponse(result)) return reject(new Error(result.msg ?? result))

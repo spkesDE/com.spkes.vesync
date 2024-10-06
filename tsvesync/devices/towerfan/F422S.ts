@@ -1,8 +1,6 @@
 import DeviceModes from "../../enum/DeviceModes";
 import BasicTowerFan from "../../lib/BasicTowerFan";
 import IApiResponse from "../../models/IApiResponse";
-import {ISetLevelPayload} from "../../models/towerfan/ISetLevelPayload";
-import {ISetTowerFanModePayload} from "../../models/towerfan/ISetTowerFanModePayload";
 import {IGetTowerFanStatus} from "../../models/towerfan/IGetTowerFanStatus";
 
 export default class F422S extends BasicTowerFan {
@@ -11,19 +9,15 @@ export default class F422S extends BasicTowerFan {
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     static modes = [DeviceModes.AdvancedSleep, DeviceModes.Auto, DeviceModes.Turbo, DeviceModes.Normal]
 
-    protected hasMethod(method: string): boolean {
-        return F422S.methods.includes(method);
-    }
-
-    async setLevel(payload: ISetLevelPayload): Promise<IApiResponse<any>> {
-        if (!F422S.levels.includes(payload.manualSpeedLevel)) {
-            throw new Error(`Invalid level: ${payload.manualSpeedLevel}`);
+    async setLevel(payload: number): Promise<IApiResponse<any>> {
+        if (!F422S.levels.includes(payload)) {
+            throw new Error(`Invalid level: ${payload}`);
         }
         return super.setLevel(payload);
     }
 
-    async setTowerFanMode(mode: ISetTowerFanModePayload): Promise<IApiResponse<any>> {
-        if (!F422S.modes.includes(mode.workMode)) {
+    async setTowerFanMode(mode: DeviceModes): Promise<IApiResponse<any>> {
+        if (!F422S.modes.includes(mode)) {
             throw new Error(`Invalid mode: ${mode}`);
         }
         return super.setTowerFanMode(mode);
@@ -36,15 +30,16 @@ export default class F422S extends BasicTowerFan {
     }
 
     /**
-     * Convert temperature from raw value to Celsius. Some crazy math here. I have no idea how the raw value is calculated and how VeSync converts it to Celsius.
-     * This should be a good approximation. If you have a better way to convert it, please let me know.
-     * @param temperature
+     * Convert temperature from raw value to Celsius or back to Fahrenheit.
+     * The raw value is Fahrenheit * 10. So 655 is 65.5 Fahrenheit.
+     * @param temperature - The raw temperature value (Fahrenheit * 10).
+     * @param toCelsius - If true, convert to Celsius. Otherwise, return in Fahrenheit.
      * @private
      */
-    private convertTemperature(temperature: number): number {
-        const a = 0.0326;
-        let temp = temperature * a - 0.1896;
-        // Round to 1 decimal places
-        return Math.round(temp * 10) / 10;
+    private convertTemperature(temperature: number, toCelsius = true): number {
+        const fahrenheit = temperature / 10;
+        return toCelsius
+            ? (fahrenheit - 32) * 5 / 9
+            : fahrenheit;
     }
 }

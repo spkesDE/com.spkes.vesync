@@ -1,14 +1,7 @@
 import BasicDevice from "./BasicDevice";
 import IApiResponse from "../models/IApiResponse";
 import {IGetTowerFanStatus} from "../models/towerfan/IGetTowerFanStatus";
-import ISetSwitchPayload from "../models/towerfan/ISetSwitchPayload";
-import {ISetTowerFanModePayload} from "../models/towerfan/ISetTowerFanModePayload";
-import {ISetSleepPreferencePayload} from "../models/towerfan/ISetSleepPreferencePayload";
-import {ISetOscillationSwitchPayload} from "../models/towerfan/ISetOscillationSwitchPayload";
-import {ISetMuteSwitchPayload} from "../models/towerfan/ISetMuteSwitchPayload";
-import {ISetLevelPayload} from "../models/towerfan/ISetLevelPayload";
-import ISetDisplayPayload from "../models/towerfan/ISetDisplayPayload";
-import ISetDisplayTypePayload from "../models/towerfan/ISetDisplayTypePayload";
+import DeviceModes from "../enum/DeviceModes";
 
 export default class BasicTowerFan extends BasicDevice {
     static levels: number[] = [];
@@ -25,37 +18,64 @@ export default class BasicTowerFan extends BasicDevice {
         return status;
     }
 
-    public async setDisplay(payload: ISetDisplayPayload): Promise<IApiResponse<any>> {
-        return await this.post('setDisplay', payload);
+    public async setDisplay(payload: boolean): Promise<IApiResponse<any>> {
+        return await this.post('setDisplay', {
+            screenSwitch: Number(payload)
+        });
     }
 
-    public async setDisplayingType(payload: ISetDisplayTypePayload): Promise<IApiResponse<any>> {
-        return await this.post('setDisplayingType', payload);
+    public async setDisplayingType(payload: 0 | 1): Promise<IApiResponse<any>> {
+        return await this.post('setDisplayingType', {
+            displayingType: payload
+        });
     }
 
-    public async setLevel(payload: ISetLevelPayload): Promise<IApiResponse<any>> {
-        return await this.post('setLevel', payload);
+    public async setLevel(payload: number): Promise<IApiResponse<any>> {
+        return await this.post('setLevel', {
+            manualSpeedLevel: payload,
+            levelIdx: 0,
+            levelType: "wind"
+        });
     }
 
-    public async setMuteSwitch(payload: ISetMuteSwitchPayload): Promise<IApiResponse<any>> {
-        return await this.post('setMuteSwitch', payload);
+    public async setMuteSwitch(payload: boolean): Promise<IApiResponse<any>> {
+        return await this.post('setMuteSwitch', {
+            muteSwitch: Number(payload)
+        });
     }
 
-    public async setOscillationSwitch(payload: ISetOscillationSwitchPayload): Promise<IApiResponse<any>> {
-        return await this.post('setOscillationSwitch', payload);
+    public async setOscillationSwitch(payload: boolean): Promise<IApiResponse<any>> {
+        return await this.post('setOscillationSwitch', {
+            oscillationSwitch: Number(payload)
+        });
     }
 
-    public async setSleepPreference(payload: ISetSleepPreferencePayload): Promise<IApiResponse<any>> {
-        return await this.post('setSleepPreference', payload);
+    public async setSleepPreference(payload: {
+        sleepPreferenceType: string,
+        oscillationSwitch: boolean | 0 | 1,
+        initFanSpeedLevel: number,
+        fallAsleepRemain: boolean | 0 | 1,
+        autoChangeFanLevelSwitch: boolean | 0 | 1
+    }): Promise<IApiResponse<any>> {
+        return await this.post('setSleepPreference', {
+            sleepPreferenceType: payload.sleepPreferenceType,
+            oscillationSwitch: Number(payload.oscillationSwitch),  // Convert to number if needed
+            initFanSpeedLevel: payload.initFanSpeedLevel,
+            fallAsleepRemain: Number(payload.fallAsleepRemain),
+            autoChangeFanLevelSwitch: Number(payload.autoChangeFanLevelSwitch)
+        });
     }
 
-    public async setSwitch(payload: ISetSwitchPayload): Promise<IApiResponse<any>> {
-        return await this.post('setSwitch', payload);
+    public async setSwitch(payload: boolean): Promise<IApiResponse<any>> {
+        return await this.post('setSwitch', {
+            powerSwitch: Number(payload),
+            switchIdx: 0
+        });
     }
 
-    public async setTowerFanMode(payload: ISetTowerFanModePayload): Promise<IApiResponse<any>> {
-        return await this.post('setTowerFanMode', payload);
+    public async setTowerFanMode(payload: DeviceModes): Promise<IApiResponse<any>> {
+        return await this.post('setTowerFanMode', {
+            workMode: payload
+        });
     }
-
-
 }
