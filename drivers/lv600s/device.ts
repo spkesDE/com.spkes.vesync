@@ -1,4 +1,5 @@
 import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
+import LV600SDevice from "../../tsvesync/devices/humidifier/LV600S";
 
 class LV600S extends HumidifierDeviceBase {
     private capabilitiesAddition: string[] = [
@@ -13,6 +14,7 @@ class LV600S extends HumidifierDeviceBase {
 
     //TODO: Flow for: Fan Speed, Warm Mist Speed, Display, Night light
     //TODO: Device Settings target Humidity
+    device!: LV600SDevice
 
 
     async onInit() {
@@ -72,7 +74,12 @@ class LV600S extends HumidifierDeviceBase {
             let level = Number(value.replace("fan_speed_", ""));
             if (this.device.status.mode === "sleep")
                 await this.device.setHumidityMode("humidity").catch(this.error);
-            this.device.setMistLevel(level).catch(this.error);
+            this.device.setLevel(level).catch(this.error);
+            return;
+        }
+        if (value.startsWith("warm_fan_speed_")) {
+            let level = Number(value.replace("warm_fan_speed_", ""));
+            this.device?.setWarmLevel(level).catch(this.error);
             return;
         }
         if (value === "auto") {

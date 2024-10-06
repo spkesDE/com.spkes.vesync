@@ -1,7 +1,11 @@
 import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
+import Oasis450SDevice from "../../tsvesync/devices/humidifier/Oasis450S";
+import DeviceModes from "../../tsvesync/enum/DeviceModes";
 
 class Oasis450S extends HumidifierDeviceBase {
     private capabilitiesAddition: string[] = []
+
+    device!: Oasis450SDevice
 
     async onInit() {
         await super.onInit();
@@ -59,15 +63,20 @@ class Oasis450S extends HumidifierDeviceBase {
             this.log("Mode: " + value);
             let level = Number(value.replace("fan_speed_", ""));
             if (this.device.status.mode === "sleep")
-                await this.device.setHumidityMode("humidity").catch(this.error);
-            this.device.setMistLevel(level).catch(this.error);
+                await this.device.setHumidityMode(DeviceModes.Humidity).catch(this.error);
+            this.device.setLevel(level).catch(this.error);
+            return;
+        }
+        if (value.startsWith("warm_fan_speed_")) {
+            let level = Number(value.replace("warm_fan_speed_", ""));
+            this.device?.setWarmLevel(level).catch(this.error);
             return;
         }
         if (value === "auto") {
             this.log("Mode: " + value);
             if (!this.device.status.enabled)
-                await this.device.on().catch(this.error);
-            this.device.setHumidityMode("humidity").catch(this.error);
+                await this.device.setSwitch(true).catch(this.error);
+            this.device.setHumidityMode(DeviceModes.Humidity).catch(this.error);
             return;
         }
         await super.setMode(value);
@@ -88,7 +97,7 @@ class Oasis450S extends HumidifierDeviceBase {
                     this.setCapabilityValue('oasis450sCapability', "off").catch(this.error);
             }
             if (this.hasCapability("oasis450sWarmCapability") && this.device.status.enabled) {
-                this.setCapabilityValue('oasis450sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
+                this.setCapabilityValue('oasis450sWarmCapability', "warm_fan_speed_" + this.device.status.res).catch(this.error);
             }
             this.log("Device has been updated!");
         }

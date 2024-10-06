@@ -4,7 +4,6 @@ import IApiResponse from "../models/IApiResponse";
 import DeviceModes from "../enum/DeviceModes";
 import {IDevice} from "../models/IDevice";
 import VeSync from "../VeSync";
-import BasicPurifier from "./BasicPurifier";
 
 export default class BasicDevice {
 
@@ -27,8 +26,8 @@ export default class BasicDevice {
         return this.modes.includes(mode as DeviceModes);
     }
 
-    protected device: IDevice;
-    protected api: VeSync;
+    device: IDevice;
+    api: VeSync;
 
     constructor(api: VeSync, device: IDevice) {
         this.api = api;
@@ -36,7 +35,7 @@ export default class BasicDevice {
     }
 
     protected hasMethod(method: string): boolean {
-        const methods = (this.constructor as typeof BasicPurifier).methods;
+        const methods = (this.constructor as typeof BasicDevice).methods;
         return methods.includes(method);
     }
 

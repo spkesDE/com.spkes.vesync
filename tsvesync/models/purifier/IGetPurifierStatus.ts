@@ -1,5 +1,3 @@
-import exp from "node:constants";
-
 export default interface IGetPurifierStatus {
     air_quality: number
     air_quality_value: number

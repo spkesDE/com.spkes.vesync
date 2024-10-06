@@ -18,9 +18,7 @@ export default class PurifierDeviceBase extends Homey.Device {
             });
         if (this.hasCapability("nightlight_toggle"))
             this.registerCapabilityListener("nightlight_toggle", async (value) => {
-                await this.device.setNightLight({
-                    night_light: value ? "on" : "off"
-                }).catch(this.error);
+                await this.device.setNightLight(value ? "on" : "off").catch(this.error);
                 this.log(`Night Light: ${value}`);
             });
         this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
@@ -29,56 +27,34 @@ export default class PurifierDeviceBase extends Homey.Device {
     async setMode(value: string) {
         this.log("Mode: " + value);
         if (value === "on") {
-            this.device.setSwitch({
-                enabled: 1,
-                id: 0
-            }).catch(this.error);
+            this.device.setSwitch(true).catch(this.error);
             return;
         }
         if (value === "off") {
-            this.device.setSwitch({
-                enabled: 0,
-                id: 0
-            }).catch(this.error);
+            this.device.setSwitch(false).catch(this.error);
             return;
         }
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
-            this.device.setLevel({
-                level: level,
-                id: 0,
-                type: 'wind'
-            }).catch(this.error);
+            this.device.setLevel(level).catch(this.error);
             return;
         }
         if (value === "manual") {
             if (this.device.status?.mode !== "manual")
-                this.device.setPurifierMode({
-                    mode: DeviceModes.Normal
-                }).catch(this.error);
-            this.device.setLevel({
-                level: this.device.status?.level ?? 1,
-                id: 0,
-                type: 'wind'
-            }).catch(this.error);
+                await this.device.setPurifierMode(DeviceModes.Normal).catch(this.error)
+            this.device.setLevel(this.device.status?.level ?? 1).catch(this.error);
             return;
         }
         if (value === "auto") {
-            this.device.setPurifierMode({
-                mode: DeviceModes.Auto
-            }).catch(this.error);
+            await this.device.setPurifierMode(DeviceModes.Auto).catch(this.error)
             return;
         }
         if (value === "sleep") {
-            this.device.setPurifierMode({
-                mode: DeviceModes.Sleep
-            }).catch(this.error);
+            await this.device.setPurifierMode(DeviceModes.Sleep).catch(this.error)
             return;
         }
         if (value === "pet") {
-            this.device.setPurifierMode({
-                mode: DeviceModes.Pet
-            }).catch(this.error);
+            await this.device.setPurifierMode(DeviceModes.Pet).catch(this.error)
             return;
         }
         this.error("Unknown Mode: " + value);
@@ -109,40 +85,65 @@ export default class PurifierDeviceBase extends Homey.Device {
     }
 
     async updateDevice(): Promise<void> {
-        //Getting latest device status
-        const status = await this.device.getPurifierStatus();
-        if (status.msg !== "request success") {
-            this.error("Failed to get device status. " + status.msg);
-            await this.setUnavailable(this.homey.__("devices.offline"));
+        // Get the latest device status
+        const status = await this.device.getPurifierStatus().catch(async (reason: Error) => {
+            if (reason.message === "device offline") {
+                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            } else {
+                await this.setUnavailable(reason.message).catch(this.error);
+                this.error(reason);
+            }
+            return null;
+        });
+
+        // If status fetch failed, exit early
+        if (!status || status.msg !== "request success") {
+            this.error("Failed to get device status.");
+            if (this.getAvailable()) {
+                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            }
             return;
         }
-        if (!this.getAvailable())
+
+        // Set the device as available
+        if (!this.getAvailable()) {
             await this.setAvailable().catch(this.error);
-        if(this.hasCapability("onoff"))
-            this.setCapabilityValue("onoff", status.result.result.enabled).catch(this.error);
-        if (this.hasCapability("fanSpeed0to3"))
-            this.setCapabilityValue('fanSpeed0to3', status.result.result.level ?? 0).catch(this.error);
-        if (this.hasCapability("fanSpeed0to4"))
-            this.setCapabilityValue('fanSpeed0to4', status.result.result.level ?? 0).catch(this.error);
-        if (this.hasCapability("fanSpeed0to5"))
-            this.setCapabilityValue('fanSpeed0to5', status.result.result.level?? 0).catch(this.error);
-        if (this.hasCapability("fanSpeed0to9"))
-            this.setCapabilityValue('fanSpeed0to9', status.result.result.level ?? 0).catch(this.error);
-        if (this.hasCapability("measure_pm25"))
-            await this.setCapabilityValue('measure_pm25', status.result.result.air_quality_value ?? 0)
-        if (this.hasCapability("alarm_pm25"))
-            await this.setCapabilityValue('alarm_pm25', status.result.result.air_quality_value> 91 ?? false)
-        if (this.hasCapability("measure_filter_life"))
-            this.setCapabilityValue("measure_filter_life", status.result.result.filter_life?? 100).catch(this.error);
-        if (this.hasCapability("alarm_filter_life")) {
-            this.setCapabilityValue("alarm_filter_life", Boolean(status.result.result.replace_filter)).catch(this.error);
-            if (Boolean(status.result.result.replace_filter)) await this.homey.flow.getDeviceTriggerCard("filter_life_low").trigger(this);
         }
-        if (this.hasCapability("display_toggle"))
-            this.setCapabilityValue("display_toggle", Boolean(status.result.result.display)).catch(this.error);
-        if (this.hasCapability("nightlight_toggle"))
-            this.setCapabilityValue("nightlight_toggle", Boolean(status.result.result.night_light)).catch(this.error);
+
+        // Helper function to update capability
+        const updateCapability = async (capability: string, value: any) => {
+            if (this.hasCapability(capability)) {
+                await this.setCapabilityValue(capability, value).catch(this.error);
+            }
+        };
+
+        // Update device status values
+        const level = status.result.result.level ?? 0;
+        await updateCapability('onoff', status.result.result.enabled);
+        await updateCapability('fanSpeed0to3', level);
+        await updateCapability('fanSpeed0to4', level);
+        await updateCapability('fanSpeed0to5', level);
+        await updateCapability('fanSpeed0to9', level);
+
+        // Air quality and filter life
+        const airQualityValue = status.result.result.air_quality_value ?? 0;
+        await updateCapability('measure_pm25', airQualityValue);
+        await updateCapability('alarm_pm25', airQualityValue > 91);
+
+        const filterLife = status.result.result.filter_life ?? 100;
+        await updateCapability('measure_filter_life', filterLife);
+
+        const replaceFilter = Boolean(status.result.result.replace_filter);
+        await updateCapability('alarm_filter_life', replaceFilter);
+        if (replaceFilter) {
+            await this.homey.flow.getDeviceTriggerCard("filter_life_low").trigger(this).catch(this.error);
+        }
+
+        // Other status updates
+        await updateCapability('display_toggle', Boolean(status.result.result.display));
+        await updateCapability('nightlight_toggle', Boolean(status.result.result.night_light));
     }
+
 
     async checkForCapability(capability: string) {
         if (!this.hasCapability(capability))

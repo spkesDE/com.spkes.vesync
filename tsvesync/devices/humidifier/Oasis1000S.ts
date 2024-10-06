@@ -1,73 +1,68 @@
 import BasicHumidifier from "../../lib/BasicHumidifier";
 import DeviceModes from "../../enum/DeviceModes";
+import IGetOasis1000SStatus from "../../models/humidifier/IGetOasis1000SStatus";
+import IApiResponse from "../../models/IApiResponse";
 
-export default class Oasis1000S extends BasicHumidifier {
+export default class Oasis1000S extends BasicHumidifier<IGetOasis1000SStatus> {
     static deviceModels = ['LUH-M101S-WUS', 'LUH-M101S-WEUR'];
     static methods = ['getHumidifierStatus', 'setAutoStopSwitch', 'setSwitch', 'setVirtualLevel', 'setTargetHumidity', 'setHumidityMode', 'setDisplay', 'setNightLightBrightness'];
     static features = [];
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     static modes = [DeviceModes.Auto, DeviceModes.Sleep, DeviceModes.Manual];
 
-    protected hasMethod(method: string): boolean {
-        return Oasis1000S.methods.includes(method);
+    public async getHumidifierStatus(): Promise<IApiResponse<any>> {
+        const status = await this.post<IGetOasis1000SStatus>('getHumidifierStatus', {});
+        this.status = status.result.result;
+        return status;
     }
 
-    /*
-    VeSyncHumidifierOasis1000S {
-  deviceRegion: 'EU',
-  isOwner: true,
-  deviceName: 'Levoit OasisMist 1000S Smart Ultrasonic Cool Mist Tower Humidifier',
-  deviceImg: 'https://image.vesync.com/defaultImages/luh_m101s/luh_m101s_240.png',
-  cid: 'vsaqfe869ae439f85e0551981bedbb09',
-  connectionStatus: null,
-  connectionType: 'WiFi+BTOnboarding+BTNotify',
-  deviceType: 'LUH-M101S-WEUR',
-  type: 'wifi-air',
-  uuid: '30c3bdb5-80b6-4b10-a278-d96382dfee31',
-  configModule: 'VS_WFON_AHM_LUH-M101S-WEUR_EU',
-  macID: '60:55:f9:ba:d7:24',
-  mode: 'off',
-  speed: null,
-  currentFirmVersion: null,
-  subDeviceNo: null,
-  deviceFirstSetupTime: 'Nov 28, 2023 4:06:44 PM',
-  Device_Features: {
-    OasisMist1000S: {
-      models: [Array],
-      features: [],
-      modes: [Array],
-      levels: [Array],
-      method: [Array]
+    public async setDisplay(payload: boolean): Promise<IApiResponse<any>> {
+        return await this.post('setDisplay', {
+            screenSwitch: Number(payload)
+        });
     }
-  },
-  childLock: 'off',
-  enabled: false,
-  api: VeSync {
-    username: 'zdenda.skal@seznam.cz',
-    password: 'badffa156977b6a55c0af3127fd9d193',
-    time_zone: 'Europe/Berlin',
-    token: '100100qyV_4cmplQ95I1mFaZiQgbKsyYiqQU0PI16lj1jNc-LItcTtNq75u0-qoL7mMW-9uGLkywa5RR55KAqDtQ2AfBlOZ_4e52A=',
-    account_id: '12497001',
-    devices: [ [Circular *1], [VeSyncHumidifier] ],
-    loggedIn: true
-  },
-  extension: null,
-  filter_life: 100,
-  display: false,
-  warm_mist_enabled: false,
-  humidity: 0,
-  mist_virtual_level: 0,
-  mist_level: 0,
-  water_lacks: false,
-  humidity_high: false,
-  water_tank_lifted: false,
-  automatic_stop_reach_target: true,
-  night_light_brightness: 0,
-  warm_mist_level: 0,
-  targetHumidity: 0,
-  autoStopSwitch: false,
-  night_light_state: false
-}
-     */
+
+    public async setHumidityMode(payload: string): Promise<IApiResponse<any>> {
+        return await this.post('setHumidityMode', {
+            workMode: payload.toLowerCase()
+        });
+    }
+
+    public async setMistLevel(payload: number): Promise<IApiResponse<any>> {
+        if (!this.hasLevel(payload)) return Promise.reject('Invalid mist level');
+        return await this.post('setVirtualLevel', {
+            levelIdx: 0,
+            virtualLevel: payload,
+            levelType: 'mist'
+        });
+    }
+
+    public async setSwitch(payload: boolean): Promise<IApiResponse<any>> {
+        return await this.post('setSwitch', {
+            powerSwitch: Number(payload),
+            switchIdx: 0
+        });
+    }
+
+    public async setTargetHumidity(payload: number): Promise<IApiResponse<any>> {
+        if (payload < 0 || payload > 100) return Promise.reject(new Error('Humidity must be between 0 and 100'));
+        return await this.post('setTargetHumidity', {
+            targetHumidity: payload
+        });
+    }
+
+    public async setAutoStopSwitch(payload: boolean): Promise<IApiResponse<any>> {
+        return await this.post('setAutoStopSwitch', {
+            autoStopSwitch: Number(payload)
+        });
+    }
+
+    public async setNightLightBrightness(payload: number): Promise<IApiResponse<any>> {
+        if (payload < 0 || payload > 100) return Promise.reject(new Error('Brightness must be between 0 and 100'));
+        return await this.post('setNightLightBrightness', {
+            nightLightBrightness: payload
+        });
+    }
+
 
 }

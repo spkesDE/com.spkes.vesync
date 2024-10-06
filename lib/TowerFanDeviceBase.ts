@@ -36,47 +36,29 @@ export default class TowerFanDeviceBase extends Homey.Device {
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
             if (level > 0) {
-                await this.device.setLevel({
-                    manualSpeedLevel: level,
-                    levelIdx: 0,
-                    levelType: 'wind'
-                }).catch(this.error);
+                await this.device.setLevel(level).catch(this.error);
             } else await this.setMode("off");
             void this.updateDevice();
             return;
         }
         switch (value) {
             case "on":
-                await this.device.setSwitch({
-                    powerSwitch: 1,
-                    switchIdx: 0
-                }).catch(this.error)
+                await this.device.setSwitch(true).catch(this.error)
                 break;
             case "off":
-                await this.device.setSwitch({
-                    powerSwitch: 0,
-                    switchIdx: 0
-                }).catch(this.error)
+                await this.device.setSwitch(false).catch(this.error)
                 break;
             case 'turbo':
-                await this.device.setTowerFanMode({
-                    workMode: DeviceModes.Turbo
-                }).catch(this.error)
+                await this.device.setTowerFanMode(DeviceModes.Turbo).catch(this.error)
                 break;
             case 'normal':
-                await this.device.setTowerFanMode({
-                    workMode: DeviceModes.Normal
-                }).catch(this.error)
+                await this.device.setTowerFanMode(DeviceModes.Normal).catch(this.error)
                 break;
             case 'auto':
-                await this.device.setTowerFanMode({
-                    workMode: DeviceModes.Auto
-                }).catch(this.error)
+                await this.device.setTowerFanMode(DeviceModes.Auto).catch(this.error)
                 break;
             case 'advancedSleep':
-                await this.device.setTowerFanMode({
-                    workMode: DeviceModes.AdvancedSleep
-                }).catch(this.error)
+                await this.device.setTowerFanMode(DeviceModes.AdvancedSleep).catch(this.error)
                 break;
             default:
                 this.error("Unknown mode: " + value);
@@ -110,36 +92,54 @@ export default class TowerFanDeviceBase extends Homey.Device {
     }
 
     async updateDevice(): Promise<void> {
-        //Getting latest device status
-        const status = await this.device.getTowerFanStatus();
-        if (status.msg !== "request success") {
-            this.error("Failed to get device status. " + status.msg);
-            await this.setUnavailable(this.homey.__("devices.offline"));
+        // Get the latest device status
+        const status = await this.device.getTowerFanStatus().catch(async (reason: Error) => {
+            if (reason.message === "device offline") {
+                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            } else {
+                await this.setUnavailable(reason.message).catch(this.error);
+                this.error(reason);
+            }
+            return null;
+        });
+
+        // If status fetch failed, exit early
+        if (!status || status.msg !== "request success") {
+            this.error("Failed to get device status.");
+            if (this.getAvailable()) {
+                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            }
             return;
         }
-        if (!this.getAvailable())
+
+        // Set the device as available
+        if (!this.getAvailable()) {
             await this.setAvailable().catch(this.error);
-        if (this.hasCapability("fanSpeed0to3"))
-            this.setCapabilityValue('fanSpeed0to3', status.result.result.fanSpeedLevel ?? 0).catch(this.error);
-        if (this.hasCapability("fanSpeed0to4"))
-            this.setCapabilityValue('fanSpeed0to4', status.result.result.fanSpeedLevel ?? 0).catch(this.error);
-        if (this.hasCapability("fanSpeed0to5"))
-            this.setCapabilityValue('fanSpeed0to5', status.result.result.fanSpeedLevel ?? 0).catch(this.error);
-        if (this.hasCapability("fanSpeed0to9"))
-            this.setCapabilityValue('fanSpeed0to9', status.result.result.fanSpeedLevel ?? 0).catch(this.error);
-        if (this.hasCapability("fanSpeed0to12"))
-            this.setCapabilityValue('fanSpeed0to12', status.result.result.fanSpeedLevel ?? 0).catch(this.error);
-        if (this.hasCapability('measure_temperature'))
-            this.setCapabilityValue('measure_temperature', status.result.result.temperature).catch(this.error);
-        if (this.hasCapability('onoff'))
-            this.setCapabilityValue('onoff', Boolean(status.result.result.powerSwitch)).catch(this.error);
-        if (this.hasCapability('oscillation_toggle'))
-            this.setCapabilityValue('oscillation_toggle', Boolean(status.result.result.oscillationState)).catch(this.error);
-        if (this.hasCapability('display_toggle'))
-            this.setCapabilityValue('display_toggle', Boolean(status.result.result.screenState)).catch(this.error);
-        if (this.hasCapability('mute_toggle'))
-            this.setCapabilityValue('mute_toggle', Boolean(status.result.result.muteState)).catch(this.error);
+        }
+
+        // Helper function to update capability
+        const updateCapability = async (capability: string, value: any) => {
+            if (this.hasCapability(capability)) {
+                await this.setCapabilityValue(capability, value).catch(this.error);
+            }
+        };
+
+        // Fan speed updates
+        const fanSpeedLevel = status.result.result.fanSpeedLevel ?? 0;
+        await updateCapability('fanSpeed0to3', fanSpeedLevel);
+        await updateCapability('fanSpeed0to4', fanSpeedLevel);
+        await updateCapability('fanSpeed0to5', fanSpeedLevel);
+        await updateCapability('fanSpeed0to9', fanSpeedLevel);
+        await updateCapability('fanSpeed0to12', fanSpeedLevel);
+
+        // Other status updates
+        await updateCapability('measure_temperature', status.result.result.temperature);
+        await updateCapability('onoff', Boolean(status.result.result.powerSwitch));
+        await updateCapability('oscillation_toggle', Boolean(status.result.result.oscillationState));
+        await updateCapability('display_toggle', Boolean(status.result.result.screenState));
+        await updateCapability('mute_toggle', Boolean(status.result.result.muteState));
     }
+
 
     async checkForCapability(capability: string) {
         if (!this.hasCapability(capability))

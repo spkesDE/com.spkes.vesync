@@ -3,18 +3,18 @@ import IGetPurifierStatus from "../models/purifier/IGetPurifierStatus";
 import BasicDevice from "./BasicDevice";
 import DeviceModes from "../enum/DeviceModes";
 
-export default class BasicPurifier extends BasicDevice {
+export default class BasicPurifier<TStatus = IGetPurifierStatus> extends BasicDevice {
     static levels: number[] = [];
 
     static hasLevel(level: number): boolean {
         return this.levels.includes(level);
     }
 
-    status: IGetPurifierStatus | any | null = null;
+    status: TStatus | null = null;
 
     // Methods shared across all purifiers, leave some abstract if specific devices need custom implementations
-    public async getPurifierStatus(): Promise<IApiResponse<any>> {
-        const status = await this.post<any>('getPurifierStatus', {});
+    public async getPurifierStatus(): Promise<IApiResponse<TStatus>> {
+        const status = await this.post<TStatus>('getPurifierStatus', {});
         this.status = status.result.result;
         return status;
     }
@@ -49,6 +49,15 @@ export default class BasicPurifier extends BasicDevice {
     public async setChildLock(payload: boolean): Promise<IApiResponse<any>> {
         return await this.post('setChildLock', {
             child_lock: Number(payload)
+        });
+    }
+
+    // 'setNightLight', {night_light: mode.toLowerCase()}
+    public async setNightLight(payload: string): Promise<IApiResponse<any>> {
+        // Allowed on, off, dim
+        if (!['on', 'off', 'dim'].includes(payload.toLowerCase())) return Promise.reject('Invalid night light mode');
+        return await this.post('setNightLight', {
+            night_light: payload.toLowerCase()
         });
     }
 }

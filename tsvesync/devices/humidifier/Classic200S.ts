@@ -8,8 +8,5 @@ export default class Classic200S extends BasicHumidifier {
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     static modes = [DeviceModes.Auto, DeviceModes.Sleep, DeviceModes.Manual];
 
-    protected hasMethod(method: string): boolean {
-        return Classic200S.methods.includes(method);
-    }
 
 }

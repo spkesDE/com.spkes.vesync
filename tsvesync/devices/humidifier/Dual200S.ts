@@ -8,7 +8,4 @@ export default class Dual200S extends BasicHumidifier {
     static levels = [1, 2, 3];
     static modes = [DeviceModes.Auto, DeviceModes.Manual];
 
-    protected hasMethod(method: string): boolean {
-        return Dual200S.methods.includes(method);
-    }
 }
