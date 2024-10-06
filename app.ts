@@ -1,9 +1,9 @@
 import Homey from 'homey';
 import VeSync from './tsvesync/VeSync';
-import VeSyncPurifier from "./tsvesync/old/veSyncPurifier";
-import VeSyncHumidifier from "./tsvesync/old/veSyncHumidifier";
 import axiosRetry from "axios-retry";
 import axios from "axios";
+import BasicPurifier from "./tsvesync/lib/BasicPurifier";
+import BasicHumidifier from "./tsvesync/lib/BasicHumidifier";
 
 export default class VeSyncApp extends Homey.App {
     veSync: VeSync = new VeSync();
@@ -69,12 +69,12 @@ export default class VeSyncApp extends Homey.App {
         /* Nightlight */
         /**************/
         this.homey.flow.getActionCard("nightlight").registerRunListener((args) => {
-            let device = args.device.device as VeSyncPurifier;
+            let device = args.device.device as BasicPurifier;
             device.setNightLight(args.level);
             args.device.setCapabilityValue("nightlight_toggle", args.level !== "off");
         });
         this.homey.flow.getActionCard("nightlight_slider").registerRunListener((args) => {
-            let device = args.device.device as VeSyncHumidifier;
+            let device = args.device.device as BasicHumidifier;
             device.setNightLightBrightness(args.brightness);
             args.device.setCapabilityValue("nightlight_toggle", args.brightness > 0);
         });

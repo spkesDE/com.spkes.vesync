@@ -1,7 +1,7 @@
 import Homey from 'homey';
 import {Utils} from "../../utils";
-import VeSyncHumidifier from "../../tsvesync/old/veSyncHumidifier";
 import VeSync from "../../tsvesync/VeSync";
+import Classic300S from "../../tsvesync/devices/humidifier/Classic300S";
 
 class Classic300sDriver extends Homey.Driver {
 
@@ -40,21 +40,15 @@ class Classic300sDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncHumidifier &&
-                    (d as VeSyncHumidifier).Device_Features.Classic300S.models.includes(d.deviceType)
-            })
-                .forEach((d) => {
-                    if (d instanceof VeSyncHumidifier) {
-                        devicesList.push({
-                            name: d.deviceName,
-                            data: {
-                                id: d.uuid,
-                                cid: d.cid,
-                                macID: d.macID
-                            },
-                            store: {
-                                fanSpeedLevel: d.mist_level,
-                            mode: d.mode,
+                return d instanceof Classic300S
+            }).forEach((d) => {
+                if (d instanceof Classic300S) {
+                    devicesList.push({
+                        name: d.device.deviceName,
+                        data: {
+                            id: d.device.uuid,
+                            cid: d.device.cid,
+                            macID: d.device.macID
                         }
                     });
                 }

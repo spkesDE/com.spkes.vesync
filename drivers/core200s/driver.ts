@@ -41,22 +41,18 @@ class Core200SDriver extends Homey.Driver {
             let devicesList: any = [];
             devices.filter(d => {
                 return d instanceof Core200S
+            }).forEach((d) => {
+                if (d instanceof Core200S) {
+                    devicesList.push({
+                        name: d.device.deviceName,
+                        data: {
+                            id: d.device.uuid,
+                            cid: d.device.cid,
+                            macID: d.device.macID
+                        }
+                    });
+                }
             })
-                .forEach((d) => {
-                    if (d instanceof Core200S) {
-                        devicesList.push({
-                            name: d.device.deviceName,
-                            data: {
-                                id: d.device.uuid,
-                                cid: d.device.cid,
-                                macID: d.device.macID
-                            },
-                            store: {
-                                mode: d.device.mode,
-                            }
-                        });
-                    }
-                });
             return devicesList;
         });
     }

@@ -1,6 +1,4 @@
 import PurifierDeviceBase from "../../lib/PurifierDeviceBase";
-import BasicPurifier from "../../tsvesync/lib/BasicPurifier";
-import BasicPurifierV2 from "../../tsvesync/lib/BasicPurifierV2";
 import Vital200S from "../../tsvesync/devices/purifier/Vital200S";
 
 class Vital200s extends PurifierDeviceBase {

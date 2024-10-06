@@ -20,18 +20,18 @@ import DeviceModes from "../../enum/DeviceModes";
  */
 
 export default interface IGetOasis1000SStatus {
-    powerSwitch: boolean
+    powerSwitch: number
     humidity: number
     targetHumidity: number
     virtualLevel: number
     mistLevel: number
     workMode: string | DeviceModes
-    waterLacksState: boolean
-    waterTankLifted: boolean
-    autoStopSwitch: boolean
-    autoStopState: boolean
-    screenSwitch: boolean
-    screenState: boolean
+    waterLacksState: number
+    waterTankLifted: number
+    autoStopSwitch: number
+    autoStopState: number
+    screenSwitch: number
+    screenState: number
     scheduleCount: number
     timerRemain: number
     errorCode: number

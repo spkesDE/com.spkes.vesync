@@ -1,7 +1,7 @@
 import Homey from 'homey';
 import {Utils} from "../../utils";
-import VeSyncHumidifier from "../../tsvesync/old/veSyncHumidifier";
 import VeSync from "../../tsvesync/VeSync";
+import Oasis450S from "../../tsvesync/devices/humidifier/Oasis450S";
 
 class Oasis450SDriver extends Homey.Driver {
 
@@ -39,25 +39,19 @@ class Oasis450SDriver extends Homey.Driver {
       let devices = await veSync.getDevices();
       let devicesList: any = [];
       devices.filter(d => {
-        return d instanceof VeSyncHumidifier &&
-            (d as VeSyncHumidifier).Device_Features.Oasis450S.models.includes(d.deviceType)
-      })
-          .forEach((d) => {
-            if (d instanceof VeSyncHumidifier) {
-              devicesList.push({
-                name: d.deviceName,
-                data: {
-                  id: d.uuid,
-                  cid: d.cid,
-                  macID: d.macID
-                },
-                store: {
-                  fanSpeedLevel: d.mist_level,
-                  mode: d.mode,
-                }
-              });
+        return d instanceof Oasis450S
+      }).forEach((d) => {
+        if (d instanceof Oasis450S) {
+          devicesList.push({
+            name: d.device.deviceName,
+            data: {
+              id: d.device.uuid,
+              cid: d.device.cid,
+              macID: d.device.macID
             }
-          })
+          });
+        }
+      })
       return devicesList;
     });
   }

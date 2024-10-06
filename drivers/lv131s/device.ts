@@ -1,8 +1,6 @@
 import PurifierDeviceBase from "../../lib/PurifierDeviceBase";
-import LV131Sdevice from "../../tsvesync/devices/purifier/LV131S";
 
-class LV131S extends PurifierDeviceBase {
-    device!: LV131Sdevice;
+class LV131SDevice extends PurifierDeviceBase {
     private capabilitiesAddition: string[] = [
         "lv131sCapability",
         "onoff",
@@ -78,7 +76,7 @@ class LV131S extends PurifierDeviceBase {
                     this.setCapabilityValue('lv131sCapability', "off").catch(this.error);
             }
             if(this.hasCapability("sensor_air_quality")){
-                this.setCapabilityValue("sensor_air_quality", this.device.status.airQuality).catch(this.error);
+                this.setCapabilityValue("sensor_air_quality", this.device.status.air_quality).catch(this.error);
             }
         }
         this.log("Updating device status!");
@@ -87,4 +85,4 @@ class LV131S extends PurifierDeviceBase {
 
 }
 
-module.exports = LV131S;
+module.exports = LV131SDevice;

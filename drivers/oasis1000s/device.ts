@@ -1,9 +1,7 @@
 import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
-import Oasis1000SDevice from "../../tsvesync/devices/humidifier/Oasis1000S";
 
 
 class Oasis1000S extends HumidifierDeviceBase {
-    device!: Oasis1000SDevice;
     private capabilitiesAddition: string[] = [
         "oasis1000sCapability",
         "onoff",
@@ -51,7 +49,7 @@ class Oasis1000S extends HumidifierDeviceBase {
 
     async updateDevice(): Promise<void> {
         await super.updateDevice();
-        if (this.device.device && this.getAvailable()) {
+        if (this.device.status && this.getAvailable()) {
             this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
             if (this.hasCapability("oasis1000sCapability")) {
                 if (this.device.status.mode === "manual")

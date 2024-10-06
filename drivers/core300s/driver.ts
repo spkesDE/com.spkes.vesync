@@ -1,7 +1,7 @@
 import Homey from 'homey';
-import VeSyncPurifier from '../../tsvesync/old/veSyncPurifier';
 import VeSync from '../../tsvesync/VeSync';
 import {Utils} from "../../utils";
+import Core300S from "../../tsvesync/devices/purifier/Core300S";
 
 class Core300SDriver extends Homey.Driver {
 
@@ -40,25 +40,19 @@ class Core300SDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncPurifier &&
-                    (d as VeSyncPurifier).Device_Features.Core300S.models.includes(d.deviceType)
+                return d instanceof Core300S
+            }).forEach((d) => {
+                if (d instanceof Core300S) {
+                    devicesList.push({
+                        name: d.device.deviceName,
+                        data: {
+                            id: d.device.uuid,
+                            cid: d.device.cid,
+                            macID: d.device.macID
+                        }
+                    });
+                }
             })
-                .forEach((d) => {
-                    if (d instanceof VeSyncPurifier) {
-                        devicesList.push({
-                            name: d.deviceName,
-                            data: {
-                                id: d.uuid,
-                                cid: d.cid,
-                                macID: d.macID
-                            },
-                            store: {
-                                fanSpeedLevel: d.fan_level,
-                                mode: d.mode,
-                            }
-                        });
-                    }
-                });
             return devicesList;
         });
     }

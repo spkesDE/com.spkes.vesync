@@ -1,7 +1,8 @@
 import HumidifierDeviceBase from "../../lib/HumidifierDeviceBase";
-import LV600SDevice from "../../tsvesync/devices/humidifier/LV600S";
+import LV600S from "../../tsvesync/devices/humidifier/LV600S";
+import DeviceModes from "../../tsvesync/enum/DeviceModes";
 
-class LV600S extends HumidifierDeviceBase {
+class LV600SDevice extends HumidifierDeviceBase {
     private capabilitiesAddition: string[] = [
         "lv600sCapability",
         "onoff",
@@ -14,7 +15,7 @@ class LV600S extends HumidifierDeviceBase {
 
     //TODO: Flow for: Fan Speed, Warm Mist Speed, Display, Night light
     //TODO: Device Settings target Humidity
-    device!: LV600SDevice
+    device!: LV600S
 
 
     async onInit() {
@@ -73,7 +74,7 @@ class LV600S extends HumidifierDeviceBase {
             this.log("Mode: " + value);
             let level = Number(value.replace("fan_speed_", ""));
             if (this.device.status.mode === "sleep")
-                await this.device.setHumidityMode("humidity").catch(this.error);
+                await this.device.setHumidityMode(DeviceModes.Humidity).catch(this.error);
             this.device.setLevel(level).catch(this.error);
             return;
         }
@@ -85,8 +86,8 @@ class LV600S extends HumidifierDeviceBase {
         if (value === "auto") {
             this.log("Mode: " + value);
             if (!this.device.status.enabled)
-                await this.device.on().catch(this.error);
-            this.device.setHumidityMode("humidity").catch(this.error);
+                await this.device.setSwitch(true).catch(this.error);
+            this.device.setHumidityMode(DeviceModes.Humidity).catch(this.error);
             return;
         }
         await super.setMode(value);
@@ -107,7 +108,7 @@ class LV600S extends HumidifierDeviceBase {
                     this.setCapabilityValue('lv600sCapability', "off").catch(this.error);
             }
             if (this.hasCapability("lv600sWarmCapability") && this.device.status.enabled) {
-                this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.warm_mist_level).catch(this.error);
+                this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.status.warm_mist_level).catch(this.error);
             }
             this.log("Device has been updated!");
         }
@@ -116,4 +117,4 @@ class LV600S extends HumidifierDeviceBase {
 
 }
 
-module.exports = LV600S;
+module.exports = LV600SDevice;

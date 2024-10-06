@@ -3,18 +3,18 @@ import IGetPurifierStatus from "../models/purifier/IGetPurifierStatus";
 import BasicDevice from "./BasicDevice";
 import DeviceModes from "../enum/DeviceModes";
 
-export default class BasicPurifier<TStatus = IGetPurifierStatus> extends BasicDevice {
+export default class BasicPurifier extends BasicDevice {
     static levels: number[] = [];
 
     static hasLevel(level: number): boolean {
         return this.levels.includes(level);
     }
 
-    status: TStatus | null = null;
+    status: IGetPurifierStatus | null = null;
 
     // Methods shared across all purifiers, leave some abstract if specific devices need custom implementations
-    public async getPurifierStatus(): Promise<IApiResponse<TStatus>> {
-        const status = await this.post<TStatus>('getPurifierStatus', {});
+    public async getPurifierStatus(): Promise<IApiResponse<IGetPurifierStatus>> {
+        const status = await this.post<IGetPurifierStatus>('getPurifierStatus', {});
         this.status = status.result.result;
         return status;
     }

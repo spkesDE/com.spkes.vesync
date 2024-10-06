@@ -3,7 +3,7 @@ import IApiResponse from "../models/IApiResponse";
 import DeviceModes from "../enum/DeviceModes";
 import IGetHumidifierStatus from "../models/humidifier/IGetHumidifierStatus";
 
-export default class BasicHumidifier<TStatus = IGetHumidifierStatus> extends BasicDevice {
+export default class BasicHumidifier extends BasicDevice {
     static warm_levels: number[] | null = null;
     static levels: number[] = [];
 
@@ -18,10 +18,10 @@ export default class BasicHumidifier<TStatus = IGetHumidifierStatus> extends Bas
         return false;
     }
 
-    status: TStatus | null = null;
+    status: IGetHumidifierStatus | null = null;
 
-    public async getHumidifierStatus(): Promise<IApiResponse<TStatus>> {
-        const status = await this.post<TStatus>('getHumidifierStatus', {});
+    public async getHumidifierStatus(): Promise<IApiResponse<IGetHumidifierStatus>> {
+        const status = await this.post<IGetHumidifierStatus>('getHumidifierStatus', {});
         this.status = status.result.result;
         return status;
     }

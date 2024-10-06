@@ -1,7 +1,7 @@
 import Homey from 'homey';
 import VeSync from '../../tsvesync/VeSync';
 import {Utils} from "../../utils";
-import VeSyncPurifierLV131 from "../../tsvesync/old/veSyncPurifierLV131.js";
+import LV131S from "../../tsvesync/devices/purifier/LV131S";
 
 class LV131SDriver extends Homey.Driver {
 
@@ -40,25 +40,19 @@ class LV131SDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncPurifierLV131 &&
-                    (d as VeSyncPurifierLV131).Device_Features.LV131S.models.includes(d.deviceType)
+                return d instanceof LV131S
+            }).forEach((d) => {
+                if (d instanceof LV131S) {
+                    devicesList.push({
+                        name: d.device.deviceName,
+                        data: {
+                            id: d.device.uuid,
+                            cid: d.device.cid,
+                            macID: d.device.macID
+                        }
+                    });
+                }
             })
-                .forEach((d) => {
-                    if (d instanceof VeSyncPurifierLV131) {
-                        devicesList.push({
-                            name: d.deviceName,
-                            data: {
-                                id: d.uuid,
-                                cid: d.cid,
-                                macID: d.macID
-                            },
-                            store: {
-                                fanSpeedLevel: d.fan_level,
-                                mode: d.mode,
-                            }
-                        });
-                    }
-                });
             return devicesList;
         });
     }

@@ -1,5 +1,4 @@
 import VeSync from "../VeSync";
-import VeSyncDeviceBase from "../old/veSyncDeviceBase";
 import axios, {AxiosError} from "axios";
 import {BodyTypes} from "../enum/BodyTypes";
 import IApiResponse from "../models/IApiResponse";
@@ -107,7 +106,7 @@ export default class ApiHelper {
         return Math.random().toString(36).substring(2, len);
     }
 
-    static async callApi<T>(api: VeSync, path: string, method: string, requestBody: {}, header: {} = this.buildHeaders(api)): Promise<IApiResponse<T> | any> {
+    static async callApi<T>(api: VeSync, path: string, method: string, requestBody: {}, header: {} = this.buildHeaders(api)): Promise<IApiResponse<T>> {
         let options = {
             method: method.toUpperCase(),
             headers: header
@@ -129,14 +128,6 @@ export default class ApiHelper {
         }
     }
 
-    public static createPayload(device: VeSyncDeviceBase, method: string, data: {}) {
-        if (!device.getDeviceFeatures()?.method.includes(method) ?? false) throw Error(device.deviceType + ' don\'t accept method: ' + method)
-        return {
-            data: data,
-            method: method,
-            source: 'APP'
-        }
-    }
 
     //HTTP Client for requests
     private static async makeRequest(url: string, requestOptions: {method: string, headers: {} }, requestBody: {}): Promise<any> {

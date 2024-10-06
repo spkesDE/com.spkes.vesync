@@ -1,5 +1,5 @@
 export default interface IGetPurifierStatus {
-    air_quality: number
+    air_quality: string
     air_quality_value: number
     buzzer: boolean
     child_lock: boolean

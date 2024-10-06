@@ -97,7 +97,7 @@ class Oasis450S extends HumidifierDeviceBase {
                     this.setCapabilityValue('oasis450sCapability', "off").catch(this.error);
             }
             if (this.hasCapability("oasis450sWarmCapability") && this.device.status.enabled) {
-                this.setCapabilityValue('oasis450sWarmCapability', "warm_fan_speed_" + this.device.status.res).catch(this.error);
+                this.setCapabilityValue('oasis450sWarmCapability', "warm_fan_speed_" + this.device.status.warm_mist_level).catch(this.error);
             }
             this.log("Device has been updated!");
         }

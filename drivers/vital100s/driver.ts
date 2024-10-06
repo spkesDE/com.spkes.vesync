@@ -1,7 +1,7 @@
 import Homey from 'homey';
-import VeSyncPurifier from '../../tsvesync/old/veSyncPurifier';
 import VeSync from '../../tsvesync/VeSync';
 import {Utils} from "../../utils";
+import Vital100S from "../../tsvesync/devices/purifier/Vital100S";
 
 class Vital100sDriver extends Homey.Driver {
 
@@ -40,24 +40,19 @@ class Vital100sDriver extends Homey.Driver {
             let devices = await veSync.getDevices();
             let devicesList: any = [];
             devices.filter(d => {
-                return d instanceof VeSyncPurifier &&
-                    (d as VeSyncPurifier).Device_Features.Vital100S.models.includes(d.deviceType)
+                return d instanceof Vital100S
             }).forEach((d) => {
-                if (d instanceof VeSyncPurifier) {
+                if (d instanceof Vital100S) {
                     devicesList.push({
-                        name: d.deviceName,
+                        name: d.device.deviceName,
                         data: {
-                            id: d.uuid,
-                            cid: d.cid,
-                            macID: d.macID
-                        },
-                        store: {
-                            fanSpeedLevel: d.fan_level,
-                            mode: d.mode,
+                            id: d.device.uuid,
+                            cid: d.device.cid,
+                            macID: d.device.macID
                         }
                     });
                 }
-            });
+            })
             return devicesList;
         });
     }

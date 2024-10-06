@@ -39,9 +39,9 @@ class Vital200sDriver extends Homey.Driver {
             let veSync: VeSync = this.homey.app.veSync;
             let devices = await veSync.getDevices();
             let devicesList: any = [];
-            devices
-                .filter(d => {return d instanceof Vital200S})
-                .forEach((d) => {
+            devices.filter(d => {
+                return d instanceof Vital200S
+            }).forEach((d) => {
                 if (d instanceof Vital200S) {
                     devicesList.push({
                         name: d.device.deviceName,
@@ -49,14 +49,10 @@ class Vital200sDriver extends Homey.Driver {
                             id: d.device.uuid,
                             cid: d.device.cid,
                             macID: d.device.macID
-                        },
-                        store: {
-                            fanSpeedLevel: d.status?.fanSpeedLevel ?? 0,
-                            mode: d.status?.mode ?? "off",
                         }
                     });
                 }
-            });
+            })
             return devicesList;
         });
     }
