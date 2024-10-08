@@ -11,10 +11,29 @@ export interface IGetVitalPurifierStatus {
     screenSwitch: number
     lightDetectionSwitch: number
     environmentLightState: number
-    autoPreference: string[]
+    autoPreference: AutoPreference
     scheduleCount: number
     timerRemain: number
     efficientModeTimeRemain: number
-    sleepPreference: string[]
-    errorCode: number
+    sleepPreference: SleepPreference
+}
+
+export interface AutoPreference {
+    autoPreferenceType: string
+    roomSize: number
+}
+
+export interface SleepPreference {
+    sleepPreferenceType: string
+    cleaningBeforeBedSwitch: number
+    cleaningBeforeBedSpeedLevel: number
+    cleaningBeforeBedMinutes: number
+    whiteNoiseSleepAidSwitch: number
+    whiteNoiseSleepAidSpeedLevel: number
+    whiteNoiseSleepAidMinutes: number
+    duringSleepSpeedLevel: number
+    duringSleepMinutes: number
+    afterWakeUpPowerSwitch: number
+    afterWakeUpWorkMode: string
+    afterWakeUpFanSpeedLevel: number
 }

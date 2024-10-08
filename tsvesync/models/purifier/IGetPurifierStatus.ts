@@ -3,11 +3,11 @@ export default interface IGetPurifierStatus {
     air_quality_value: number
     buzzer: boolean
     child_lock: boolean
-    configuration: IPurifierConfiguration
+    configuration?: IPurifierConfiguration
     device_error_code: number
     display: boolean
     enabled: boolean
-    extension: IExtensions
+    extension?: IExtensions
     filter_life: number
     level: number
     mode: string

@@ -111,7 +111,12 @@ export default class ApiHelper {
             method: method.toUpperCase(),
             headers: header
         };
-        return ApiHelper.makeRequest(this.API_BASE_URL + path, options, requestBody);
+        const resp = ApiHelper.makeRequest(this.API_BASE_URL + path, options, requestBody);
+        if (VeSync.debugMode) {
+            console.debug(`API Request: ${method} ${this.API_BASE_URL}${path}`);
+            console.debug(`API Request Body: `, requestBody, await resp);
+        }
+        return resp;
     }
 
     static bypassHeader() {
