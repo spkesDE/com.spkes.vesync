@@ -196,5 +196,8 @@
   },
   "1.0.0": {
     "en": "Complete rewrite of the app for improved performance and easier future device support."
+  },
+  "1.0.1": {
+    "en": "Complete rewrite of the app for improved performance and easier future device support. (Bug fixes #1)"
   }
 }
