@@ -32,14 +32,14 @@ export default class F422S extends BasicTowerFan {
     /**
      * Convert temperature from raw value to Celsius or back to Fahrenheit.
      * The raw value is Fahrenheit * 10. So 655 is 65.5 Fahrenheit.
-     * @param temperature - The raw temperature value (Fahrenheit * 10).
+     * @param temperatureInFahrenheit - The raw temperature value e.g. 654 -> 65.4°F (Fahrenheit * 10).
      * @param toCelsius - If true, convert to Celsius. Otherwise, return in Fahrenheit.
      * @private
      */
-    private convertTemperature(temperature: number, toCelsius = true): number {
-        const fahrenheit = temperature / 10;
-        return toCelsius
-            ? (fahrenheit - 32) * 5 / 9
-            : fahrenheit;
+    private convertTemperature(temperatureInFahrenheit: number, toCelsius = true): number {
+        const fahrenheit = temperatureInFahrenheit / 10;
+        // Fahrenheit to Celsius conversion
+        if (toCelsius) return parseFloat(((fahrenheit - 32) * 5 / 9).toFixed(1));
+        return parseFloat((fahrenheit).toFixed(1));
     }
 }

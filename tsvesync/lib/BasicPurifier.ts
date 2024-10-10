@@ -15,13 +15,14 @@ export default class BasicPurifier extends BasicDevice {
     // Methods shared across all purifiers, leave some abstract if specific devices need custom implementations
     public async getPurifierStatus(): Promise<IApiResponse<IGetPurifierStatus>> {
         const status = await this.post<IGetPurifierStatus>('getPurifierStatus', {});
+        if (!status) throw new Error('Failed to get humidifier status');
         if (status.msg === 'request success') this.status = status.result.result;
         return status;
     }
 
     public async setSwitch(payload: boolean): Promise<IApiResponse<any>> {
         return await this.post('setSwitch', {
-            enabled: Number(payload),
+            enabled: payload,
             id: 0
         });
     }
@@ -42,13 +43,13 @@ export default class BasicPurifier extends BasicDevice {
 
     public async setDisplay(payload: boolean): Promise<IApiResponse<any>> {
         return await this.post('setDisplay', {
-            status: Number(payload)
+            state: payload
         });
     }
 
     public async setChildLock(payload: boolean): Promise<IApiResponse<any>> {
         return await this.post('setChildLock', {
-            child_lock: Number(payload)
+            child_lock: payload
         });
     }
 

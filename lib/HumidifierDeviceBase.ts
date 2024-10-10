@@ -76,13 +76,22 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 return reject("Device is undefined or is not a VeSyncHumidifier");
             }
             this.device = device as BasicHumidifier;
-            const status = await this.device.getHumidifierStatus();
-            if (status.msg === "request success") {
-                await this.setAvailable().catch(this.error);
-                return resolve();
+            const status = await this.device.getHumidifierStatus().catch(async (reason: Error) => {
+                if (reason.message === "device offline") {
+                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                } else {
+                    await this.setUnavailable(reason.message).catch(this.error);
+                    this.error(reason);
+                }
+                return null;
+            });
+            if (!status || status.msg !== "request success") {
+                this.error("Failed to get device status.");
+                await this.setUnavailable(this.homey.__("devices.offline"))
+                return reject("Cannot get device status. Device is " + status?.msg);
             }
-            await this.setUnavailable(this.homey.__("devices.offline"))
-            return reject("Cannot get device status. Device is " + this.device.device.connectionStatus);
+            await this.setAvailable().catch(this.error);
+            return resolve();
         })
     }
 

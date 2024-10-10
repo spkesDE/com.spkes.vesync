@@ -47,6 +47,7 @@ export default class LV131S extends BasicPurifier {
             uuid: this.device.uuid
         }
         const status: IApiResponse<IGetLV131PurifierStatus> = await ApiHelper.callApi<IGetLV131PurifierStatus>(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
+        if (!status) throw new Error('Failed to get purifier status');
         if (status.msg !== 'request success') return status;
         /*
         Raw Result:  {

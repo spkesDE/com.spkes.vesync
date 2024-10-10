@@ -14,6 +14,7 @@ export default class BasicTowerFan extends BasicDevice {
 
     public async getTowerFanStatus(): Promise<IApiResponse<IGetTowerFanStatus>> {
         const status = await this.post<IGetTowerFanStatus>('getTowerFanStatus', {});
+        if (!status) throw new Error('Failed to get humidifier status');
         this.status = status.result.result;
         return status;
     }

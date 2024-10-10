@@ -22,13 +22,14 @@ export default class BasicHumidifier extends BasicDevice {
 
     public async getHumidifierStatus(): Promise<IApiResponse<IGetHumidifierStatus>> {
         const status = await this.post<IGetHumidifierStatus>('getHumidifierStatus', {});
+        if (!status) throw new Error('Failed to get humidifier status');
         if (status.msg === 'request success') this.status = status.result.result;
         return status;
     }
 
     public async setSwitch(payload: boolean): Promise<IApiResponse<any>> {
         return await this.post('setSwitch', {
-            enabled: Number(payload),
+            enabled: payload,
             id: 0
         });
     }
@@ -57,13 +58,13 @@ export default class BasicHumidifier extends BasicDevice {
 
     public async setAutomaticStop(payload: boolean): Promise<IApiResponse<any>> {
         return await this.post('setAutomaticStop', {
-            enabled: Number(payload)
+            enabled: payload
         });
     }
 
     public async setDisplay(payload: boolean): Promise<IApiResponse<any>> {
         return await this.post('setDisplay', {
-            state: Number(payload)
+            state: payload
         });
     }
 
@@ -74,11 +75,6 @@ export default class BasicHumidifier extends BasicDevice {
         });
     }
 
-    public async setChildLock(payload: boolean): Promise<IApiResponse<any>> {
-        return await this.post('setChildLock', {
-            child_lock: Number(payload)
-        });
-    }
 
     protected hasLevel(level: number): boolean {
         const methods = (this.constructor as typeof BasicHumidifier).levels;

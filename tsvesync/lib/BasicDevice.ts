@@ -57,12 +57,6 @@ export default class BasicDevice {
             throw new Error(`Invalid method: ${method}`);
         }
 
-        // Boolean conversion to integers
-        for (const key in payload) {
-            if (typeof payload[key] === 'boolean') {
-                payload[key] = payload[key] ? 1 : 0;
-            }
-        }
 
         // Construct API call
         const requestPayload = {

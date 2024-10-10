@@ -113,8 +113,7 @@ export default class ApiHelper {
         };
         const resp = ApiHelper.makeRequest(this.API_BASE_URL + path, options, requestBody);
         if (VeSync.debugMode) {
-            console.debug(`API Request: ${method} ${this.API_BASE_URL}${path}`);
-            console.debug(`API Request Body: `, requestBody, await resp);
+            console.debug(`API Request: ${method} ${this.API_BASE_URL}${path}`, requestBody, await resp);
         }
         return resp;
     }
