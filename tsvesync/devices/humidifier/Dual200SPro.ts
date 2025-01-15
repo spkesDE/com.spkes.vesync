@@ -1,11 +1,11 @@
 import BasicHumidifier from "../../lib/BasicHumidifier";
 import DeviceModes from "../../enum/DeviceModes";
 
-export default class Dual200S extends BasicHumidifier {
-    static deviceModels = ['Dual200S', 'LUH-D301S-WUSR', 'LUH-D301S-WJP', 'LUH-D301S-WEU', 'LUH-D301S-KEUR'];
+export default class Dual200SPro extends BasicHumidifier {
+    static deviceModels = ['LUH-D301S-KEUR'];
     static methods = ['getHumidifierStatus', 'setAutomaticStop', 'setSwitch', 'setNightLightBrightness', 'setVirtualLevel', 'setTargetHumidity', 'setHumidityMode', 'setDisplay', 'setLevel'];
     static features = [];
     static levels = [1, 2, 3];
-    static modes = [DeviceModes.Auto, DeviceModes.Manual];
+    static modes = [DeviceModes.Auto, DeviceModes.Manual, DeviceModes.Sleep];
 
 }

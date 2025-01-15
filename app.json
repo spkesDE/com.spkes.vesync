@@ -874,6 +874,61 @@
         ]
       },
       {
+        "id": "setModeDual200sPro",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dual200spro"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
         "id": "setModeF422S",
         "title": {
           "en": "Set mode",
@@ -1920,6 +1975,105 @@
     },
     {
       "name": {
+        "en": "Dual200s Pro"
+      },
+      "class": "fan",
+      "capabilities": [
+        "dual200sProCapability",
+        "fanSpeed0to3",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "display_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/dual200spro/assets/images/small.png",
+        "large": "/drivers/dual200spro/assets/images/large.png",
+        "xlarge": "/drivers/dual200spro/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "dual200spro",
+      "settings": [
+        {
+          "id": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Target Humidity",
+            "de": "Zielfeuchtigkeit"
+          },
+          "value": 45,
+          "min": 30,
+          "max": 80,
+          "units": {
+            "en": "%"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
         "en": "F422S"
       },
       "class": "fan",
@@ -2850,6 +3004,48 @@
           "title": {
             "en": "Auto Mode",
             "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "dual200sProCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
           }
         },
         {
