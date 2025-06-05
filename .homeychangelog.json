@@ -202,5 +202,8 @@
   },
   "1.0.2": {
     "en": "Dual200S Pro support"
+  },
+  "1.0.3": {
+    "en": "Bug fixes for Classic300s"
   }
 }
