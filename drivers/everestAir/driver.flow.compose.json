@@ -1,0 +1,61 @@
+{
+  "actions": [
+    {
+      "id": "setModeVital100s",
+      "title": {
+        "en": "Set mode",
+        "de": "Setzte modus"
+      },
+      "titleFormatted": {
+        "en": "Set mode [[mode]]",
+        "de": "Setzte modus [[mode]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "mode",
+          "title": {
+            "en": "Mode"
+          },
+          "values": [
+            {
+              "id": "off",
+              "label": {
+                "en": "Off",
+                "de": "Aus"
+              }
+            },
+            {
+              "id": "auto",
+              "label": {
+                "en": "Auto Mode",
+                "de": "Auto Modus"
+              }
+            },
+            {
+              "id": "sleep",
+              "label": {
+                "en": "Sleep Mode",
+                "de": "Schlaf Modus"
+              }
+            },
+            {
+              "id": "pet",
+              "label": {
+                "en": "Pet Mode",
+                "de": "Tier Modus"
+              }
+            },
+            {
+              "id": "manual",
+              "label": {
+                "en": "Manual Mode",
+                "de": "Manualler Modus"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
