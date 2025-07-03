@@ -205,5 +205,8 @@
   },
   "1.0.3": {
     "en": "Bug fixes for Classic300s"
+  },
+  "1.0.4": {
+    "en": "Everest Air (Experimental) support"
   }
 }
