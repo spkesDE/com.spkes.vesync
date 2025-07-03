@@ -1,10 +1,10 @@
 {
   "name": {
-    "en": "Vital 100s (Experimental)"
+    "en": "Everest Air (Experimental)"
   },
   "class": "fan",
   "capabilities": [
-    "vital100sCapability",
+    "everestAirCapability",
     "fanSpeed0to4",
     "onoff",
     "measure_pm25",

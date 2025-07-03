@@ -1,7 +1,7 @@
 {
   "actions": [
     {
-      "id": "setModeVital100s",
+      "id": "setModeEverestAirMode",
       "title": {
         "en": "Set mode",
         "de": "Setzte modus"
@@ -40,10 +40,10 @@
               }
             },
             {
-              "id": "pet",
+              "id": "turbo",
               "label": {
-                "en": "Pet Mode",
-                "de": "Tier Modus"
+                "en": "Turbo Mode",
+                "de": "Turbo Modus"
               }
             },
             {
