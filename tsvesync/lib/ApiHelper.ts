@@ -26,8 +26,6 @@ export default class ApiHelper {
                     ...this.bodyDetails(),
                     email: api.username,
                     password: api.password,
-                    devToken: '',
-                    userType: this.USER_TYPE,
                     method: 'login'
                 }
             case BodyTypes.ENERGY_YEAR:

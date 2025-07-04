@@ -19,10 +19,14 @@ export default class VeSync {
     private typeManager!: DeviceTypeManager;
 
     public async login(username: string, password: string, isHashedPassword: boolean = false): Promise<boolean> {
+        console.log(`Logging in with username: ${username}`);
         this.username = username;
         this.password = isHashedPassword ? password : this.hashPassword(password);
         let response = await ApiHelper.callApi<any>(this, ApiCalls.LOGIN, 'post', ApiHelper.requestBody(this, BodyTypes.LOGIN)).catch(console.error)
-        if(response === undefined) return false;
+        if (response === undefined || response.code !== 0) {
+            console.error("Login failed: " + (response?.msg || "Unknown error"));
+            throw new Error(response?.msg || "Unknown error");
+        }
         try {
             this.account_id = response.result.accountID;
             this.token = response.result.token;
