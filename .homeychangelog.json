@@ -211,5 +211,11 @@
   },
   "1.0.5": {
     "en": "Better error handling on Login"
+  },
+  "1.0.6": {
+    "en": "Bug fixes"
+  },
+  "1.0.7": {
+    "en": "Bug fixes"
   }
 }
