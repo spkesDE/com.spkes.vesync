@@ -151,7 +151,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
 
         // Nightlight state
-        await updateCapability('nightlight_toggle', status.result.result.night_light_brightness > 0 ?? false);
+        await updateCapability('nightlight_toggle', status.result.result.night_light_brightness > 0);
 
         // Update target humidity setting
         const currentSettingHumidity = this.getSetting("humidity");
