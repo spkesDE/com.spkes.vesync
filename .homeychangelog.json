@@ -217,5 +217,8 @@
   },
   "1.0.7": {
     "en": "Bug fixes"
+  },
+  "1.0.8": {
+    "en": "Upgrade packages to latest versions and fix security issues"
   }
 }
