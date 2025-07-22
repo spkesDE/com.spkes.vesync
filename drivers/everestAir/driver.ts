@@ -11,7 +11,7 @@ class EverestAirDriver extends Homey.Driver {
     async onInit() {
         this.log('EverestAir Driver has been initialized');
 
-        this.homey.flow.getActionCard("setModeEverestAir").registerRunListener(async (args) =>
+        this.homey.flow.getActionCard("setModeEverestAirMode").registerRunListener(async (args) =>
             args.device.triggerCapabilityListener("everestAirCapability", args.mode));
     }
 

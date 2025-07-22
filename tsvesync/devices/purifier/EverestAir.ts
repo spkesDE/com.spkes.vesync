@@ -12,8 +12,77 @@ export default class EverestAir extends BasicPurifier {
 
     public async getPurifierStatus(): Promise<IApiResponse<any>> {
         const status = await this.post<any>('getPurifierStatus', {});
-        this.status = status.result.result;
-        return status;
+        /**
+         * fanRotateAngle: 75,
+         *       filterOpenState: 0,
+         *       powerSwitch: 1,
+         *       filterLifePercent: 53,
+         *       workMode: 'manual',
+         *       manualSpeedLevel: 2,
+         *       fanSpeedLevel: 2,
+         *       AQLevel: 1,
+         *       AQPercent: 99,
+         *       PM25: 2,
+         *       PM1: 1,
+         *       PM10: 3,
+         *       screenState: 1,
+         *       childLockSwitch: 0,
+         *       screenSwitch: 1,
+         *       lightDetectionSwitch: 1,
+         *       environmentLightState: 0,
+         *       autoPreference: [Object],
+         *       routine: [Object],
+         *       scheduleCount: 0,
+         *       timerRemain: 0,
+         *       efficientModeTimeRemain: 0,
+         *       ecoModeRunTime: 0,
+         *       errorCode: 0
+         */
+        // Convert the status to the correct format
+        this.status = {
+            air_quality: this.mapPMToQuality(status.result.result.PM25),
+            air_quality_value: status.result.result.PM25,
+            buzzer: false,
+            child_lock: status.result.result.childLockSwitch === 1,
+            configuration: undefined,
+            device_error_code: status.result.result.errorCode,
+            display: status.result.result.screenSwitch === 1,
+            enabled: status.result.result.powerSwitch === 1,
+            level: status.result.result.fanSpeedLevel,
+            filter_life: status.result.result.filterLifePercent,
+            night_light: "off", // This device does not have a night light feature
+            mode: status.result.result.workMode as DeviceModes,
+            replace_filter: status.result.result.filterLifePercent < 20,
+            fanRotateAngle: status.result.result.fanRotateAngle,
+            AQLevel: status.result.result.AQLevel,
+            AQPercent: status.result.result.AQPercent,
+            PM1: status.result.result.PM1,
+            PM10: status.result.result.PM10,
+            PM25: status.result.result.PM25,
+        };
+
+        return {
+            ...status,
+            result: {
+                traceId: status.result.result.traceId,
+                code: status.result.result.code,
+                result: this.status
+            }
+        }
+    }
+
+    private mapPMToQuality(pmValue: number): string {
+        if (pmValue === 0) {
+            return 'excellent';
+        } else if (pmValue <= 12) {
+            return 'good';
+        } else if (pmValue <= 35) {
+            return 'moderate';
+        } else if (pmValue <= 55) {
+            return 'poor';
+        } else {
+            return 'very poor';
+        }
     }
 
     public async setSwitch(payload: boolean): Promise<IApiResponse<any>> {

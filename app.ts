@@ -15,8 +15,6 @@ export default class VeSyncApp extends Homey.App {
      */
     async onInit() {
         //Debug reset password and username
-        //await this.homey.settings.unset('username');
-        //await this.homey.settings.unset('password');
         this.username = await this.homey.settings.get('username');
         this.password = await this.homey.settings.get('password');
         await this._initializeFlows();

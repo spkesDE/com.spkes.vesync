@@ -1,7 +1,7 @@
 export default interface IGetPurifierStatus {
     air_quality: string
     air_quality_value: number
-    buzzer: boolean
+    buzzer?: boolean
     child_lock: boolean
     configuration?: IPurifierConfiguration
     device_error_code: number
@@ -12,8 +12,15 @@ export default interface IGetPurifierStatus {
     level: number
     mode: string
     night_light: string
-    plasma: boolean
+    plasma?: boolean
     replace_filter: boolean
+    filterOpenStatus?: boolean
+    AQLevel?: number
+    AQPercent?: number
+    PM25?: number
+    PM1?: number
+    PM10?: number
+    fanRotateAngle?: number
 }
 
 export interface IPurifierConfiguration {
