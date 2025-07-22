@@ -223,5 +223,8 @@
   },
   "1.0.9": {
     "en": "Upgrade packages to latest versions and fix security issues"
+  },
+  "1.0.10": {
+    "en": "Rolled back node12 version"
   }
 }
