@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed to push and fetch branches
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -42,13 +44,24 @@ jobs:
           jq --arg version "$version" --arg title "$changelog_title" \
             '. + {($version): {"en": $title}}' .homeychangelog.json > tmp && mv tmp .homeychangelog.json
 
-      - name: Commit and push version bump and changelog
+      - name: Commit and push version bump and changelog to master
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .homeycompose/app.json .homeychangelog.json
           git commit -m "Bump version to ${{ steps.extract_version.outputs.new_version }} and update changelog"
           git push origin master
+
+      - name: Push the same changes back to dev
+        run: |
+          # Fetch dev branch
+          git fetch origin dev
+          # Checkout dev branch locally
+          git checkout dev
+          # Merge master into dev (fast-forward only)
+          git merge --ff-only origin/master
+          # Push dev branch update
+          git push origin dev
 
       - name: Publish Homey App
         uses: athombv/github-action-homey-app-publish@master
