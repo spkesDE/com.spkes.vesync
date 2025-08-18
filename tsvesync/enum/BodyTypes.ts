@@ -9,4 +9,5 @@ export const enum BodyTypes {
     ENERGY_WEEK,
     DEVICE_DETAIL,
     DEVICE_STATUS,
+    LOGIN_TOKEN_EXCHANGE,
 }
