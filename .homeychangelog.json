@@ -226,5 +226,8 @@
   },
   "1.0.10": {
     "en": "Rolled back node12 version"
+  },
+  "1.0.11": {
+    "en": "New Login System"
   }
 }
