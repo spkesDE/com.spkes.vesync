@@ -30,7 +30,6 @@ export default class VeSyncApp extends Homey.App {
             retryCondition: () => true
         });
         await this.startVeSync();
-
     }
 
     private async startVeSync() {
@@ -38,7 +37,11 @@ export default class VeSyncApp extends Homey.App {
             this.log('No username or password set');
             return;
         }
-        await this.veSync.login(this.username, this.password, true);
+        await this.veSync.login(this.username, this.password, true).catch(
+            (error: Error) => {
+                this.error(`Could not login with username ${this.username} - Reason: ${error.message}`);
+            }
+        );
         this.log('VeSync has been initialized');
     }
 
