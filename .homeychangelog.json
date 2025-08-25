@@ -229,5 +229,8 @@
   },
   "1.0.11": {
     "en": "New Login System"
+  },
+  "1.0.12": {
+    "en": "Catching errors of the new login system"
   }
 }
