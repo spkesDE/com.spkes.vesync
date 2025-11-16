@@ -238,5 +238,11 @@
   },
   "1.0.14": {
     "en": "Changed LV131S Logic"
+  },
+  "1.0.15": {
+    "en": "Changed LV131S logic"
+  },
+  "1.0.16": {
+    "en": "Changed LV131S status system"
   }
 }
