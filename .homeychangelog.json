@@ -232,5 +232,11 @@
   },
   "1.0.12": {
     "en": "Catching errors of the new login system"
+  },
+  "1.0.13": {
+    "en": "Changed LV131S status logic"
+  },
+  "1.0.14": {
+    "en": "Changed LV131S Logic"
   }
 }
