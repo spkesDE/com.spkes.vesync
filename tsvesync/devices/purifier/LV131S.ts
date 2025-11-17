@@ -46,7 +46,7 @@ export default class LV131S extends BasicPurifier {
             ...ApiHelper.requestBody(this.api, BodyTypes.DEVICE_STATUS),
             uuid: this.device.uuid
         }
-        const status: IApiResponse<IGetLV131PurifierStatus> = await ApiHelper.callApi<IGetLV131PurifierStatus>(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
+        const status: any = await ApiHelper.callApi<IGetLV131PurifierStatus>(this.api, "/131airPurifier/v1/device/deviceDetail", 'post', body)
         if (!status) throw new Error('Failed to get purifier status');
         if (status.msg !== 'request success') return status;
         /*
@@ -74,10 +74,10 @@ export default class LV131S extends BasicPurifier {
          */
         // Convert the status to the correct format
         this.status = {
-            air_quality: status.result.result.airQuality, // Convert air quality string to numeric value
-            air_quality_value: this.mapAirQuality(status.result.result.airQuality), // Map air quality to a numerical value
+            air_quality: status.airQuality, // Convert air quality string to numeric value
+            air_quality_value: this.mapAirQuality(status.airQuality), // Map air quality to a numerical value
             buzzer: false, // Assuming buzzer functionality is not supported in LV131
-            child_lock: status.result.result.childLock === 'on', // Set true if the child lock is on
+            child_lock: status.childLock === 'on', // Set true if the child lock is on
             configuration: {
                 auto_preference: "auto", // Default value or retrieve from status if applicable
                 display: true, // Set based on display status if applicable
@@ -86,27 +86,27 @@ export default class LV131S extends BasicPurifier {
                 light_detection: false // Default value
             },
             device_error_code: 0, // Default value for device error code
-            display: status.result.result.screenStatus === 'on', // Device display status
-            enabled: status.result.result.deviceStatus === 'on', // Determine if the device is enabled based on deviceStatus
+            display: status.screenStatus === 'on', // Device display status
+            enabled: status.deviceStatus === 'on', // Determine if the device is enabled based on deviceStatus
             extension: {
                 eco_mode_run_time: 0, // Default or determine if applicable
                 efficient_mode_time_remain: 0, // Default or determine if applicable
-                schedule_count: status.result.result.scheduleCount, // Schedule count from the API response
-                timer_remain: status.result.result.timer ? status.result.result.timer.remainingTime || 0 : 0 // Fallback to 0 if timer is null
+                schedule_count: status.scheduleCount, // Schedule count from the API response
+                timer_remain: status.timer ? status.timer.remainingTime || 0 : 0 // Fallback to 0 if timer is null
             },
-            filter_life: status.result.result.filterLife.percent, // Filter life percentage from the API response
-            level: status.result.result.level ?? status.result.result.levelNew ?? 0, // New level from the API response, defaulting to 0 if null
-            mode: status.result.result.mode, // Direct mapping for mode
+            filter_life: status.filterLife.percent, // Filter life percentage from the API response
+            level: status.level ?? status.levelNew ?? 0, // New level from the API response, defaulting to 0 if null
+            mode: status.mode, // Direct mapping for mode
             night_light: "off", // Default value or retrieve if applicable
             plasma: false, // Default value or retrieve if applicable
-            replace_filter: status.result.result.filterLife.change // Determine if the filter needs replacing
+            replace_filter: status.filterLife.change // Determine if the filter needs replacing
         };
 
         return {
             ...status,
             result: {
-                traceId: status.result.traceId,
-                code: status.result.code,
+                traceId: status.traceId,
+                code: status.code,
                 result: this.status
             }
         }
