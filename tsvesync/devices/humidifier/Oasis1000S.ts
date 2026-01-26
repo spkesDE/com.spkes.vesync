@@ -13,6 +13,10 @@ export default class Oasis1000S extends BasicHumidifier {
     public async getHumidifierStatus(): Promise<IApiResponse<any>> {
         const status = await this.post<IGetOasis1000SStatus>('getHumidifierStatus', {});
         if (status.msg === 'request success') {
+            const nightLightBrightness =
+            status.result.result.nightLight?.brightness ??
+            (status.result.result as IGetOasis1000SStatus & { brightness?: number }).brightness ??
+            0;
             // Convert the status to the IGetHumidifierStatus format
             this.status = {
                 humidity: status.result?.result.humidity, // Direct mapping
@@ -26,7 +30,7 @@ export default class Oasis1000S extends BasicHumidifier {
                 humidity_high: false, // Implement logic to determine if humidity is high, if needed
                 water_tank_lifted: status.result.result.waterTankLifted === 1, // Convert to boolean
                 automatic_stop_reach_target: status.result.result.autoStopState === 1, // Convert to boolean
-                night_light_brightness: status.result.result.nightLight.brightness, // Night light brightness mapping
+                night_light_brightness: nightLightBrightness, // Night light brightness mapping
                 autoStopSwitch: status.result.result.autoStopSwitch === 1, // Convert to boolean
                 indicator_light_switch: status.result.result.screenSwitch === 1, // Convert to boolean
                 configuration: {
