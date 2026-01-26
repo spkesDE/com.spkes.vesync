@@ -244,5 +244,8 @@
   },
   "1.0.16": {
     "en": "Changed LV131S status system"
+  },
+  "1.0.17": {
+    "en": "Fixed brightness error for oasis1000s humidifier"
   }
 }
