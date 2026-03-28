@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Cook time",
+    "de": "Kochzeit"
+  },
+  "min": 0,
+  "max": 360,
+  "step": 1,
+  "decimals": 0,
+  "getable": true,
+  "setable": true,
+  "insights": true,
+  "units": "min",
+  "uiComponent": "slider",
+  "icon": "/assets/capability_icons/time-left.svg"
+}

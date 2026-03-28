@@ -1,0 +1,14 @@
+{
+  "id": "airfryer_pull_out",
+  "title": {
+    "en": "Basket pulled out",
+    "de": "Korb herausgezogen"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=cafdc111saeu"
+    }
+  ]
+}

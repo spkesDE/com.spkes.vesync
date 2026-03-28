@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Cook temperature",
+    "de": "Kochtemperatur"
+  },
+  "min": 0,
+  "max": 300,
+  "step": 1,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "units": "°",
+  "uiComponent": "sensor",
+  "icon": "/assets/capability_icons/heating_level.svg"
+}
