@@ -17,6 +17,7 @@ export default class ApiHelper {
     static CLIENT_TYPE = 'vesyncApp'
     static USER_TYPE = '1'
     static BYPASS_APP_V = "VeSync " + this.APP_VERSION;
+    static TERMINAL_ID = "";
     static SENSITIVE_KEYS = [
         "password",
         "email",
@@ -158,7 +159,11 @@ export default class ApiHelper {
     }
 
     static getTerminalId(): string {
-        return '2' + ApiHelper.getAppID(32)
+        return this.TERMINAL_ID || ('2' + ApiHelper.getAppID(32));
+    }
+
+    static setTerminalId(terminalId: string) {
+        this.TERMINAL_ID = terminalId;
     }
 
     static getRandomToken(len: number): string {

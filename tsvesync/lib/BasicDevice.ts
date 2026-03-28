@@ -61,6 +61,7 @@ export default class BasicDevice {
         // Construct API call
         const requestPayload = {
             ...ApiHelper.bypassBodyV2(this.api),
+            deviceRegion: this.device.deviceRegion || this.api.getRegion(),
             cid: this.device.cid,
             configModule: this.device.configModule,
             payload: {

@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Remaining time",
+    "de": "Restzeit"
+  },
+  "min": 0,
+  "max": 1440,
+  "step": 1,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "units": "min",
+  "uiComponent": "sensor",
+  "icon": "/assets/capability_icons/time-left.svg"
+}
