@@ -1,9 +1,11 @@
 import Homey from 'homey';
+import * as crypto from "crypto";
 import VeSync from './tsvesync/VeSync';
 import axiosRetry from "axios-retry";
 import axios from "axios";
 import BasicPurifier from "./tsvesync/lib/BasicPurifier";
 import BasicHumidifier from "./tsvesync/lib/BasicHumidifier";
+import ApiHelper from "./tsvesync/lib/ApiHelper";
 
 export default class VeSyncApp extends Homey.App {
     veSync: VeSync = new VeSync();
@@ -17,6 +19,7 @@ export default class VeSyncApp extends Homey.App {
         //Debug reset password and username
         this.username = await this.homey.settings.get('username');
         this.password = await this.homey.settings.get('password');
+        await this.initializeTerminalId();
         await this._initializeFlows();
         axiosRetry(axios, {
             retries: 3,
@@ -30,6 +33,16 @@ export default class VeSyncApp extends Homey.App {
             retryCondition: () => true
         });
         await this.startVeSync();
+    }
+
+    private async initializeTerminalId() {
+        let terminalId = await this.homey.settings.get('terminalId');
+        if (!terminalId || typeof terminalId !== 'string' || terminalId.length !== 33 || !terminalId.startsWith('2')) {
+            terminalId = '2' + crypto.randomBytes(16).toString('hex');
+            await this.homey.settings.set('terminalId', terminalId);
+        }
+
+        ApiHelper.setTerminalId(terminalId);
     }
 
     private async startVeSync() {
