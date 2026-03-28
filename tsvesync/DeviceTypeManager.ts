@@ -1,5 +1,6 @@
 import BasicDevice from "./lib/BasicDevice";
 import path from "node:path";
+import {pathToFileURL} from "node:url";
 import {glob} from "glob";
 
 export default class DeviceTypeManager {
@@ -10,8 +11,12 @@ export default class DeviceTypeManager {
         const deviceFiles = glob.sync(path.join(__dirname, 'devices/**/*.{ts,js}').replace(/\\/g,'/'));
         for (const file of deviceFiles) {
             try {
-                const deviceModule = await import(file);
-                const DeviceClass = deviceModule.default;
+                const deviceModule = await import(pathToFileURL(file).href);
+                const DeviceClass = this.resolveDeviceClass(deviceModule);
+                if (!DeviceClass || typeof DeviceClass.hasModel !== 'function') {
+                    console.error(`Invalid device module loaded from ${file}`);
+                    continue;
+                }
                 this.devices.push(DeviceClass);
             } catch (error) {
                 console.error(`Error loading device module ${file}:`, error);
@@ -24,7 +29,19 @@ export default class DeviceTypeManager {
     }
 
     public getDevice(deviceType: string): typeof BasicDevice | undefined {
-        return this.devices.find(device => device.hasModel(deviceType));
+        return this.devices.find(device => typeof device.hasModel === 'function' && device.hasModel(deviceType));
+    }
+
+    private resolveDeviceClass(deviceModule: any): typeof BasicDevice | undefined {
+        if (typeof deviceModule?.default?.hasModel === 'function') {
+            return deviceModule.default;
+        }
+
+        if (typeof deviceModule?.default?.default?.hasModel === 'function') {
+            return deviceModule.default.default;
+        }
+
+        return undefined;
     }
 
 }

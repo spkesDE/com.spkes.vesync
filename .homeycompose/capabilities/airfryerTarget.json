@@ -1,0 +1,35 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Target",
+    "de": "Ziel"
+  },
+  "values": [
+    {
+      "id": "chamber1",
+      "title": {
+        "en": "Basket 1",
+        "de": "Korb 1"
+      }
+    },
+    {
+      "id": "chamber2",
+      "title": {
+        "en": "Basket 2",
+        "de": "Korb 2"
+      }
+    },
+    {
+      "id": "both",
+      "title": {
+        "en": "Both",
+        "de": "Beide"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "uiQuickAction": false,
+  "icon": "/assets/icon.svg"
+}

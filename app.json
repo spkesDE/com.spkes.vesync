@@ -1,8 +1,8 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.spkes.vesync",
-  "version": "1.0.16",
-  "compatibility": ">=5.0.0",
+  "version": "1.0.17",
+  "compatibility": ">=12.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
   "platforms": [
@@ -57,6 +57,20 @@
   "homeyCommunityTopicId": 71369,
   "flow": {
     "triggers": [
+      {
+        "id": "airfryer_pull_out",
+        "title": {
+          "en": "Basket pulled out",
+          "de": "Korb herausgezogen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu"
+          }
+        ]
+      },
       {
         "id": "filter_life_low",
         "title": {
@@ -508,6 +522,141 @@
           }
         ],
         "id": "warm_fan_speed_0_3"
+      },
+      {
+        "id": "startPresetCAFDC111S",
+        "title": {
+          "en": "Start preset",
+          "de": "Preset starten"
+        },
+        "titleFormatted": {
+          "en": "Start [[preset]]",
+          "de": "Starte [[preset]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu"
+          },
+          {
+            "type": "dropdown",
+            "name": "preset",
+            "title": {
+              "en": "Preset"
+            },
+            "values": [
+              {
+                "id": "airfry",
+                "label": {
+                  "en": "Air Fry",
+                  "de": "Heißluftfrittieren"
+                }
+              },
+              {
+                "id": "bake",
+                "label": {
+                  "en": "Bake",
+                  "de": "Backen"
+                }
+              },
+              {
+                "id": "roast",
+                "label": {
+                  "en": "Roast",
+                  "de": "Braten"
+                }
+              },
+              {
+                "id": "grill",
+                "label": {
+                  "en": "Grill",
+                  "de": "Grillen"
+                }
+              },
+              {
+                "id": "reheat",
+                "label": {
+                  "en": "Reheat",
+                  "de": "Aufwärmen"
+                }
+              },
+              {
+                "id": "dry",
+                "label": {
+                  "en": "Dry",
+                  "de": "Trocknen"
+                }
+              },
+              {
+                "id": "proof",
+                "label": {
+                  "en": "Proof",
+                  "de": "Gehen lassen"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stopCookCAFDC111S",
+        "title": {
+          "en": "Stop cooking",
+          "de": "Kochen stoppen"
+        },
+        "titleFormatted": {
+          "en": "Stop cooking",
+          "de": "Kochen stoppen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu"
+          }
+        ]
+      },
+      {
+        "id": "setTempUnitCAFDC111S",
+        "title": {
+          "en": "Set temperature unit",
+          "de": "Temperatureinheit setzen"
+        },
+        "titleFormatted": {
+          "en": "Set temperature unit to [[unit]]",
+          "de": "Setze Temperatureinheit auf [[unit]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu"
+          },
+          {
+            "type": "dropdown",
+            "name": "unit",
+            "title": {
+              "en": "Unit"
+            },
+            "values": [
+              {
+                "id": "c",
+                "label": {
+                  "en": "Celsius",
+                  "de": "Celsius"
+                }
+              },
+              {
+                "id": "f",
+                "label": {
+                  "en": "Fahrenheit",
+                  "de": "Fahrenheit"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "setModeClassic200s",
@@ -1399,6 +1548,99 @@
     ]
   },
   "drivers": [
+    {
+      "name": {
+        "en": "Cosori Turbo Tower Air Fryer"
+      },
+      "class": "airfryer",
+      "capabilities": [
+        "onoff",
+        "airfryerProgram",
+        "measure_airfryer_remaining_time",
+        "airfryerCookStatus",
+        "measure_airfryer_hold_time",
+        "measure_airfryer_cook_set_time",
+        "target_temperature",
+        "measure_temperature",
+        "measure_airfryer_current_remaining_time"
+      ],
+      "capabilitiesOptions": {
+        "target_temperature": {
+          "min": 30,
+          "max": 230,
+          "step": 1
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/cafdc111saeu/assets/images/small.png",
+        "large": "/drivers/cafdc111saeu/assets/images/large.png",
+        "xlarge": "/drivers/cafdc111saeu/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "cafdc111saeu"
+    },
     {
       "name": {
         "en": "Classic200s"
@@ -2858,6 +3100,273 @@
     }
   ],
   "capabilities": {
+    "airfryerCookSetTime": {
+      "type": "number",
+      "title": {
+        "en": "Cook time",
+        "de": "Kochzeit"
+      },
+      "min": 0,
+      "max": 360,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "insights": true,
+      "units": "min",
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/time-left.svg"
+    },
+    "airfryerCookStatus": {
+      "type": "enum",
+      "title": {
+        "en": "Cook status",
+        "de": "Garstatus"
+      },
+      "values": [
+        {
+          "id": "standby",
+          "title": {
+            "en": "Standby",
+            "de": "Bereit"
+          }
+        },
+        {
+          "id": "ready",
+          "title": {
+            "en": "Ready",
+            "de": "Startbereit"
+          }
+        },
+        {
+          "id": "awaiting_input",
+          "title": {
+            "en": "Awaiting Input",
+            "de": "Wartet auf Eingabe"
+          }
+        },
+        {
+          "id": "pull_out",
+          "title": {
+            "en": "Basket Out",
+            "de": "Korb herausgezogen"
+          }
+        },
+        {
+          "id": "cooking",
+          "title": {
+            "en": "Cooking",
+            "de": "Kocht"
+          }
+        },
+        {
+          "id": "paused",
+          "title": {
+            "en": "Paused",
+            "de": "Pausiert"
+          }
+        },
+        {
+          "id": "completed",
+          "title": {
+            "en": "Completed",
+            "de": "Abgeschlossen"
+          }
+        },
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Unknown",
+            "de": "Unbekannt"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "airfryerCookTemp": {
+      "type": "number",
+      "title": {
+        "en": "Cook temperature",
+        "de": "Kochtemperatur"
+      },
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "°",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
+    "airfryerCurrentRemainingTime": {
+      "type": "number",
+      "title": {
+        "en": "Current remaining time",
+        "de": "Aktuelle Restzeit"
+      },
+      "min": 0,
+      "max": 1440,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "min",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/ttime.svg"
+    },
+    "airfryerHoldTime": {
+      "type": "number",
+      "title": {
+        "en": "Hold time",
+        "de": "Wartezeit"
+      },
+      "min": 0,
+      "max": 1440,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "min",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/time-left.svg"
+    },
+    "airfryerProgram": {
+      "type": "enum",
+      "title": {
+        "en": "Program",
+        "de": "Programm"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "airfry",
+          "title": {
+            "en": "Air Fry",
+            "de": "Heißluftfrittieren"
+          }
+        },
+        {
+          "id": "bake",
+          "title": {
+            "en": "Bake",
+            "de": "Backen"
+          }
+        },
+        {
+          "id": "roast",
+          "title": {
+            "en": "Roast",
+            "de": "Braten"
+          }
+        },
+        {
+          "id": "grill",
+          "title": {
+            "en": "Grill",
+            "de": "Grillen"
+          }
+        },
+        {
+          "id": "reheat",
+          "title": {
+            "en": "Reheat",
+            "de": "Aufwärmen"
+          }
+        },
+        {
+          "id": "dry",
+          "title": {
+            "en": "Dry",
+            "de": "Trocknen"
+          }
+        },
+        {
+          "id": "proof",
+          "title": {
+            "en": "Proof",
+            "de": "Gehen lassen"
+          }
+        },
+        {
+          "id": "mixed",
+          "title": {
+            "en": "Mixed",
+            "de": "Gemischt"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": false,
+      "icon": "/assets/icon.svg"
+    },
+    "airfryerRemainingTime": {
+      "type": "number",
+      "title": {
+        "en": "Remaining time",
+        "de": "Restzeit"
+      },
+      "min": 0,
+      "max": 1440,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "min",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/time-left.svg"
+    },
+    "airfryerTarget": {
+      "type": "enum",
+      "title": {
+        "en": "Target",
+        "de": "Ziel"
+      },
+      "values": [
+        {
+          "id": "chamber1",
+          "title": {
+            "en": "Basket 1",
+            "de": "Korb 1"
+          }
+        },
+        {
+          "id": "chamber2",
+          "title": {
+            "en": "Basket 2",
+            "de": "Korb 2"
+          }
+        },
+        {
+          "id": "both",
+          "title": {
+            "en": "Both",
+            "de": "Beide"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": false,
+      "icon": "/assets/icon.svg"
+    },
     "alarm_filter_life": {
       "type": "boolean",
       "title": {
@@ -3470,6 +3979,74 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
+    },
+    "measure_airfryer_cook_set_time": {
+      "type": "number",
+      "title": {
+        "en": "Cook time",
+        "de": "Kochzeit"
+      },
+      "min": 0,
+      "max": 360,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "insights": true,
+      "units": "min",
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/time-left.svg"
+    },
+    "measure_airfryer_current_remaining_time": {
+      "type": "number",
+      "title": {
+        "en": "Current remaining time",
+        "de": "Aktuelle Restzeit"
+      },
+      "min": 0,
+      "max": 1440,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "min",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/ttime.svg"
+    },
+    "measure_airfryer_hold_time": {
+      "type": "number",
+      "title": {
+        "en": "Hold time",
+        "de": "Wartezeit"
+      },
+      "min": 0,
+      "max": 1440,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "min",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/time-left.svg"
+    },
+    "measure_airfryer_remaining_time": {
+      "type": "number",
+      "title": {
+        "en": "Remaining time",
+        "de": "Restzeit"
+      },
+      "min": 0,
+      "max": 1440,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "min",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/time-left.svg"
     },
     "measure_filter_life": {
       "type": "number",

@@ -1,0 +1,68 @@
+{
+  "actions": [
+    {
+      "id": "startPresetCAFDC111S",
+      "title": {
+        "en": "Start preset",
+        "de": "Preset starten"
+      },
+      "titleFormatted": {
+        "en": "Start [[preset]]",
+        "de": "Starte [[preset]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "preset",
+          "title": {
+            "en": "Preset"
+          },
+          "values": [
+            {"id": "airfry", "label": {"en": "Air Fry", "de": "Heißluftfrittieren"}},
+            {"id": "bake", "label": {"en": "Bake", "de": "Backen"}},
+            {"id": "roast", "label": {"en": "Roast", "de": "Braten"}},
+            {"id": "grill", "label": {"en": "Grill", "de": "Grillen"}},
+            {"id": "reheat", "label": {"en": "Reheat", "de": "Aufwärmen"}},
+            {"id": "dry", "label": {"en": "Dry", "de": "Trocknen"}},
+            {"id": "proof", "label": {"en": "Proof", "de": "Gehen lassen"}}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stopCookCAFDC111S",
+      "title": {
+        "en": "Stop cooking",
+        "de": "Kochen stoppen"
+      },
+      "titleFormatted": {
+        "en": "Stop cooking",
+        "de": "Kochen stoppen"
+      }
+    },
+    {
+      "id": "setTempUnitCAFDC111S",
+      "title": {
+        "en": "Set temperature unit",
+        "de": "Temperatureinheit setzen"
+      },
+      "titleFormatted": {
+        "en": "Set temperature unit to [[unit]]",
+        "de": "Setze Temperatureinheit auf [[unit]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "unit",
+          "title": {
+            "en": "Unit"
+          },
+          "values": [
+            {"id": "c", "label": {"en": "Celsius", "de": "Celsius"}},
+            {"id": "f", "label": {"en": "Fahrenheit", "de": "Fahrenheit"}}
+          ]
+        }
+      ]
+    }
+  ]
+}

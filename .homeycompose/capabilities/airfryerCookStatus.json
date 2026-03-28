@@ -1,0 +1,70 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Cook status",
+    "de": "Garstatus"
+  },
+  "values": [
+    {
+      "id": "standby",
+      "title": {
+        "en": "Standby",
+        "de": "Bereit"
+      }
+    },
+    {
+      "id": "ready",
+      "title": {
+        "en": "Ready",
+        "de": "Startbereit"
+      }
+    },
+    {
+      "id": "awaiting_input",
+      "title": {
+        "en": "Awaiting Input",
+        "de": "Wartet auf Eingabe"
+      }
+    },
+    {
+      "id": "pull_out",
+      "title": {
+        "en": "Basket Out",
+        "de": "Korb herausgezogen"
+      }
+    },
+    {
+      "id": "cooking",
+      "title": {
+        "en": "Cooking",
+        "de": "Kocht"
+      }
+    },
+    {
+      "id": "paused",
+      "title": {
+        "en": "Paused",
+        "de": "Pausiert"
+      }
+    },
+    {
+      "id": "completed",
+      "title": {
+        "en": "Completed",
+        "de": "Abgeschlossen"
+      }
+    },
+    {
+      "id": "unknown",
+      "title": {
+        "en": "Unknown",
+        "de": "Unbekannt"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "/assets/capability_icons/heating_level.svg"
+}

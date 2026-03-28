@@ -1,0 +1,77 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Program",
+    "de": "Programm"
+  },
+  "values": [
+    {
+      "id": "off",
+      "title": {
+        "en": "Off",
+        "de": "Aus"
+      }
+    },
+    {
+      "id": "airfry",
+      "title": {
+        "en": "Air Fry",
+        "de": "Heißluftfrittieren"
+      }
+    },
+    {
+      "id": "bake",
+      "title": {
+        "en": "Bake",
+        "de": "Backen"
+      }
+    },
+    {
+      "id": "roast",
+      "title": {
+        "en": "Roast",
+        "de": "Braten"
+      }
+    },
+    {
+      "id": "grill",
+      "title": {
+        "en": "Grill",
+        "de": "Grillen"
+      }
+    },
+    {
+      "id": "reheat",
+      "title": {
+        "en": "Reheat",
+        "de": "Aufwärmen"
+      }
+    },
+    {
+      "id": "dry",
+      "title": {
+        "en": "Dry",
+        "de": "Trocknen"
+      }
+    },
+    {
+      "id": "proof",
+      "title": {
+        "en": "Proof",
+        "de": "Gehen lassen"
+      }
+    },
+    {
+      "id": "mixed",
+      "title": {
+        "en": "Mixed",
+        "de": "Gemischt"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "uiQuickAction": false,
+  "icon": "/assets/icon.svg"
+}
