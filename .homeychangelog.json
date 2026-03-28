@@ -247,5 +247,8 @@
   },
   "1.0.17": {
     "en": "Fixed brightness error for oasis1000s humidifier"
+  },
+  "1.0.18": {
+    "en": "Cosori Turbo Tower Pro Smart Support"
   }
 }
