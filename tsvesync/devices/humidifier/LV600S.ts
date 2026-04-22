@@ -3,7 +3,7 @@ import DeviceModes from "../../enum/DeviceModes";
 import IApiResponse from "../../models/IApiResponse";
 
 export default class LV600S extends BasicHumidifier {
-    static deviceModels = ['LUH-A602S-WUSR', 'LUH-A602S-WUS', 'LUH-A602S-WEUR', 'LUH-A602S-WEU', 'LUH-A602S-WJP'];
+    static deviceModels = ['LUH-A602S-WUSR', 'LUH-A602S-WUS', 'LUH-A602S-WEUR', 'LUH-A602S-WEU', 'LUH-A602S-WJP', 'LUH-A603S-WEU',];
     static methods = ['getHumidifierStatus', 'setAutomaticStop', 'setSwitch', 'setVirtualLevel', 'setTargetHumidity', 'setHumidityMode', 'setDisplay', 'setLevel'];
     static features = ['warm_mist'];
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
