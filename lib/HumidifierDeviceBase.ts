@@ -148,6 +148,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
         // Fan speed updates
         const fanSpeed = status.result.result.virtual_mist_level ?? status.result.result.mist_level ?? 0;
+        await updateCapability('fanSpeed0to2', fanSpeed);
         await updateCapability('fanSpeed0to3', fanSpeed);
         await updateCapability('fanSpeed0to4', fanSpeed);
         await updateCapability('fanSpeed0to5', fanSpeed);
