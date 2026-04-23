@@ -71,6 +71,9 @@ export default class TowerFanDeviceBase extends Homey.Device {
             case 'auto':
                 await this.device.setTowerFanMode(DeviceModes.Auto).catch(this.error)
                 break;
+            case 'eco':
+                await this.device.setTowerFanMode(DeviceModes.Eco).catch(this.error)
+                break;
             case 'advancedSleep':
                 await this.device.setTowerFanMode(DeviceModes.AdvancedSleep).catch(this.error)
                 break;

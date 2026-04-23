@@ -8,6 +8,7 @@ enum DeviceModes {
     Humidity = "humidity",
     Turbo = "turbo",
     Normal = "normal",
+    Eco = "eco",
 }
 
 export default DeviceModes;
