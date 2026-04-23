@@ -54,9 +54,8 @@ export default class PurifierDeviceBase extends Homey.Device {
             return;
         }
         if (value === "manual") {
-            if (this.device.status?.mode !== "manual")
-                await this.device.setPurifierMode(DeviceModes.Normal).catch(this.error)
-            this.device.setLevel(this.device.status?.level ?? 1).catch(this.error);
+            const level = this.device.status?.level ?? 1;
+            this.device.setLevel(level > 0 ? level : 1).catch(this.error);
             return;
         }
         if (value === "auto") {
