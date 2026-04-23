@@ -256,5 +256,8 @@
   },
   "1.0.20": {
     "en": "Added 'LUH-A603S-WEU' to LV600S"
+  },
+  "1.0.21": {
+    "en": "Improve device compatibility, diagnostics, and pairing categories"
   }
 }
