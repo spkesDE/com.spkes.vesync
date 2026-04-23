@@ -17,6 +17,13 @@ class Oasis1000S extends HumidifierDeviceBase {
     async onInit() {
         this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
         await super.onInit();
+        if (this.supportsNightlight()) {
+            await this.checkForCapability("nightlight_toggle");
+            this.registerCapabilityListener("nightlight_toggle", async (value) => {
+                await this.device.setNightLightBrightness(value ? 50 : 0).catch(this.error);
+                this.log(`Night Light: ${value}`);
+            });
+        }
         this.registerCapabilityListener("onoff", async (value) => {
             if (!value) await this.setCapabilityValue("oasis1000sCapability", "off");
             await this.setMode(value ? "on" : "off");
@@ -37,6 +44,10 @@ class Oasis1000S extends HumidifierDeviceBase {
             }
         })
         this.log('Oasis1000S has been initialized');
+    }
+
+    private supportsNightlight(): boolean {
+        return this.device?.device?.deviceType === "LUH-M101S-WEUR";
     }
 
     async setMode(value: string) {
