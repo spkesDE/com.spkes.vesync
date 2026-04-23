@@ -2,7 +2,7 @@
   "name": {
     "en": "Classic200s"
   },
-  "class": "fan",
+  "class": "humidifier",
   "capabilities": [
     "classic200sCapability",
     "onoff",

@@ -2,7 +2,7 @@
   "name": {
     "en": "Core300s"
   },
-  "class": "fan",
+  "class": "airpurifier",
   "capabilities": [
     "core300sCapability",
     "onoff",

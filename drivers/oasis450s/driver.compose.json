@@ -2,7 +2,7 @@
   "name": {
     "en": "Oasis450S (Experimental)"
   },
-  "class": "fan",
+  "class": "humidifier",
   "capabilities": [
     "oasis450sCapability",
     "onoff",

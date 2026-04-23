@@ -2,7 +2,7 @@
   "name": {
     "en": "Everest Air (Experimental)"
   },
-  "class": "fan",
+  "class": "airpurifier",
   "capabilities": [
     "everestAirCapability",
     "fanSpeed0to4",
