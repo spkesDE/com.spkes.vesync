@@ -5,7 +5,7 @@ import BasicPurifier from "../../lib/BasicPurifier";
 
 
 export default class Core300S extends BasicPurifier {
-    static deviceModels = ['Core300S', 'LAP-C301S-WJP', 'LAP-C302S-WUSB'];
+    static deviceModels = ['Core300S', 'LAP-C301S-WJP', 'LAP-C302S-WUSB', 'LAP-C301S-WAAA', 'LAP-C302S-WGC'];
     static methods = ['getPurifierStatus', 'setSwitch', 'setNightLight', 'setLevel', 'setPurifierMode', 'setDisplay', 'setChildLock', 'setIndicatorLight'];
     static modes = [DeviceModes.Auto, DeviceModes.Manual, DeviceModes.Sleep, DeviceModes.Off];
     static levels = [1, 2, 3, 4, 5];

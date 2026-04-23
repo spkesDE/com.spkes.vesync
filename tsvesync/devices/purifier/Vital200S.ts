@@ -6,7 +6,7 @@ import {IGetVitalPurifierStatus} from "../../models/purifier/IGetVitalPurifierSt
 
 export default class Vital200S extends BasicPurifier {
     static deviceModels = ['LAP-V201S-AASR', 'LAP-V201S-WJP', 'LAP-V201S-WEU',
-        'LAP-V201S-WUS', 'LAP-V201-AUSR', 'LAP-V201S-AEUR'];
+        'LAP-V201S-WUS', 'LAP-V201-AUSR', 'LAP-V201S-AUSR', 'LAP-V201S-AEUR'];
     static methods = ['getPurifierStatus', 'setSwitch', 'setLevel', 'setLightDetection', 'setChildLock', 'setDisplay', 'setAutoPreference', 'setPurifierMode'];
     static modes = [DeviceModes.Auto, DeviceModes.Manual, DeviceModes.Sleep, DeviceModes.Pet, DeviceModes.Off];
     static levels = [1, 2, 3, 4];
