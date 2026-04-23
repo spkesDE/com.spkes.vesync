@@ -7,6 +7,10 @@ on:
     branches:
       - master
 
+concurrency:
+  group: version-bump-master
+  cancel-in-progress: false
+
 jobs:
   bump-and-publish:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref == 'dev'
@@ -16,7 +20,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: master
           fetch-depth: 0  # needed to push and fetch branches
+
+      - name: Sync master branch
+        run: |
+          git fetch origin master
+          git checkout master
+          git pull --rebase origin master
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -50,10 +61,11 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .homeycompose/app.json .homeychangelog.json
           git commit -m "Bump version to ${{ steps.extract_version.outputs.new_version }} and update changelog"
-          git push origin master
+          git push origin HEAD:master
 
       - name: Push the same changes back to dev
         run: |
+          git fetch origin master
           # Fetch dev branch
           git fetch origin dev
           # Checkout dev branch locally
