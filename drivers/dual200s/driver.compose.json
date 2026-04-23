@@ -2,7 +2,7 @@
   "name": {
     "en": "Dual200s"
   },
-  "class": "fan",
+  "class": "humidifier",
   "capabilities": [
     "dual200sCapability",
     "fanSpeed0to3",

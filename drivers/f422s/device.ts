@@ -54,6 +54,7 @@ class F422S extends TowerFanDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('F422S has been deleted');
     }
 

@@ -58,6 +58,7 @@ class LV131SDevice extends PurifierDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('LV131S has been deleted');
     }
 

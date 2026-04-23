@@ -4,7 +4,7 @@ import IApiResponse from "../../models/IApiResponse";
 import {IGetTowerFanStatus} from "../../models/towerfan/IGetTowerFanStatus";
 
 export default class F422S extends BasicTowerFan {
-    static deviceModels = ['LTF-F422S-KEU', 'LTF-F422S-WUSR', 'LTF-F422_WJP', 'LTF-F422S-WUS'];
+    static deviceModels = ['LTF-F422S-KEU', 'LTF-F422S-WUSR', 'LTF-F422S-WJP', 'LTF-F422S-WUS'];
     static methods = ['getTowerFanStatus', 'setDisplay', 'setDisplayingType', 'setLevel', 'setMuteSwitch', 'setOscillationSwitch', 'setSleepPreference', 'setSwitch', 'setTowerFanMode'];
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     static modes = [DeviceModes.AdvancedSleep, DeviceModes.Auto, DeviceModes.Turbo, DeviceModes.Normal]

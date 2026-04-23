@@ -27,10 +27,15 @@ export default class ApiHelper {
         "authorizeCode",
         "authCode",
         "accountID",
+        "accountId",
         "macID",
+        "wifiMac",
+        "BTMac",
+        "terminalId",
         "tk",
         "cid",
         "mobileID",
+        "mobileId",
     ];
 
     static requestBody(api: VeSync, type: BodyTypes): {} {

@@ -4,7 +4,7 @@ import IGetOasis1000SStatus from "../../models/humidifier/IGetOasis1000SStatus";
 import IApiResponse from "../../models/IApiResponse";
 
 export default class Oasis1000S extends BasicHumidifier {
-    static deviceModels = ['LUH-M101S-WUS', 'LUH-M101S-WEUR'];
+    static deviceModels = ['LUH-M101S-WUS', 'LUH-M101S-WUSR', 'LUH-M101S-WEUR'];
     static methods = ['getHumidifierStatus', 'setAutoStopSwitch', 'setSwitch', 'setVirtualLevel', 'setTargetHumidity', 'setHumidityMode', 'setDisplay', 'setNightLightBrightness'];
     static features = [];
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];

@@ -78,6 +78,7 @@ class Classic200s extends HumidifierDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('Classic200s has been deleted');
     }
 

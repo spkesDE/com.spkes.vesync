@@ -59,6 +59,7 @@ class Core300S extends PurifierDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('Core300S has been deleted');
     }
 

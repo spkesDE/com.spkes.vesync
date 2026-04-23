@@ -2,7 +2,7 @@
   "name": {
     "en": "LV600s"
   },
-  "class": "fan",
+  "class": "humidifier",
   "capabilities": [
     "lv600sCapability",
     "onoff",

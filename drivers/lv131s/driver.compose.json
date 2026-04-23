@@ -2,7 +2,7 @@
   "name": {
     "en": "LV131S"
   },
-  "class": "fan",
+  "class": "airpurifier",
   "capabilities": [
     "lv131sCapability",
     "onoff",

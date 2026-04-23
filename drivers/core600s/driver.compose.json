@@ -2,7 +2,7 @@
   "name": {
     "en": "Core600s"
   },
-  "class": "fan",
+  "class": "airpurifier",
   "capabilities": [
     "core600sCapability",
     "fanSpeed0to4",

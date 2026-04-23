@@ -3,7 +3,7 @@ import DeviceModes from "../../enum/DeviceModes";
 import IApiResponse from "../../models/IApiResponse";
 
 export default class Oasis450S extends BasicHumidifier {
-    static deviceModels = ['LUH-O451S-WUS', 'LUH-O451S-WEU'];
+    static deviceModels = ['LUH-O451S-WUS', 'LUH-O451S-WUSR', 'LUH-O451S-WEU', 'LUH-O601S-WUS', 'LUH-O601S-KUS'];
     static methods = ['getHumidifierStatus', 'setAutomaticStop', 'setSwitch', 'setVirtualLevel', 'setTargetHumidity', 'setHumidityMode', 'setDisplay', 'setLevel'];
     static features = ['warm_mist'];
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];

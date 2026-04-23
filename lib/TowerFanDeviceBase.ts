@@ -10,7 +10,15 @@ export default class TowerFanDeviceBase extends Homey.Device {
     private updateInterval!: NodeJS.Timer;
 
     async onInit() {
-        await this.getDevice().catch(this.log);
+        const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
+            this.log(reason);
+            return false;
+        });
+
+        if (!deviceReady) {
+            return;
+        }
+
         await this.updateDevice().catch(this.error);
         this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
 
@@ -30,6 +38,12 @@ export default class TowerFanDeviceBase extends Homey.Device {
         if (this.hasCapability("mute_toggle")) this.registerCapabilityListener("mute_toggle", async (value) => {
             await this.device.setMuteSwitch(value).catch(this.error);
         });
+    }
+
+    async onDeleted() {
+        if (this.updateInterval) {
+            this.homey.clearInterval(this.updateInterval);
+        }
     }
 
     async setMode(value: string) {
@@ -101,6 +115,11 @@ export default class TowerFanDeviceBase extends Homey.Device {
     }
 
     async updateDevice(): Promise<void> {
+        if (!this.device) {
+            this.log("Device is undefined", this.device);
+            return;
+        }
+
         // Get the latest device status
         const status = await this.device.getTowerFanStatus().catch(async (reason: Error) => {
             if (reason.message === "device offline") {

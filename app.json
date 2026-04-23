@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.spkes.vesync",
-  "version": "1.0.18",
+  "version": "1.0.20",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
@@ -101,6 +101,17 @@
       }
     ],
     "actions": [
+      {
+        "title": {
+          "en": "Create diagnostic report",
+          "de": "Diagnosebericht erstellen"
+        },
+        "titleFormatted": {
+          "en": "Create VeSync diagnostic report",
+          "de": "VeSync Diagnosebericht erstellen"
+        },
+        "id": "create_diagnostic_report"
+      },
       {
         "title": {
           "en": "Set Display to...",
@@ -1645,7 +1656,7 @@
       "name": {
         "en": "Classic200s"
       },
-      "class": "fan",
+      "class": "humidifier",
       "capabilities": [
         "classic200sCapability",
         "onoff",
@@ -1744,7 +1755,7 @@
       "name": {
         "en": "Classic300s"
       },
-      "class": "fan",
+      "class": "humidifier",
       "capabilities": [
         "classic300sCapability",
         "onoff",
@@ -1844,7 +1855,7 @@
       "name": {
         "en": "Core200s"
       },
-      "class": "fan",
+      "class": "airpurifier",
       "capabilities": [
         "core200sCapability",
         "fanSpeed0to3",
@@ -1928,7 +1939,7 @@
       "name": {
         "en": "Core300s"
       },
-      "class": "fan",
+      "class": "airpurifier",
       "capabilities": [
         "core300sCapability",
         "onoff",
@@ -2012,7 +2023,7 @@
       "name": {
         "en": "Core400s"
       },
-      "class": "fan",
+      "class": "airpurifier",
       "capabilities": [
         "core400sCapability",
         "fanSpeed0to4",
@@ -2097,7 +2108,7 @@
       "name": {
         "en": "Core600s"
       },
-      "class": "fan",
+      "class": "airpurifier",
       "capabilities": [
         "core600sCapability",
         "fanSpeed0to4",
@@ -2182,7 +2193,7 @@
       "name": {
         "en": "Dual200s"
       },
-      "class": "fan",
+      "class": "humidifier",
       "capabilities": [
         "dual200sCapability",
         "fanSpeed0to3",
@@ -2281,7 +2292,7 @@
       "name": {
         "en": "Dual200s Pro"
       },
-      "class": "fan",
+      "class": "humidifier",
       "capabilities": [
         "dual200sProCapability",
         "fanSpeed0to3",
@@ -2380,7 +2391,7 @@
       "name": {
         "en": "Everest Air (Experimental)"
       },
-      "class": "fan",
+      "class": "airpurifier",
       "capabilities": [
         "everestAirCapability",
         "fanSpeed0to4",
@@ -2549,7 +2560,7 @@
       "name": {
         "en": "LV131S"
       },
-      "class": "fan",
+      "class": "airpurifier",
       "capabilities": [
         "lv131sCapability",
         "onoff",
@@ -2633,7 +2644,7 @@
       "name": {
         "en": "LV600s"
       },
-      "class": "fan",
+      "class": "humidifier",
       "capabilities": [
         "lv600sCapability",
         "onoff",
@@ -2733,7 +2744,7 @@
       "name": {
         "en": "Oasis1000S"
       },
-      "class": "fan",
+      "class": "humidifier",
       "capabilities": [
         "oasis1000sCapability",
         "onoff",
@@ -2832,7 +2843,7 @@
       "name": {
         "en": "Oasis450S (Experimental)"
       },
-      "class": "fan",
+      "class": "humidifier",
       "capabilities": [
         "oasis450sCapability",
         "onoff",
@@ -2932,7 +2943,7 @@
       "name": {
         "en": "Vital 100s (Experimental)"
       },
-      "class": "fan",
+      "class": "airpurifier",
       "capabilities": [
         "vital100sCapability",
         "fanSpeed0to4",
@@ -3017,7 +3028,7 @@
       "name": {
         "en": "Vital 200s"
       },
-      "class": "fan",
+      "class": "airpurifier",
       "capabilities": [
         "vital200sCapability",
         "fanSpeed0to4",

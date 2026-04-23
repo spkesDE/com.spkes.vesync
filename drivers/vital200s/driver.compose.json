@@ -2,7 +2,7 @@
   "name": {
     "en": "Vital 200s"
   },
-  "class": "fan",
+  "class": "airpurifier",
   "capabilities": [
     "vital200sCapability",
     "fanSpeed0to4",

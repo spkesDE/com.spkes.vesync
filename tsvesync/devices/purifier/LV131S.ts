@@ -8,7 +8,7 @@ import {IGetLV131PurifierStatus} from "../../models/purifier/IGetLV131PurifierSt
 
 
 export default class LV131S extends BasicPurifier {
-    static deviceModels = ['LV-PUR131S', 'LV-RH131S'];
+    static deviceModels = ['LV-PUR131S', 'LV-RH131S', 'LV-RH131S-WM'];
     static methods = ['getPurifierStatus', 'setSwitch', 'setNightLight', 'setLevel', 'setPurifierMode', 'setDisplay', 'setChildLock', 'setIndicatorLight'];
     static modes = [DeviceModes.Auto, DeviceModes.Manual, DeviceModes.Sleep];
     static levels = [1, 2, 3];
