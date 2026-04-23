@@ -7,9 +7,20 @@ import DeviceTypeManager from "./DeviceTypeManager";
 import BasicDevice from "./lib/BasicDevice";
 import {AuthByPWDOrOTMModel} from "./models/AuthByPWDOrOTMModel";
 
+export interface IUnsupportedDeviceInfo {
+    deviceType: string;
+    type: string;
+    configModule: string;
+    connectionType: string;
+    connectionStatus: string | null;
+    deviceStatus: string | null;
+    deviceRegion: string;
+}
+
 export default class VeSync {
 
     static debugMode: boolean = true;
+    private static ignoredDeviceTypes = ['CAF-R901-AEU/AUK'];
     username: string = "";
     region = 'US';
     password: string = "";
@@ -19,6 +30,8 @@ export default class VeSync {
     private account_id: number = 0;
     private countryCode: string = 'US';
     private devices: BasicDevice[] = [];
+    private unsupportedDevices: Map<string, IUnsupportedDeviceInfo> = new Map();
+    private loggedUnsupportedDeviceTypes: Set<string> = new Set();
     private loggedIn: boolean = false;
     private typeManager!: DeviceTypeManager;
 
@@ -97,6 +110,32 @@ export default class VeSync {
         return this.devices
     }
 
+    public getUnsupportedDevices(): IUnsupportedDeviceInfo[] {
+        return Array.from(this.unsupportedDevices.values());
+    }
+
+    public getDiagnosticReport(): string {
+        const storedDevices = this.devices.map(device => ({
+            deviceType: device.device.deviceType,
+            type: device.device.type,
+            configModule: device.device.configModule,
+            connectionType: device.device.connectionType,
+            connectionStatus: device.device.connectionStatus,
+            deviceStatus: device.device.deviceStatus,
+            deviceRegion: device.device.deviceRegion,
+            adapter: device.constructor.name,
+        }));
+
+        return JSON.stringify({
+            region: this.region,
+            countryCode: this.countryCode,
+            loggedIn: this.loggedIn,
+            supportedDevices: storedDevices,
+            unsupportedDevices: this.getUnsupportedDevices(),
+            ignoredDeviceTypes: VeSync.ignoredDeviceTypes,
+        }, null, 2);
+    }
+
     public getTypeManager() {
         return this.typeManager;
     }
@@ -106,6 +145,7 @@ export default class VeSync {
     }
 
     private processDevices(list: any) {
+        this.unsupportedDevices.clear();
         for (let deviceRaw of list as any) {
             let device = this.getDeviceObject(deviceRaw as IDevice);
             if (device === undefined) continue;
@@ -115,12 +155,35 @@ export default class VeSync {
     }
 
     private getDeviceObject(deviceRaw: IDevice): BasicDevice | undefined {
+        if (VeSync.ignoredDeviceTypes.includes(deviceRaw.deviceType)) {
+            if (VeSync.debugMode) console.debug("Ignoring unsupported virtual device type: " + deviceRaw.deviceType);
+            return undefined;
+        }
+
         let deviceType = this.typeManager.getDevice(deviceRaw.deviceType)
         if (deviceType === undefined) {
-            console.error("Device type not found: " + deviceRaw.deviceType);
-            return new BasicDevice(this, deviceRaw);
+            this.registerUnsupportedDevice(deviceRaw);
+            return undefined;
         }
         return new deviceType(this, deviceRaw);
+    }
+
+    private registerUnsupportedDevice(deviceRaw: IDevice) {
+        const unsupportedDevice = {
+            deviceType: deviceRaw.deviceType,
+            type: deviceRaw.type,
+            configModule: deviceRaw.configModule,
+            connectionType: deviceRaw.connectionType,
+            connectionStatus: deviceRaw.connectionStatus,
+            deviceStatus: deviceRaw.deviceStatus,
+            deviceRegion: deviceRaw.deviceRegion,
+        };
+
+        this.unsupportedDevices.set(deviceRaw.deviceType, unsupportedDevice);
+        if (this.loggedUnsupportedDeviceTypes.has(deviceRaw.deviceType)) return;
+
+        this.loggedUnsupportedDeviceTypes.add(deviceRaw.deviceType);
+        console.warn("Unsupported VeSync device discovered: " + JSON.stringify(unsupportedDevice));
     }
 
     private async _exchangeAuthCode(authCode: string, regionChangeToken?: string): Promise<boolean> {

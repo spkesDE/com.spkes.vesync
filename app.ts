@@ -73,6 +73,17 @@ export default class VeSyncApp extends Homey.App {
         this.homey.flow.getActionCard("warm_fan_speed_0_3").registerRunListener((args) =>
             args.device.triggerCapabilityListener("warmFanSpeed0to3", Number(args.level) ?? 0));
 
+        /**************/
+        /* Diagnostic */
+        /**************/
+        this.homey.flow.getActionCard("create_diagnostic_report").registerRunListener(async () => {
+            if (this.veSync.isLoggedIn()) {
+                await this.veSync.getDevices().catch((error: Error) => this.error(error));
+            }
+            this.log("VeSync diagnostic report:\n" + this.veSync.getDiagnosticReport());
+            return true;
+        });
+
         /***********/
         /* Display */
         /***********/
