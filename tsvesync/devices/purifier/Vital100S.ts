@@ -4,7 +4,7 @@ import IApiResponse from "../../models/IApiResponse";
 
 export default class Vital100S extends BasicPurifier {
     static deviceModels = ['LAP-V102S-AASR', 'LAP-V102S-WUS', 'LAP-V102S-WEU',
-        'LAP-V102S-AUSR', 'LAP-V102S-WJP'];
+        'LAP-V102S-AUSR', 'LAP-V102S-WJP', 'LAP-V102S-AJPR', 'LAP-V102S-AEUR'];
     static methods = ['getPurifierStatus', 'setSwitch', 'setLevel', 'setLightDetection', 'setChildLock', 'setDisplay', 'setAutoPreference', 'setPurifierMode'];
     static modes = [DeviceModes.Auto, DeviceModes.Manual, DeviceModes.Sleep, DeviceModes.Pet, DeviceModes.Off];
     static levels = [1, 2, 3, 4];
@@ -13,8 +13,15 @@ export default class Vital100S extends BasicPurifier {
 
     public async getPurifierStatus(): Promise<IApiResponse<any>> {
         const status = await this.post<any>('getPurifierStatus', {});
-        this.status = status.result.result;
-        return status;
+        if (status.msg !== 'request success') return status;
+        this.status = this.normalizePurifierStatus(status.result?.result ?? {});
+        return {
+            ...status,
+            result: {
+                ...status.result,
+                result: this.status
+            }
+        };
     }
 
     public async setSwitch(payload: boolean): Promise<IApiResponse<any>> {

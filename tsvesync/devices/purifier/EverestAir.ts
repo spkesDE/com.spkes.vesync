@@ -12,6 +12,7 @@ export default class EverestAir extends BasicPurifier {
 
     public async getPurifierStatus(): Promise<IApiResponse<any>> {
         const status = await this.post<any>('getPurifierStatus', {});
+        if (status.msg !== 'request success') return status;
         /**
          * fanRotateAngle: 75,
          *       filterOpenState: 0,

@@ -13,9 +13,18 @@ export default class BasicTowerFan extends BasicDevice {
     status: IGetTowerFanStatus | null = null;
 
     public async getTowerFanStatus(): Promise<IApiResponse<IGetTowerFanStatus>> {
-        const status = await this.post<IGetTowerFanStatus>('getTowerFanStatus', {});
+        const status = await this.post<any>('getTowerFanStatus', {});
         if (!status) throw new Error('Failed to get humidifier status');
-        this.status = status.result.result;
+        if (status.msg === 'request success') {
+            this.status = this.normalizeTowerFanStatus(status.result?.result ?? {});
+            return {
+                ...status,
+                result: {
+                    ...status.result,
+                    result: this.status
+                }
+            };
+        }
         return status;
     }
 
@@ -78,5 +87,44 @@ export default class BasicTowerFan extends BasicDevice {
         return await this.post('setTowerFanMode', {
             workMode: payload
         });
+    }
+
+    protected normalizeTowerFanStatus(rawStatus: any): IGetTowerFanStatus {
+        return {
+            ...rawStatus,
+            powerSwitch: this.numberValue(rawStatus.powerSwitch),
+            workMode: rawStatus.workMode ?? DeviceModes.Normal,
+            manualSpeedLevel: this.numberValue(rawStatus.manualSpeedLevel, rawStatus.fanSpeedLevel),
+            fanSpeedLevel: this.numberValue(rawStatus.fanSpeedLevel, rawStatus.manualSpeedLevel),
+            screenState: this.numberValue(rawStatus.screenState, rawStatus.screenSwitch),
+            screenSwitch: this.numberValue(rawStatus.screenSwitch, rawStatus.screenState),
+            oscillationSwitch: this.numberValue(rawStatus.oscillationSwitch, rawStatus.oscillationState),
+            oscillationState: this.numberValue(rawStatus.oscillationState, rawStatus.oscillationSwitch),
+            muteSwitch: this.numberValue(rawStatus.muteSwitch, rawStatus.muteState),
+            muteState: this.numberValue(rawStatus.muteState, rawStatus.muteSwitch),
+            timerRemain: this.numberValue(rawStatus.timerRemain),
+            temperature: this.numberValue(rawStatus.temperature, rawStatus.tempInF),
+            errorCode: this.numberValue(rawStatus.errorCode),
+            sleepPreference: {
+                sleepPreferenceType: rawStatus.sleepPreference?.sleepPreferenceType ?? rawStatus.sleepPreferenceType ?? "default",
+                oscillationSwitch: this.numberValue(rawStatus.sleepPreference?.oscillationSwitch, rawStatus.oscillationSwitch),
+                initFanSpeedLevel: this.numberValue(rawStatus.sleepPreference?.initFanSpeedLevel),
+                fallAsleepRemain: this.numberValue(rawStatus.sleepPreference?.fallAsleepRemain),
+                autoChangeFanLevelSwitch: this.numberValue(rawStatus.sleepPreference?.autoChangeFanLevelSwitch),
+            },
+            scheduleCount: this.numberValue(rawStatus.scheduleCount),
+            displayingType: this.numberValue(rawStatus.displayingType),
+        };
+    }
+
+    private numberValue(...values: any[]): number {
+        for (const value of values) {
+            if (typeof value === 'number' && !Number.isNaN(value)) return value;
+            if (typeof value === 'string' && value.trim() !== '') {
+                const parsed = Number(value);
+                if (!Number.isNaN(parsed)) return parsed;
+            }
+        }
+        return 0;
     }
 }

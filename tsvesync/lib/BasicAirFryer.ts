@@ -16,9 +16,18 @@ export default class BasicAirFryer extends BasicDevice {
     presetRecipes: IAirFryerPreset[] = [];
 
     public async getAirFryerStatus(): Promise<IApiResponse<IGetAirFryerMultiStatus>> {
-        const status = await this.post<IGetAirFryerMultiStatus>('getAirfryerMultiStatus', {});
+        const status = await this.post<any>('getAirfryerMultiStatus', {});
         if (!status) throw new Error('Failed to get air fryer status');
-        if (status.msg === 'request success') this.status = status.result.result;
+        if (status.msg === 'request success') {
+            this.status = this.normalizeAirFryerStatus(status.result?.result ?? {});
+            return {
+                ...status,
+                result: {
+                    ...status.result,
+                    result: this.status
+                }
+            };
+        }
         return status;
     }
 
@@ -74,5 +83,44 @@ export default class BasicAirFryer extends BasicDevice {
         const recipeMeta = (this.constructor as AirFryerClass).recipeMeta;
         const matchedKey = Object.keys(recipeMeta).find((key) => key.toLowerCase() === mode.toLowerCase());
         return matchedKey ? recipeMeta[matchedKey] : undefined;
+    }
+
+    protected normalizeAirFryerStatus(rawStatus: any): IGetAirFryerMultiStatus {
+        const rawStatusList = Array.isArray(rawStatus.statusList) ? rawStatus.statusList : [];
+        const statusList = rawStatusList.map((item: any) => ({
+            ...item,
+            cookStatus: item.cookStatus ?? 'standby',
+            startTime: this.numberValue(item.startTime),
+            recipeType: this.numberValue(item.recipeType),
+            recipeId: this.numberValue(item.recipeId),
+            recipeName: item.recipeName ?? '',
+            upc: item.upc ?? '',
+            holdTime: this.numberValue(item.holdTime),
+            cookSetTime: this.numberValue(item.cookSetTime),
+            cookTemp: this.numberValue(item.cookTemp),
+            mode: item.mode ?? '',
+            currentRemainingTime: this.numberValue(item.currentRemainingTime),
+            totalTimeRemaining: this.numberValue(item.totalTimeRemaining),
+            chamber: this.numberValue(item.chamber),
+        }));
+
+        return {
+            ...rawStatus,
+            statusList,
+            tempUnit: rawStatus.tempUnit ?? 'c',
+            syncType: this.numberValue(rawStatus.syncType),
+            workChamber: this.numberValue(rawStatus.workChamber, 1),
+        };
+    }
+
+    private numberValue(...values: any[]): number {
+        for (const value of values) {
+            if (typeof value === 'number' && !Number.isNaN(value)) return value;
+            if (typeof value === 'string' && value.trim() !== '') {
+                const parsed = Number(value);
+                if (!Number.isNaN(parsed)) return parsed;
+            }
+        }
+        return 0;
     }
 }

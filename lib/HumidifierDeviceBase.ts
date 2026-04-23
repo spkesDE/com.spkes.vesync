@@ -9,7 +9,15 @@ export default class HumidifierDeviceBase extends Homey.Device {
     private updateInterval!: NodeJS.Timer;
 
     async onInit() {
-        await this.getDevice().catch(this.log);
+        const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
+            this.log(reason);
+            return false;
+        });
+
+        if (!deviceReady) {
+            return;
+        }
+
         await this.updateDevice().catch(this.error);
         if (this.hasCapability("display_toggle"))
             this.registerCapabilityListener("display_toggle", async (value) => {
@@ -22,6 +30,12 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 this.log(`Night Light: ${value}`);
             });
         this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
+    }
+
+    async onDeleted() {
+        if (this.updateInterval) {
+            this.homey.clearInterval(this.updateInterval);
+        }
     }
 
     async setMode(value: string) {
@@ -155,7 +169,12 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
         // Update target humidity setting
         const currentSettingHumidity = this.getSetting("humidity");
-        const deviceHumidity = status.result.result.configuration.auto_target_humidity ?? 0;
+        const statusResult = status.result.result as any;
+        const deviceHumidity =
+            statusResult.configuration?.auto_target_humidity ??
+            statusResult.targetHumidity ??
+            statusResult.target_humidity ??
+            0;
         if (currentSettingHumidity != null && Number(currentSettingHumidity) !== deviceHumidity) {
             await this.setSettings({humidity: deviceHumidity}).catch(this.error);
         }

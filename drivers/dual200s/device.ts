@@ -65,7 +65,8 @@ class Dual200s extends HumidifierDeviceBase {
         this.log('Dual200s has been added');
     }
 
-    async onSettings({oldSettings: {}, newSettings: {}, changedKeys: []}): Promise<string | void> {
+    async onSettings(settings: { oldSettings: any, newSettings: any, changedKeys: string[] }): Promise<string | void> {
+        await super.onSettings(settings);
         this.log('Dual200s settings where changed');
     }
 
@@ -74,6 +75,7 @@ class Dual200s extends HumidifierDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('Dual200s has been deleted');
     }
 

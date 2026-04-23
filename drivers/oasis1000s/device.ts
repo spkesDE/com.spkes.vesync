@@ -79,6 +79,7 @@ class Oasis1000S extends HumidifierDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('Oasis1000S has been deleted');
     }
 

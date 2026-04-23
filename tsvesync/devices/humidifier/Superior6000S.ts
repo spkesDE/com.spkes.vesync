@@ -3,7 +3,7 @@ import DeviceModes from "../../enum/DeviceModes";
 import IApiResponse from "../../models/IApiResponse";
 
 export default class Superior6000S extends BasicHumidifier {
-    static deviceModels = ['LEH-S601S-WUS', 'LEH-S601S-WUSR', 'LEH-S601S-WEUR'];
+    static deviceModels = ['LEH-S601S-WUS', 'LEH-S601S-WUSR', 'LEH-S601S-WEUR', 'LEH-S602S-WUS'];
     static methods = ['getHumidifierStatus', 'setAutoStopSwitch', 'setSwitch', 'setVirtualLevel', 'setTargetHumidity', 'setHumidityMode', 'setDisplay', 'setNightLightBrightness'];
     static features = [];
     static levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -25,7 +25,7 @@ export default class Superior6000S extends BasicHumidifier {
                 humidity_high: false, // Implement logic to determine if humidity is high, if needed
                 water_tank_lifted: status.result.result.waterTankLifted === 1, // Convert to boolean
                 automatic_stop_reach_target: status.result.result.autoStopState === 1, // Convert to boolean
-                night_light_brightness: status.result.result.nightLight.brightness, // Night light brightness mapping
+                night_light_brightness: status.result.result.nightLight?.brightness ?? 0, // Night light brightness mapping
                 autoStopSwitch: status.result.result.autoStopSwitch === 1, // Convert to boolean
                 indicator_light_switch: status.result.result.screenSwitch === 1, // Convert to boolean
                 configuration: {

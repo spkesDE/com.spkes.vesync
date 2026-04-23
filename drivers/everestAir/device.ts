@@ -61,6 +61,7 @@ class EverestAir extends PurifierDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('Vital100s has been deleted');
     }
 

@@ -21,9 +21,18 @@ export default class BasicHumidifier extends BasicDevice {
     status: IGetHumidifierStatus | null = null;
 
     public async getHumidifierStatus(): Promise<IApiResponse<IGetHumidifierStatus>> {
-        const status = await this.post<IGetHumidifierStatus>('getHumidifierStatus', {});
+        const status = await this.post<any>('getHumidifierStatus', {});
         if (!status) throw new Error('Failed to get humidifier status');
-        if (status.msg === 'request success') this.status = status.result.result;
+        if (status.msg === 'request success') {
+            this.status = this.normalizeHumidifierStatus(status.result?.result ?? {});
+            return {
+                ...status,
+                result: {
+                    ...status.result,
+                    result: this.status
+                }
+            };
+        }
         return status;
     }
 
@@ -79,5 +88,61 @@ export default class BasicHumidifier extends BasicDevice {
     protected hasLevel(level: number): boolean {
         const methods = (this.constructor as typeof BasicHumidifier).levels;
         return methods.includes(level);
+    }
+
+    protected normalizeHumidifierStatus(rawStatus: any): IGetHumidifierStatus {
+        const configuration = rawStatus?.configuration ?? {};
+        const targetHumidity = this.numberValue(
+            configuration.auto_target_humidity,
+            rawStatus.auto_target_humidity,
+            rawStatus.targetHumidity,
+            rawStatus.target_humidity
+        );
+
+        return {
+            ...rawStatus,
+            humidity: this.numberValue(rawStatus.humidity),
+            enabled: this.booleanValue(rawStatus.enabled, rawStatus.powerSwitch, rawStatus.deviceStatus),
+            mode: rawStatus.mode ?? rawStatus.workMode ?? DeviceModes.Manual,
+            mist_level: this.numberValue(rawStatus.mist_level, rawStatus.mistLevel, rawStatus.level),
+            virtual_mist_level: this.numberValue(rawStatus.virtual_mist_level, rawStatus.virtualLevel, rawStatus.mist_level, rawStatus.mistLevel),
+            warm_mist_enabled: this.booleanValue(rawStatus.warm_mist_enabled, rawStatus.warmPower),
+            warm_mist_level: this.numberValue(rawStatus.warm_mist_level, rawStatus.warmLevel),
+            water_lacks: this.booleanValue(rawStatus.water_lacks, rawStatus.waterLacksState),
+            humidity_high: this.booleanValue(rawStatus.humidity_high),
+            water_tank_lifted: this.booleanValue(rawStatus.water_tank_lifted, rawStatus.waterTankLifted),
+            automatic_stop_reach_target: this.booleanValue(rawStatus.automatic_stop_reach_target, rawStatus.autoStopState),
+            night_light_brightness: this.numberValue(rawStatus.night_light_brightness, rawStatus.nightLight?.brightness, rawStatus.brightness),
+            autoStopSwitch: this.booleanValue(rawStatus.autoStopSwitch),
+            indicator_light_switch: this.booleanValue(rawStatus.indicator_light_switch, rawStatus.screenSwitch),
+            configuration: {
+                ...configuration,
+                auto_target_humidity: targetHumidity
+            }
+        };
+    }
+
+    private numberValue(...values: any[]): number {
+        for (const value of values) {
+            if (typeof value === 'number' && !Number.isNaN(value)) return value;
+            if (typeof value === 'string' && value.trim() !== '') {
+                const parsed = Number(value);
+                if (!Number.isNaN(parsed)) return parsed;
+            }
+        }
+        return 0;
+    }
+
+    private booleanValue(...values: any[]): boolean {
+        for (const value of values) {
+            if (typeof value === 'boolean') return value;
+            if (typeof value === 'number') return value === 1;
+            if (typeof value === 'string') {
+                const normalized = value.toLowerCase();
+                if (['on', 'online', 'true', 'enabled'].includes(normalized)) return true;
+                if (['off', 'offline', 'false', 'disabled'].includes(normalized)) return false;
+            }
+        }
+        return false;
     }
 }

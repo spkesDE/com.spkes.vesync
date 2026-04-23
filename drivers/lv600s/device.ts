@@ -53,7 +53,8 @@ class LV600SDevice extends HumidifierDeviceBase {
         this.log('LV600S has been added');
     }
 
-    async onSettings({oldSettings: {}, newSettings: {}, changedKeys: []}): Promise<string | void> {
+    async onSettings(settings: { oldSettings: any, newSettings: any, changedKeys: string[] }): Promise<string | void> {
+        await super.onSettings(settings);
         this.log('LV600S settings where changed');
     }
 
@@ -62,6 +63,7 @@ class LV600SDevice extends HumidifierDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('LV600S has been deleted');
     }
 
@@ -107,8 +109,8 @@ class LV600SDevice extends HumidifierDeviceBase {
                 if (!this.device.status.enabled)
                     this.setCapabilityValue('lv600sCapability', "off").catch(this.error);
             }
-            if (this.hasCapability("lv600sWarmCapability") && this.device.status.enabled) {
-                this.setCapabilityValue('lv600sWarmCapability', "warm_fan_speed_" + this.device.status.warm_mist_level).catch(this.error);
+            if (this.hasCapability("warmFanSpeed0to3") && this.device.status.enabled) {
+                this.setCapabilityValue('warmFanSpeed0to3', this.device.status.warm_mist_level).catch(this.error);
             }
             this.log("Device has been updated!");
         }

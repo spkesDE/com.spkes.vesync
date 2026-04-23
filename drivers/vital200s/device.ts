@@ -57,6 +57,7 @@ class Vital200s extends PurifierDeviceBase {
     }
 
     async onDeleted() {
+        await super.onDeleted();
         this.log('Vital200s has been deleted');
     }
 
