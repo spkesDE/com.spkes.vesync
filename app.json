@@ -58,6 +58,58 @@
   "flow": {
     "triggers": [
       {
+        "id": "air_quality_changed",
+        "title": {
+          "en": "Air quality changed",
+          "de": "Luftqualitaet geaendert"
+        },
+        "titleFormatted": {
+          "en": "Air quality changed to [[quality]]",
+          "de": "Luftqualitaet wechselte zu [[quality]]"
+        },
+        "tokens": [
+          {
+            "name": "pm25",
+            "type": "number",
+            "title": {
+              "en": "PM2.5",
+              "de": "PM2.5"
+            }
+          },
+          {
+            "name": "previous_pm25",
+            "type": "number",
+            "title": {
+              "en": "Previous PM2.5",
+              "de": "Vorheriges PM2.5"
+            }
+          },
+          {
+            "name": "quality",
+            "type": "string",
+            "title": {
+              "en": "Air quality",
+              "de": "Luftqualitaet"
+            }
+          },
+          {
+            "name": "previous_quality",
+            "type": "string",
+            "title": {
+              "en": "Previous air quality",
+              "de": "Vorherige Luftqualitaet"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          }
+        ]
+      },
+      {
         "id": "airfryer_pull_out",
         "title": {
           "en": "Basket pulled out",
@@ -72,6 +124,84 @@
         ]
       },
       {
+        "id": "device_offline",
+        "title": {
+          "en": "Device went offline",
+          "de": "Gerät ging offline"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "device_online",
+        "title": {
+          "en": "Device came online",
+          "de": "Gerät kam online"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "filter_life_below_threshold",
+        "title": {
+          "en": "Filter life drops below threshold",
+          "de": "Filterlebensdauer faellt unter Schwellwert"
+        },
+        "titleFormatted": {
+          "en": "Filter life drops below [[threshold]]%",
+          "de": "Filterlebensdauer faellt unter [[threshold]]%"
+        },
+        "tokens": [
+          {
+            "name": "filter_life",
+            "type": "number",
+            "title": {
+              "en": "Filter life",
+              "de": "Filterlebensdauer"
+            }
+          },
+          {
+            "name": "previous_filter_life",
+            "type": "number",
+            "title": {
+              "en": "Previous filter life",
+              "de": "Vorherige Filterlebensdauer"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          },
+          {
+            "type": "range",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold",
+              "de": "Schwellwert"
+            },
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "label": "%",
+            "labelMultiplier": 1,
+            "labelDecimals": 0
+          }
+        ]
+      },
+      {
         "id": "filter_life_low",
         "title": {
           "en": "Filter life low",
@@ -81,7 +211,179 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=core200s|core300s|core400s|core600s|lv131s|vital100s|vital200s"
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "humidifier_mode_changed",
+        "title": {
+          "en": "Humidifier mode changed",
+          "de": "Luftbefeuchter-Modus geaendert"
+        },
+        "titleFormatted": {
+          "en": "Humidifier mode changed to [[mode]]",
+          "de": "Luftbefeuchter-Modus wechselte zu [[mode]]"
+        },
+        "tokens": [
+          {
+            "name": "mode",
+            "type": "string",
+            "title": {
+              "en": "Mode",
+              "de": "Modus"
+            }
+          },
+          {
+            "name": "previous_mode",
+            "type": "string",
+            "title": {
+              "en": "Previous mode",
+              "de": "Vorheriger Modus"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
+          }
+        ]
+      },
+      {
+        "id": "pm25_above_threshold",
+        "title": {
+          "en": "PM2.5 rises above threshold",
+          "de": "PM2.5 steigt ueber Schwellwert"
+        },
+        "titleFormatted": {
+          "en": "PM2.5 rises above [[threshold]]",
+          "de": "PM2.5 steigt ueber [[threshold]]"
+        },
+        "tokens": [
+          {
+            "name": "pm25",
+            "type": "number",
+            "title": {
+              "en": "PM2.5",
+              "de": "PM2.5"
+            }
+          },
+          {
+            "name": "previous_pm25",
+            "type": "number",
+            "title": {
+              "en": "Previous PM2.5",
+              "de": "Vorheriges PM2.5"
+            }
+          },
+          {
+            "name": "quality",
+            "type": "string",
+            "title": {
+              "en": "Air quality",
+              "de": "Luftqualitaet"
+            }
+          },
+          {
+            "name": "previous_quality",
+            "type": "string",
+            "title": {
+              "en": "Previous air quality",
+              "de": "Vorherige Luftqualitaet"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          },
+          {
+            "type": "range",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold",
+              "de": "Schwellwert"
+            },
+            "min": 1,
+            "max": 500,
+            "step": 1,
+            "labelDecimals": 0
+          }
+        ]
+      },
+      {
+        "id": "purifier_mode_changed",
+        "title": {
+          "en": "Purifier mode changed",
+          "de": "Luftreiniger-Modus geaendert"
+        },
+        "titleFormatted": {
+          "en": "Purifier mode changed to [[mode]]",
+          "de": "Luftreiniger-Modus wechselte zu [[mode]]"
+        },
+        "tokens": [
+          {
+            "name": "mode",
+            "type": "string",
+            "title": {
+              "en": "Mode",
+              "de": "Modus"
+            }
+          },
+          {
+            "name": "previous_mode",
+            "type": "string",
+            "title": {
+              "en": "Previous mode",
+              "de": "Vorheriger Modus"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "target_humidity_reached",
+        "title": {
+          "en": "Target humidity reached",
+          "de": "Zielfeuchtigkeit erreicht"
+        },
+        "titleFormatted": {
+          "en": "Humidity reached [[target_humidity]]%",
+          "de": "Feuchtigkeit erreichte [[target_humidity]]%"
+        },
+        "tokens": [
+          {
+            "name": "humidity",
+            "type": "number",
+            "title": {
+              "en": "Humidity",
+              "de": "Feuchtigkeit"
+            }
+          },
+          {
+            "name": "target_humidity",
+            "type": "number",
+            "title": {
+              "en": "Target humidity",
+              "de": "Zielfeuchtigkeit"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
           }
         ]
       },
@@ -95,7 +397,21 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=lv600s|dual200s|classic200s|classic300s|oasis450s|oasis1000s"
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
+          }
+        ]
+      },
+      {
+        "id": "water_tank_refilled",
+        "title": {
+          "en": "Water tank refilled",
+          "de": "Wassertank nachgefuellt"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
           }
         ]
       }
@@ -477,6 +793,56 @@
           }
         ],
         "id": "nightlight_slider"
+      },
+      {
+        "title": {
+          "en": "Refresh device status",
+          "de": "Gerätestatus aktualisieren"
+        },
+        "titleFormatted": {
+          "en": "Refresh status of [[device]]",
+          "de": "Aktualisiere Status von [[device]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+          }
+        ],
+        "id": "refresh_device_status"
+      },
+      {
+        "title": {
+          "en": "Set target humidity",
+          "de": "Zielfeuchtigkeit setzen"
+        },
+        "titleFormatted": {
+          "en": "Set target humidity to [[humidity]]%",
+          "de": "Setze Zielfeuchtigkeit auf [[humidity]]%"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis1000s|oasis450s|sprouthumidifier"
+          },
+          {
+            "type": "range",
+            "name": "humidity",
+            "title": {
+              "en": "Humidity",
+              "de": "Feuchtigkeit"
+            },
+            "min": 30,
+            "max": 80,
+            "step": 1,
+            "label": "%",
+            "labelMultiplier": 1,
+            "labelDecimals": 0
+          }
+        ],
+        "id": "set_target_humidity"
       },
       {
         "title": {
@@ -3381,7 +3747,7 @@
     },
     {
       "name": {
-        "en": "Vital 100s (Experimental)"
+        "en": "Vital 100s"
       },
       "class": "airpurifier",
       "capabilities": [

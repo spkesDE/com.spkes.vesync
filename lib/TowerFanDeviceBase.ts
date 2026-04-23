@@ -126,7 +126,7 @@ export default class TowerFanDeviceBase extends Homey.Device {
         // Get the latest device status
         const status = await this.device.getTowerFanStatus().catch(async (reason: Error) => {
             if (reason.message === "device offline") {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             } else {
                 await this.setUnavailable(reason.message).catch(this.error);
                 this.error(reason);
@@ -138,7 +138,7 @@ export default class TowerFanDeviceBase extends Homey.Device {
         if (!status || status.msg !== "request success") {
             this.error("Failed to get device status.");
             if (this.getAvailable()) {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             }
             return;
         }
@@ -146,6 +146,7 @@ export default class TowerFanDeviceBase extends Homey.Device {
         // Set the device as available
         if (!this.getAvailable()) {
             await this.setAvailable().catch(this.error);
+            await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
         }
 
         // Helper function to update capability
@@ -175,6 +176,14 @@ export default class TowerFanDeviceBase extends Homey.Device {
     async checkForCapability(capability: string) {
         if (!this.hasCapability(capability))
             await this.addCapability(capability).catch(this.error);
+    }
+
+    private async markDeviceOffline(): Promise<void> {
+        const wasAvailable = this.getAvailable();
+        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+        if (wasAvailable) {
+            await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
+        }
     }
 
 }

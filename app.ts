@@ -59,6 +59,11 @@ export default class VeSyncApp extends Homey.App {
     }
 
     private async _initializeFlows() {
+        const numberValue = (value: unknown): number | null => {
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : null;
+        };
+
         /**************/
         /* Fan Speeds */
         /**************/
@@ -81,6 +86,39 @@ export default class VeSyncApp extends Homey.App {
                 await this.veSync.getDevices().catch((error: Error) => this.error(error));
             }
             this.log("VeSync diagnostic report:\n" + this.veSync.getDiagnosticReport());
+            return true;
+        });
+        this.homey.flow.getDeviceTriggerCard("pm25_above_threshold").registerRunListener(async (args, state) => {
+            const threshold = numberValue(args.threshold);
+            const currentPm25 = numberValue(state?.pm25);
+            const previousPm25 = numberValue(state?.previous_pm25);
+            if (threshold === null || currentPm25 === null || previousPm25 === null) {
+                return false;
+            }
+            return previousPm25 < threshold && currentPm25 >= threshold;
+        });
+        this.homey.flow.getDeviceTriggerCard("filter_life_below_threshold").registerRunListener(async (args, state) => {
+            const threshold = numberValue(args.threshold);
+            const currentFilterLife = numberValue(state?.filter_life);
+            const previousFilterLife = numberValue(state?.previous_filter_life);
+            if (threshold === null || currentFilterLife === null || previousFilterLife === null) {
+                return false;
+            }
+            return previousFilterLife > threshold && currentFilterLife <= threshold;
+        });
+        this.homey.flow.getActionCard("refresh_device_status").registerRunListener(async (args) => {
+            await (args.device as any).updateDevice();
+            return true;
+        });
+        this.homey.flow.getActionCard("set_target_humidity").registerRunListener(async (args) => {
+            const targetHumidity = Number(args.humidity);
+            if (!Number.isFinite(targetHumidity)) {
+                throw new Error("Humidity must be a valid number.");
+            }
+
+            const device = (args.device as any).device as BasicHumidifier;
+            await device.setTargetHumidity(targetHumidity);
+            await (args.device as any).updateDevice();
             return true;
         });
 

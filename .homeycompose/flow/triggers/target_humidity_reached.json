@@ -1,0 +1,36 @@
+{
+  "id": "target_humidity_reached",
+  "title": {
+    "en": "Target humidity reached",
+    "de": "Zielfeuchtigkeit erreicht"
+  },
+  "titleFormatted": {
+    "en": "Humidity reached [[target_humidity]]%",
+    "de": "Feuchtigkeit erreichte [[target_humidity]]%"
+  },
+  "tokens": [
+    {
+      "name": "humidity",
+      "type": "number",
+      "title": {
+        "en": "Humidity",
+        "de": "Feuchtigkeit"
+      }
+    },
+    {
+      "name": "target_humidity",
+      "type": "number",
+      "title": {
+        "en": "Target humidity",
+        "de": "Zielfeuchtigkeit"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
+    }
+  ]
+}

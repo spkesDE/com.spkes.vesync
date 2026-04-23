@@ -7,6 +7,9 @@ import DeviceModes from "../tsvesync/enum/DeviceModes";
 export default class HumidifierDeviceBase extends Homey.Device {
     device!: BasicHumidifier;
     private updateInterval!: NodeJS.Timer;
+    private lastKnownFlowMode: string | null = null;
+    private lastKnownWaterLacks: boolean | null = null;
+    private lastKnownHumidity: number | null = null;
 
     async onInit() {
         const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
@@ -118,7 +121,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         // Get the latest device status
         const status = await this.device.getHumidifierStatus().catch(async (reason: Error) => {
             if (reason.message === "device offline") {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             } else {
                 await this.setUnavailable(reason.message).catch(this.error);
                 this.error(reason);
@@ -129,7 +132,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         // If the status fetch failed, exit early
         if (!status || status.msg !== "request success") {
             if (this.getAvailable()) {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             }
             return;
         }
@@ -137,6 +140,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
         // Set the device as available
         if (!this.getAvailable()) {
             await this.setAvailable().catch(this.error);
+            await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
         }
 
         // Update capabilities based on status
@@ -163,6 +167,10 @@ export default class HumidifierDeviceBase extends Homey.Device {
         if (waterLacks) {
             await this.homey.flow.getDeviceTriggerCard("water_lacks").trigger(this).catch(this.error);
         }
+        if (this.lastKnownWaterLacks === true && waterLacks === false) {
+            await this.homey.flow.getDeviceTriggerCard("water_tank_refilled").trigger(this).catch(this.error);
+        }
+        this.lastKnownWaterLacks = waterLacks;
 
 
         // Nightlight state
@@ -170,6 +178,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
         // Update target humidity setting
         const currentSettingHumidity = this.getSetting("humidity");
+        const currentHumidity = status.result.result.humidity ?? 0;
         const statusResult = status.result.result as any;
         const deviceHumidity =
             statusResult.configuration?.auto_target_humidity ??
@@ -178,6 +187,24 @@ export default class HumidifierDeviceBase extends Homey.Device {
             0;
         if (currentSettingHumidity != null && Number(currentSettingHumidity) !== deviceHumidity) {
             await this.setSettings({humidity: deviceHumidity}).catch(this.error);
+        }
+        if (deviceHumidity > 0 && this.lastKnownHumidity !== null && this.lastKnownHumidity < deviceHumidity && currentHumidity >= deviceHumidity) {
+            await this.homey.flow.getDeviceTriggerCard("target_humidity_reached").trigger(this, {
+                humidity: currentHumidity,
+                target_humidity: deviceHumidity,
+            }).catch(this.error);
+        }
+        this.lastKnownHumidity = currentHumidity;
+
+        const currentFlowMode = this.getFlowMode();
+        if (currentFlowMode !== null) {
+            if (this.lastKnownFlowMode !== null && this.lastKnownFlowMode !== currentFlowMode) {
+                await this.homey.flow.getDeviceTriggerCard("humidifier_mode_changed").trigger(this, {
+                    mode: this.formatFlowMode(currentFlowMode),
+                    previous_mode: this.formatFlowMode(this.lastKnownFlowMode),
+                }).catch(this.error);
+            }
+            this.lastKnownFlowMode = currentFlowMode;
         }
     }
 
@@ -189,5 +216,48 @@ export default class HumidifierDeviceBase extends Homey.Device {
     async checkForCapability(capability: string) {
         if (!this.hasCapability(capability))
             await this.addCapability(capability).catch(this.error);
+    }
+
+    private async markDeviceOffline(): Promise<void> {
+        const wasAvailable = this.getAvailable();
+        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+        if (wasAvailable) {
+            await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
+        }
+    }
+
+    private getFlowMode(): string | null {
+        if (!this.device?.status) {
+            return null;
+        }
+        if (!this.device.status.enabled) {
+            return "off";
+        }
+
+        switch (this.device.status.mode) {
+            case DeviceModes.Auto:
+            case DeviceModes.Manual:
+            case DeviceModes.Sleep:
+                return this.device.status.mode;
+            case DeviceModes.Humidity:
+                return "auto";
+            default:
+                return typeof this.device.status.mode === "string" ? this.device.status.mode : null;
+        }
+    }
+
+    private formatFlowMode(mode: string): string {
+        switch (mode) {
+            case "off":
+                return "Off";
+            case "auto":
+                return "Auto";
+            case "manual":
+                return "Manual";
+            case "sleep":
+                return "Sleep";
+            default:
+                return mode;
+        }
     }
 }

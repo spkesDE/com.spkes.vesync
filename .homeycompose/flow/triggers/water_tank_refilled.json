@@ -1,8 +1,8 @@
 {
-  "id": "water_lacks",
+  "id": "water_tank_refilled",
   "title": {
-    "en": "Water Lacks",
-    "de": "Wasserstand zu niedrig"
+    "en": "Water tank refilled",
+    "de": "Wassertank nachgefuellt"
   },
   "args": [
     {

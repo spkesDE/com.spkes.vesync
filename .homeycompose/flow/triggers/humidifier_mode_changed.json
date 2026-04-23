@@ -1,0 +1,36 @@
+{
+  "id": "humidifier_mode_changed",
+  "title": {
+    "en": "Humidifier mode changed",
+    "de": "Luftbefeuchter-Modus geaendert"
+  },
+  "titleFormatted": {
+    "en": "Humidifier mode changed to [[mode]]",
+    "de": "Luftbefeuchter-Modus wechselte zu [[mode]]"
+  },
+  "tokens": [
+    {
+      "name": "mode",
+      "type": "string",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      }
+    },
+    {
+      "name": "previous_mode",
+      "type": "string",
+      "title": {
+        "en": "Previous mode",
+        "de": "Vorheriger Modus"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
+    }
+  ]
+}

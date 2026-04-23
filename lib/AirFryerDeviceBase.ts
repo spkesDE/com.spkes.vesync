@@ -155,7 +155,7 @@ export default class AirFryerDeviceBase extends Homey.Device {
     async updateDevice(): Promise<void> {
         const status = await this.device.getAirFryerStatus().catch(async (reason: Error) => {
             if (reason.message === "device offline") {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             } else {
                 await this.setUnavailable(reason.message).catch(this.error);
                 this.error(reason);
@@ -165,13 +165,14 @@ export default class AirFryerDeviceBase extends Homey.Device {
 
         if (!status || status.msg !== "request success") {
             if (this.getAvailable()) {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             }
             return;
         }
 
         if (!this.getAvailable()) {
             await this.setAvailable().catch(this.error);
+            await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
         }
 
         const airFryerStatus = status.result.result;
@@ -492,6 +493,14 @@ export default class AirFryerDeviceBase extends Homey.Device {
                 return 'proof';
             default:
                 return 'mixed';
+        }
+    }
+
+    private async markDeviceOffline(): Promise<void> {
+        const wasAvailable = this.getAvailable();
+        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+        if (wasAvailable) {
+            await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
         }
     }
 }

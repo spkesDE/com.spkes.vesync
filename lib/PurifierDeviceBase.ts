@@ -7,6 +7,10 @@ import DeviceModes from "../tsvesync/enum/DeviceModes";
 export default class PurifierDeviceBase extends Homey.Device {
     device!: BasicPurifier;
     private updateInterval!: NodeJS.Timer;
+    private lastKnownFlowMode: string | null = null;
+    private lastKnownPm25: number | null = null;
+    private lastKnownAirQuality: string | null = null;
+    private lastKnownFilterLife: number | null = null;
 
     async onInit() {
         const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
@@ -115,7 +119,7 @@ export default class PurifierDeviceBase extends Homey.Device {
         // Get the latest device status
         const status = await this.device.getPurifierStatus().catch(async (reason: Error) => {
             if (reason.message === "device offline") {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             } else {
                 await this.setUnavailable(reason.message).catch(this.error);
                 this.error(reason);
@@ -127,7 +131,7 @@ export default class PurifierDeviceBase extends Homey.Device {
         if (!status || status.msg !== "request success") {
             this.error("Failed to get device status.");
             if (this.getAvailable()) {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             }
             return;
         }
@@ -135,6 +139,7 @@ export default class PurifierDeviceBase extends Homey.Device {
         // Set the device as available
         if (!this.getAvailable()) {
             await this.setAvailable().catch(this.error);
+            await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
         }
 
         // Helper function to update capability
@@ -169,12 +174,112 @@ export default class PurifierDeviceBase extends Homey.Device {
         // Other status updates
         await updateCapability('display_toggle', Boolean(status.result.result.display));
         await updateCapability('nightlight_toggle', status.result.result.night_light === "on");
+
+        const currentFlowMode = this.getFlowMode();
+        if (currentFlowMode !== null) {
+            if (this.lastKnownFlowMode !== null && this.lastKnownFlowMode !== currentFlowMode) {
+                await this.homey.flow.getDeviceTriggerCard("purifier_mode_changed").trigger(this, {
+                    mode: this.formatFlowMode(currentFlowMode),
+                    previous_mode: this.formatFlowMode(this.lastKnownFlowMode),
+                }).catch(this.error);
+            }
+            this.lastKnownFlowMode = currentFlowMode;
+        }
+
+        const currentAirQuality = typeof status.result.result.air_quality === "string"
+            ? status.result.result.air_quality
+            : null;
+        if (this.lastKnownPm25 !== null && this.lastKnownPm25 !== airQualityValue) {
+            await this.homey.flow.getDeviceTriggerCard("air_quality_changed").trigger(this, {
+                pm25: airQualityValue,
+                previous_pm25: this.lastKnownPm25,
+                quality: this.formatAirQuality(currentAirQuality),
+                previous_quality: this.formatAirQuality(this.lastKnownAirQuality),
+            }).catch(this.error);
+            await this.homey.flow.getDeviceTriggerCard("pm25_above_threshold").trigger(this, {
+                pm25: airQualityValue,
+                previous_pm25: this.lastKnownPm25,
+                quality: this.formatAirQuality(currentAirQuality),
+                previous_quality: this.formatAirQuality(this.lastKnownAirQuality),
+            }, {
+                pm25: airQualityValue,
+                previous_pm25: this.lastKnownPm25,
+            }).catch(this.error);
+        }
+        this.lastKnownPm25 = airQualityValue;
+        this.lastKnownAirQuality = currentAirQuality;
+
+        if (this.lastKnownFilterLife !== null && this.lastKnownFilterLife !== filterLife) {
+            await this.homey.flow.getDeviceTriggerCard("filter_life_below_threshold").trigger(this, {
+                filter_life: filterLife,
+                previous_filter_life: this.lastKnownFilterLife,
+            }, {
+                filter_life: filterLife,
+                previous_filter_life: this.lastKnownFilterLife,
+            }).catch(this.error);
+        }
+        this.lastKnownFilterLife = filterLife;
     }
 
 
     async checkForCapability(capability: string) {
         if (!this.hasCapability(capability))
             await this.addCapability(capability).catch(this.error);
+    }
+
+    private async markDeviceOffline(): Promise<void> {
+        const wasAvailable = this.getAvailable();
+        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+        if (wasAvailable) {
+            await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
+        }
+    }
+
+    private getFlowMode(): string | null {
+        if (!this.device?.status) {
+            return null;
+        }
+        if (!this.device.status.enabled) {
+            return "off";
+        }
+
+        return typeof this.device.status.mode === "string" ? this.device.status.mode : null;
+    }
+
+    private formatFlowMode(mode: string): string {
+        switch (mode) {
+            case "off":
+                return "Off";
+            case "auto":
+                return "Auto";
+            case "manual":
+                return "Manual";
+            case "sleep":
+                return "Sleep";
+            case "pet":
+                return "Pet";
+            case "turbo":
+                return "Turbo";
+            default:
+                return mode;
+        }
+    }
+
+    private formatAirQuality(quality: string | null): string {
+        switch (quality) {
+            case "excellent":
+                return "Excellent";
+            case "good":
+                return "Good";
+            case "moderate":
+                return "Moderate";
+            case "poor":
+                return "Poor";
+            case "very poor":
+                return "Very poor";
+            default:
+                return quality ?? "";
+        }
     }
 
 }
