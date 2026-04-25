@@ -4,8 +4,9 @@ import VeSyncApp from "../app";
 import BasicPurifier from "../tsvesync/lib/BasicPurifier";
 import DeviceModes from "../tsvesync/enum/DeviceModes";
 import { getErrorMessage } from "./utils/error";
+import HomeyDeviceBase from "./HomeyDeviceBase";
 
-export default class PurifierDeviceBase extends Homey.Device {
+export default class PurifierDeviceBase extends HomeyDeviceBase {
     device!: BasicPurifier;
     private updateInterval!: NodeJS.Timer;
     private lastKnownFlowMode: string | null = null;
@@ -146,37 +147,31 @@ export default class PurifierDeviceBase extends Homey.Device {
         }
 
         // Helper function to update capability
-        const updateCapability = async (capability: string, value: any) => {
-            if (this.hasCapability(capability)) {
-                await this.setCapabilityValue(capability, value).catch(this.error);
-            }
-        };
-
         // Update device status values
         const level = status.result.result.level ?? 0;
-        await updateCapability('onoff', status.result.result.enabled ?? false);
-        await updateCapability('fanSpeed0to3', level);
-        await updateCapability('fanSpeed0to4', level);
-        await updateCapability('fanSpeed0to5', level);
-        await updateCapability('fanSpeed0to9', level);
+        await this.setCapabilityIfPresent('onoff', status.result.result.enabled ?? false);
+        await this.setCapabilityIfPresent('fanSpeed0to3', level);
+        await this.setCapabilityIfPresent('fanSpeed0to4', level);
+        await this.setCapabilityIfPresent('fanSpeed0to5', level);
+        await this.setCapabilityIfPresent('fanSpeed0to9', level);
 
         // Air quality and filter life
         const airQualityValue = status.result.result.air_quality_value ?? 0;
-        await updateCapability('measure_pm25', airQualityValue);
-        await updateCapability('alarm_pm25', airQualityValue > 91);
+        await this.setCapabilityIfPresent('measure_pm25', airQualityValue);
+        await this.setCapabilityIfPresent('alarm_pm25', airQualityValue > 91);
 
         const filterLife = status.result.result.filter_life ?? 100;
-        await updateCapability('measure_filter_life', filterLife);
+        await this.setCapabilityIfPresent('measure_filter_life', filterLife);
 
         const replaceFilter = Boolean(status.result.result.replace_filter);
-        await updateCapability('alarm_filter_life', replaceFilter);
+        await this.setCapabilityIfPresent('alarm_filter_life', replaceFilter);
         if (replaceFilter) {
             await this.homey.flow.getDeviceTriggerCard("filter_life_low").trigger(this).catch(this.error);
         }
 
         // Other status updates
-        await updateCapability('display_toggle', Boolean(status.result.result.display));
-        await updateCapability('nightlight_toggle', status.result.result.night_light === "on");
+        await this.setCapabilityIfPresent('display_toggle', Boolean(status.result.result.display));
+        await this.setCapabilityIfPresent('nightlight_toggle', status.result.result.night_light === "on");
 
         const currentFlowMode = this.getFlowMode();
         if (currentFlowMode !== null) {
@@ -223,21 +218,6 @@ export default class PurifierDeviceBase extends Homey.Device {
         }
         this.lastKnownFilterLife = filterLife;
     }
-
-
-    async checkForCapability(capability: string) {
-        if (!this.hasCapability(capability))
-            await this.addCapability(capability).catch(this.error);
-    }
-
-    private async markDeviceOffline(): Promise<void> {
-        const wasAvailable = this.getAvailable();
-        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-        if (wasAvailable) {
-            await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
-        }
-    }
-
     private getFlowMode(): string | null {
         if (!this.device?.status) {
             return null;

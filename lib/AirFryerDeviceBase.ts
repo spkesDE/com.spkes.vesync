@@ -6,12 +6,13 @@ import IStartMultiCookPayload from "../tsvesync/models/airfryer/IStartMultiCookP
 import {IAirFryerPreset} from "../tsvesync/models/airfryer/IAirFryerPreset";
 import {IAirFryerStatusItem} from "../tsvesync/models/airfryer/IGetAirFryerMultiStatus";
 import { getErrorMessage } from "./utils/error";
+import HomeyDeviceBase from "./HomeyDeviceBase";
 
 type AirFryerProgramId = 'off' | 'airfry' | 'bake' | 'roast' | 'grill' | 'reheat' | 'dry' | 'proof' | 'mixed';
 type AirFryerCookStatusId = 'standby' | 'ready' | 'awaiting_input' | 'pull_out' | 'cooking' | 'paused' | 'completed' | 'unknown';
 const DEFAULT_PROGRAM: Exclude<AirFryerProgramId, 'off' | 'mixed'> = 'airfry';
 
-export default class AirFryerDeviceBase extends Homey.Device {
+export default class AirFryerDeviceBase extends HomeyDeviceBase {
     device!: BasicAirFryer;
     private updateInterval!: NodeJS.Timer;
     private awaitingInputSince: number | null = null;
@@ -216,16 +217,8 @@ export default class AirFryerDeviceBase extends Homey.Device {
         }
     }
 
-    async checkForCapability(capability: string) {
-        if (!this.hasCapability(capability)) {
-            await this.addCapability(capability).catch(this.error);
-        }
-    }
-
     private async updateCapability(capability: string, value: string | number | boolean): Promise<void> {
-        if (this.hasCapability(capability)) {
-            await this.setCapabilityValue(capability, value).catch(this.error);
-        }
+        await this.setCapabilityIfPresent(capability, value);
     }
 
     private async ensureDefaultCapabilityValues(): Promise<void> {
@@ -496,14 +489,6 @@ export default class AirFryerDeviceBase extends Homey.Device {
                 return 'proof';
             default:
                 return 'mixed';
-        }
-    }
-
-    private async markDeviceOffline(): Promise<void> {
-        const wasAvailable = this.getAvailable();
-        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-        if (wasAvailable) {
-            await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
         }
     }
 }

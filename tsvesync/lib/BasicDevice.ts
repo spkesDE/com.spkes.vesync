@@ -39,6 +39,30 @@ export default class BasicDevice {
         return methods.includes(method);
     }
 
+    protected numberValue(...values: any[]): number {
+        for (const value of values) {
+            if (typeof value === 'number' && !Number.isNaN(value)) return value;
+            if (typeof value === 'string' && value.trim() !== '') {
+                const parsed = Number(value);
+                if (!Number.isNaN(parsed)) return parsed;
+            }
+        }
+        return 0;
+    }
+
+    protected booleanValue(...values: any[]): boolean {
+        for (const value of values) {
+            if (typeof value === 'boolean') return value;
+            if (typeof value === 'number') return value === 1;
+            if (typeof value === 'string') {
+                const normalized = value.toLowerCase();
+                if (['on', 'online', 'true', 'enabled'].includes(normalized)) return true;
+                if (['off', 'offline', 'false', 'disabled'].includes(normalized)) return false;
+            }
+        }
+        return false;
+    }
+
     async post<T>(method: string, payload: any): Promise<IApiResponse<T>> {
         return this.callApi<T>(method, payload, 'post');
     }

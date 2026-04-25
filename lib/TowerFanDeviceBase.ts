@@ -4,9 +4,10 @@ import VeSyncApp from "../app";
 import BasicTowerFan from "../tsvesync/lib/BasicTowerFan";
 import DeviceModes from "../tsvesync/enum/DeviceModes";
 import { getErrorMessage } from "./utils/error";
+import HomeyDeviceBase from "./HomeyDeviceBase";
 
 
-export default class TowerFanDeviceBase extends Homey.Device {
+export default class TowerFanDeviceBase extends HomeyDeviceBase {
     device!: BasicTowerFan;
     private updateInterval!: NodeJS.Timer;
 
@@ -152,41 +153,19 @@ export default class TowerFanDeviceBase extends Homey.Device {
             await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
         }
 
-        // Helper function to update capability
-        const updateCapability = async (capability: string, value: any) => {
-            if (this.hasCapability(capability)) {
-                await this.setCapabilityValue(capability, value).catch(this.error);
-            }
-        };
-
         // Fan speed updates
         const fanSpeedLevel = status.result.result.fanSpeedLevel ?? 0;
-        await updateCapability('fanSpeed0to3', fanSpeedLevel);
-        await updateCapability('fanSpeed0to4', fanSpeedLevel);
-        await updateCapability('fanSpeed0to5', fanSpeedLevel);
-        await updateCapability('fanSpeed0to9', fanSpeedLevel);
-        await updateCapability('fanSpeed0to12', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to3', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to4', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to5', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to9', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to12', fanSpeedLevel);
 
         // Other status updates
-        await updateCapability('measure_temperature', status.result.result.temperature);
-        await updateCapability('onoff', Boolean(status.result.result.powerSwitch));
-        await updateCapability('oscillation_toggle', Boolean(status.result.result.oscillationState));
-        await updateCapability('display_toggle', Boolean(status.result.result.screenState));
-        await updateCapability('mute_toggle', Boolean(status.result.result.muteState));
+        await this.setCapabilityIfPresent('measure_temperature', status.result.result.temperature);
+        await this.setCapabilityIfPresent('onoff', Boolean(status.result.result.powerSwitch));
+        await this.setCapabilityIfPresent('oscillation_toggle', Boolean(status.result.result.oscillationState));
+        await this.setCapabilityIfPresent('display_toggle', Boolean(status.result.result.screenState));
+        await this.setCapabilityIfPresent('mute_toggle', Boolean(status.result.result.muteState));
     }
-
-
-    async checkForCapability(capability: string) {
-        if (!this.hasCapability(capability))
-            await this.addCapability(capability).catch(this.error);
-    }
-
-    private async markDeviceOffline(): Promise<void> {
-        const wasAvailable = this.getAvailable();
-        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-        if (wasAvailable) {
-            await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
-        }
-    }
-
 }

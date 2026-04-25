@@ -4,8 +4,9 @@ import VeSyncApp from "../app";
 import BasicHumidifier from "../tsvesync/lib/BasicHumidifier";
 import DeviceModes from "../tsvesync/enum/DeviceModes";
 import { getErrorMessage } from "./utils/error";
+import HomeyDeviceBase from "./HomeyDeviceBase";
 
-export default class HumidifierDeviceBase extends Homey.Device {
+export default class HumidifierDeviceBase extends HomeyDeviceBase {
     device!: BasicHumidifier;
     private updateInterval!: NodeJS.Timer;
     private lastKnownFlowMode: string | null = null;
@@ -147,26 +148,20 @@ export default class HumidifierDeviceBase extends Homey.Device {
         }
 
         // Update capabilities based on status
-        const updateCapability = async (capability: string, value: any) => {
-            if (this.hasCapability(capability)) {
-                await this.setCapabilityValue(capability, value).catch(this.error);
-            }
-        };
-
         // Fan speed updates
         const fanSpeed = status.result.result.virtual_mist_level ?? status.result.result.mist_level ?? 0;
-        await updateCapability('fanSpeed0to2', fanSpeed);
-        await updateCapability('fanSpeed0to3', fanSpeed);
-        await updateCapability('fanSpeed0to4', fanSpeed);
-        await updateCapability('fanSpeed0to5', fanSpeed);
-        await updateCapability('fanSpeed0to9', fanSpeed);
+        await this.setCapabilityIfPresent('fanSpeed0to2', fanSpeed);
+        await this.setCapabilityIfPresent('fanSpeed0to3', fanSpeed);
+        await this.setCapabilityIfPresent('fanSpeed0to4', fanSpeed);
+        await this.setCapabilityIfPresent('fanSpeed0to5', fanSpeed);
+        await this.setCapabilityIfPresent('fanSpeed0to9', fanSpeed);
 
         // Humidity updates
-        await updateCapability('measure_humidity', status.result.result.humidity ?? 0);
+        await this.setCapabilityIfPresent('measure_humidity', status.result.result.humidity ?? 0);
 
         // Water lacks alarm
         const waterLacks = status.result.result.water_lacks ?? false;
-        await updateCapability('alarm_water_lacks', waterLacks);
+        await this.setCapabilityIfPresent('alarm_water_lacks', waterLacks);
         if (waterLacks) {
             await this.homey.flow.getDeviceTriggerCard("water_lacks").trigger(this).catch(this.error);
         }
@@ -177,7 +172,7 @@ export default class HumidifierDeviceBase extends Homey.Device {
 
 
         // Nightlight state
-        await updateCapability('nightlight_toggle', status.result.result.night_light_brightness > 0);
+        await this.setCapabilityIfPresent('nightlight_toggle', status.result.result.night_light_brightness > 0);
 
         // Update target humidity setting
         const currentSettingHumidity = this.getSetting("humidity");
@@ -214,19 +209,6 @@ export default class HumidifierDeviceBase extends Homey.Device {
     async onSettings(settings: { oldSettings: any, newSettings: any, changedKeys: string[] }): Promise<string | void> {
         if (settings.changedKeys.includes("humidity"))
             await this.device.setTargetHumidity(settings.newSettings.humidity ?? 45).catch(this.error);
-    }
-
-    async checkForCapability(capability: string) {
-        if (!this.hasCapability(capability))
-            await this.addCapability(capability).catch(this.error);
-    }
-
-    private async markDeviceOffline(): Promise<void> {
-        const wasAvailable = this.getAvailable();
-        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-        if (wasAvailable) {
-            await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
-        }
     }
 
     private getFlowMode(): string | null {
