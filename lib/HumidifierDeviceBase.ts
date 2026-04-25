@@ -4,6 +4,16 @@ import VeSyncApp from "../app";
 import BasicHumidifier from "../tsvesync/lib/BasicHumidifier";
 import DeviceModes from "../tsvesync/enum/DeviceModes";
 
+const getErrorMessage = (reason: unknown): string => {
+    if (reason instanceof Error && typeof reason.message === "string" && reason.message.length > 0) {
+        return reason.message;
+    }
+    if (typeof reason === "string" && reason.length > 0) {
+        return reason;
+    }
+    return "Unknown error";
+};
+
 export default class HumidifierDeviceBase extends Homey.Device {
     device!: BasicHumidifier;
     private updateInterval!: NodeJS.Timer;
@@ -93,11 +103,12 @@ export default class HumidifierDeviceBase extends Homey.Device {
                 return reject("Device is undefined or is not a VeSyncHumidifier");
             }
             this.device = device as BasicHumidifier;
-            const status = await this.device.getHumidifierStatus().catch(async (reason: Error) => {
-                if (reason.message === "device offline") {
+            const status = await this.device.getHumidifierStatus().catch(async (reason: unknown) => {
+                const message = getErrorMessage(reason);
+                if (message === "device offline") {
                     await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
                 } else {
-                    await this.setUnavailable(reason.message).catch(this.error);
+                    await this.setUnavailable(message).catch(this.error);
                     this.error(reason);
                 }
                 return null;
@@ -119,11 +130,12 @@ export default class HumidifierDeviceBase extends Homey.Device {
         }
 
         // Get the latest device status
-        const status = await this.device.getHumidifierStatus().catch(async (reason: Error) => {
-            if (reason.message === "device offline") {
+        const status = await this.device.getHumidifierStatus().catch(async (reason: unknown) => {
+            const message = getErrorMessage(reason);
+            if (message === "device offline") {
                 await this.markDeviceOffline();
             } else {
-                await this.setUnavailable(reason.message).catch(this.error);
+                await this.setUnavailable(message).catch(this.error);
                 this.error(reason);
             }
             return null;

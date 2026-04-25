@@ -6,6 +6,16 @@ import IStartMultiCookPayload from "../tsvesync/models/airfryer/IStartMultiCookP
 import {IAirFryerPreset} from "../tsvesync/models/airfryer/IAirFryerPreset";
 import {IAirFryerStatusItem} from "../tsvesync/models/airfryer/IGetAirFryerMultiStatus";
 
+const getErrorMessage = (reason: unknown): string => {
+    if (reason instanceof Error && typeof reason.message === "string" && reason.message.length > 0) {
+        return reason.message;
+    }
+    if (typeof reason === "string" && reason.length > 0) {
+        return reason;
+    }
+    return "Unknown error";
+};
+
 type AirFryerProgramId = 'off' | 'airfry' | 'bake' | 'roast' | 'grill' | 'reheat' | 'dry' | 'proof' | 'mixed';
 type AirFryerCookStatusId = 'standby' | 'ready' | 'awaiting_input' | 'pull_out' | 'cooking' | 'paused' | 'completed' | 'unknown';
 const DEFAULT_PROGRAM: Exclude<AirFryerProgramId, 'off' | 'mixed'> = 'airfry';
@@ -131,11 +141,12 @@ export default class AirFryerDeviceBase extends Homey.Device {
             }
 
             this.device = device as BasicAirFryer;
-            const status = await this.device.getAirFryerStatus().catch(async (reason: Error) => {
-                if (reason.message === "device offline") {
+            const status = await this.device.getAirFryerStatus().catch(async (reason: unknown) => {
+                const message = getErrorMessage(reason);
+                if (message === "device offline") {
                     await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
                 } else {
-                    await this.setUnavailable(reason.message).catch(this.error);
+                    await this.setUnavailable(message).catch(this.error);
                     this.error(reason);
                 }
                 return null;
@@ -153,11 +164,12 @@ export default class AirFryerDeviceBase extends Homey.Device {
     }
 
     async updateDevice(): Promise<void> {
-        const status = await this.device.getAirFryerStatus().catch(async (reason: Error) => {
-            if (reason.message === "device offline") {
+        const status = await this.device.getAirFryerStatus().catch(async (reason: unknown) => {
+            const message = getErrorMessage(reason);
+            if (message === "device offline") {
                 await this.markDeviceOffline();
             } else {
-                await this.setUnavailable(reason.message).catch(this.error);
+                await this.setUnavailable(message).catch(this.error);
                 this.error(reason);
             }
             return null;
