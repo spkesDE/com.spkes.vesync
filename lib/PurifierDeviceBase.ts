@@ -3,16 +3,7 @@ import VeSync from "../tsvesync/VeSync";
 import VeSyncApp from "../app";
 import BasicPurifier from "../tsvesync/lib/BasicPurifier";
 import DeviceModes from "../tsvesync/enum/DeviceModes";
-
-const getErrorMessage = (reason: unknown): string => {
-    if (reason instanceof Error && typeof reason.message === "string" && reason.message.length > 0) {
-        return reason.message;
-    }
-    if (typeof reason === "string" && reason.length > 0) {
-        return reason;
-    }
-    return "Unknown error";
-};
+import { getErrorMessage } from "./utils/error";
 
 export default class PurifierDeviceBase extends Homey.Device {
     device!: BasicPurifier;
