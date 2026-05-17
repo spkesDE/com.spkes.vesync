@@ -82,37 +82,41 @@ export default class HumidifierDeviceBase extends HomeyDeviceBase {
     }
 
     public async getDevice(): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            let veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
-            if (veSync === null || !veSync.isLoggedIn()) {
-                await this.setUnavailable(this.homey.__("devices.failed_login"));
-                return reject("Failed to login. Please use the repair function.");
+        const veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
+        if (veSync === null || !veSync.isLoggedIn()) {
+            await this.setUnavailable(this.homey.__("devices.failed_login"));
+            throw new Error("Failed to login. Please use the repair function.");
+        }
+
+        const device = veSync.getStoredDevice().find((storedDevice) => {
+            return storedDevice?.device?.uuid === this.getData().id;
+        });
+
+        if (!(device instanceof BasicHumidifier)) {
+            this.error("Device is undefined or is not a VeSyncHumidifier");
+            await this.setUnavailable(this.homey.__("devices.not_found"));
+            throw new Error("Device is undefined or is not a VeSyncHumidifier");
+        }
+
+        this.device = device;
+        const status = await this.device.getHumidifierStatus().catch(async (reason: unknown) => {
+            const message = getErrorMessage(reason);
+            if (message === "device offline") {
+                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            } else {
+                await this.setUnavailable(message).catch(this.error);
+                this.error(reason);
             }
-            let device = veSync.getStoredDevice().find(d => d.device.uuid === this.getData().id);
-            if (device === undefined || !(device instanceof BasicHumidifier)) {
-                this.error("Device is undefined or is not a VeSyncHumidifier");
-                await this.setUnavailable(this.homey.__("devices.not_found"));
-                return reject("Device is undefined or is not a VeSyncHumidifier");
-            }
-            this.device = device as BasicHumidifier;
-            const status = await this.device.getHumidifierStatus().catch(async (reason: unknown) => {
-                const message = getErrorMessage(reason);
-                if (message === "device offline") {
-                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-                } else {
-                    await this.setUnavailable(message).catch(this.error);
-                    this.error(reason);
-                }
-                return null;
-            });
-            if (!status || status.msg !== "request success") {
-                this.error("Failed to get device status.");
-                await this.setUnavailable(this.homey.__("devices.offline"))
-                return reject("Cannot get device status. Device is " + status?.msg);
-            }
-            await this.setAvailable().catch(this.error);
-            return resolve();
-        })
+            return null;
+        });
+
+        if (!status || status.msg !== "request success") {
+            this.error("Failed to get device status.");
+            await this.setUnavailable(this.homey.__("devices.offline"));
+            throw new Error("Cannot get device status. Device is " + (status?.msg ?? "unknown"));
+        }
+
+        await this.setAvailable().catch(this.error);
     }
 
     async updateDevice(): Promise<void> {
