@@ -2,11 +2,11 @@
   "id": "air_quality_changed",
   "title": {
     "en": "Air quality changed",
-    "de": "Luftqualitaet geaendert"
+    "de": "Luftqualität geändert"
   },
   "titleFormatted": {
-    "en": "Air quality changed to [[quality]]",
-    "de": "Luftqualitaet wechselte zu [[quality]]"
+    "en": "Air quality changed",
+    "de": "Luftqualität wechselte"
   },
   "tokens": [
     {

@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.spkes.vesync",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
@@ -61,11 +61,11 @@
         "id": "air_quality_changed",
         "title": {
           "en": "Air quality changed",
-          "de": "Luftqualitaet geaendert"
+          "de": "Luftqualität geändert"
         },
         "titleFormatted": {
-          "en": "Air quality changed to [[quality]]",
-          "de": "Luftqualitaet wechselte zu [[quality]]"
+          "en": "Air quality changed",
+          "de": "Luftqualität wechselte"
         },
         "tokens": [
           {
@@ -155,11 +155,11 @@
         "id": "filter_life_below_threshold",
         "title": {
           "en": "Filter life drops below threshold",
-          "de": "Filterlebensdauer faellt unter Schwellwert"
+          "de": "Filterlebensdauer fällt unter Schwellwert"
         },
         "titleFormatted": {
           "en": "Filter life drops below [[threshold]]%",
-          "de": "Filterlebensdauer faellt unter [[threshold]]%"
+          "de": "Filterlebensdauer fällt unter [[threshold]]%"
         },
         "tokens": [
           {
@@ -219,11 +219,11 @@
         "id": "humidifier_mode_changed",
         "title": {
           "en": "Humidifier mode changed",
-          "de": "Luftbefeuchter-Modus geaendert"
+          "de": "Luftbefeuchter-Modus geändert"
         },
         "titleFormatted": {
-          "en": "Humidifier mode changed to [[mode]]",
-          "de": "Luftbefeuchter-Modus wechselte zu [[mode]]"
+          "en": "Humidifier mode changed",
+          "de": "Luftbefeuchter-Modus wechselte"
         },
         "tokens": [
           {
@@ -255,11 +255,11 @@
         "id": "pm25_above_threshold",
         "title": {
           "en": "PM2.5 rises above threshold",
-          "de": "PM2.5 steigt ueber Schwellwert"
+          "de": "PM2.5 steigt über Schwellwert"
         },
         "titleFormatted": {
           "en": "PM2.5 rises above [[threshold]]",
-          "de": "PM2.5 steigt ueber [[threshold]]"
+          "de": "PM2.5 steigt über [[threshold]]"
         },
         "tokens": [
           {
@@ -283,7 +283,7 @@
             "type": "string",
             "title": {
               "en": "Air quality",
-              "de": "Luftqualitaet"
+              "de": "Luftqualität"
             }
           },
           {
@@ -291,7 +291,7 @@
             "type": "string",
             "title": {
               "en": "Previous air quality",
-              "de": "Vorherige Luftqualitaet"
+              "de": "Vorherige Luftqualität"
             }
           }
         ],
@@ -319,11 +319,11 @@
         "id": "purifier_mode_changed",
         "title": {
           "en": "Purifier mode changed",
-          "de": "Luftreiniger-Modus geaendert"
+          "de": "Luftreiniger-Modus geändert"
         },
         "titleFormatted": {
-          "en": "Purifier mode changed to [[mode]]",
-          "de": "Luftreiniger-Modus wechselte zu [[mode]]"
+          "en": "Purifier mode changed",
+          "de": "Luftreiniger-Modus wechselte"
         },
         "tokens": [
           {
@@ -358,8 +358,8 @@
           "de": "Zielfeuchtigkeit erreicht"
         },
         "titleFormatted": {
-          "en": "Humidity reached [[target_humidity]]%",
-          "de": "Feuchtigkeit erreichte [[target_humidity]]%"
+          "en": "Humidity reached",
+          "de": "Feuchtigkeit erreichte"
         },
         "tokens": [
           {
@@ -405,7 +405,7 @@
         "id": "water_tank_refilled",
         "title": {
           "en": "Water tank refilled",
-          "de": "Wassertank nachgefuellt"
+          "de": "Wassertank nachgefüllt"
         },
         "args": [
           {
@@ -800,8 +800,8 @@
           "de": "Gerätestatus aktualisieren"
         },
         "titleFormatted": {
-          "en": "Refresh status of [[device]]",
-          "de": "Aktualisiere Status von [[device]]"
+          "en": "Refresh status",
+          "de": "Aktualisiere Status"
         },
         "args": [
           {
@@ -3488,6 +3488,16 @@
         "display_toggle",
         "pedestalFanCapability",
         "oscillation_toggle",
+        "pedestalFanHorizontalOscillation",
+        "pedestalFanVerticalOscillation",
+        "pedestalFanChildLock",
+        "pedestalFanHighTemperatureReminder",
+        "measure_pedestal_fan_high_temperature",
+        "pedestalFanSmartCleaningReminder",
+        "pedestalFanOscillationCalibrationState",
+        "measure_pedestal_fan_oscillation_calibration_progress",
+        "measure_pedestal_fan_yaw",
+        "measure_pedestal_fan_pitch",
         "fanSpeed0to12",
         "mute_toggle"
       ],

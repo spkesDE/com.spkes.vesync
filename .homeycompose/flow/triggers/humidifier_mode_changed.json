@@ -2,11 +2,11 @@
   "id": "humidifier_mode_changed",
   "title": {
     "en": "Humidifier mode changed",
-    "de": "Luftbefeuchter-Modus geaendert"
+    "de": "Luftbefeuchter-Modus geändert"
   },
   "titleFormatted": {
-    "en": "Humidifier mode changed to [[mode]]",
-    "de": "Luftbefeuchter-Modus wechselte zu [[mode]]"
+    "en": "Humidifier mode changed",
+    "de": "Luftbefeuchter-Modus wechselte"
   },
   "tokens": [
     {

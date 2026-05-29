@@ -5,8 +5,8 @@
     "de": "Zielfeuchtigkeit erreicht"
   },
   "titleFormatted": {
-    "en": "Humidity reached [[target_humidity]]%",
-    "de": "Feuchtigkeit erreichte [[target_humidity]]%"
+    "en": "Humidity reached",
+    "de": "Feuchtigkeit erreichte"
   },
   "tokens": [
     {

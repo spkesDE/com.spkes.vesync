@@ -117,4 +117,18 @@ export default class BasicTowerFan extends BasicDevice {
         };
     }
 
+    /**
+     * Convert temperature from raw value to Celsius or back to Fahrenheit.
+     * The raw value is Fahrenheit * 10. So 655 is 65.5 Fahrenheit.
+     * @param temperatureInFahrenheit - The raw temperature value e.g. 654 -> 65.4°F (Fahrenheit * 10).
+     * @param toCelsius - If true, convert to Celsius. Otherwise, return in Fahrenheit.
+     * @private
+     */
+    protected convertTemperature(temperatureInFahrenheit: number, toCelsius = true): number {
+        const fahrenheit = temperatureInFahrenheit / 10;
+        // Fahrenheit to Celsius conversion
+        if (toCelsius) return parseFloat(((fahrenheit - 32) * 5 / 9).toFixed(1));
+        return parseFloat((fahrenheit).toFixed(1));
+    }
+
 }

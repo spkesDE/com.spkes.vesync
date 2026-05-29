@@ -21,4 +21,32 @@ export interface IGetTowerFanStatus {
     };
     scheduleCount: number;
     displayingType: number;
+    horizontalOscillationState?: number;
+    verticalOscillationState?: number;
+    childLock?: number;
+    highTemperatureReminderState?: number;
+    highTemperature?: number;
+    smartCleaningReminderState?: number;
+    oscillationCalibrationState?: number;
+    oscillationCalibrationProgress?: number;
+    oscillationCoordinate?: {
+        yaw: number;
+        pitch: number;
+    };
+    oscillationRange?: {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+    };
+    levelMemory?: Array<{
+        workMode: string;
+        level: number;
+        enable: number;
+    }>;
+    horizontalOscillationDemo?: number;
+    verticalOscillationDemo?: number;
+    isSupportSetOnceOscillation?: number;
+    isTimerSupportPowerOn?: number;
+    isSupportSetRelativeCoordinate?: number;
 }

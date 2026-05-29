@@ -2,11 +2,11 @@
   "id": "filter_life_below_threshold",
   "title": {
     "en": "Filter life drops below threshold",
-    "de": "Filterlebensdauer faellt unter Schwellwert"
+    "de": "Filterlebensdauer fällt unter Schwellwert"
   },
   "titleFormatted": {
     "en": "Filter life drops below [[threshold]]%",
-    "de": "Filterlebensdauer faellt unter [[threshold]]%"
+    "de": "Filterlebensdauer fällt unter [[threshold]]%"
   },
   "tokens": [
     {

@@ -2,11 +2,11 @@
   "id": "pm25_above_threshold",
   "title": {
     "en": "PM2.5 rises above threshold",
-    "de": "PM2.5 steigt ueber Schwellwert"
+    "de": "PM2.5 steigt über Schwellwert"
   },
   "titleFormatted": {
     "en": "PM2.5 rises above [[threshold]]",
-    "de": "PM2.5 steigt ueber [[threshold]]"
+    "de": "PM2.5 steigt über [[threshold]]"
   },
   "tokens": [
     {
@@ -30,7 +30,7 @@
       "type": "string",
       "title": {
         "en": "Air quality",
-        "de": "Luftqualitaet"
+        "de": "Luftqualität"
       }
     },
     {
@@ -38,7 +38,7 @@
       "type": "string",
       "title": {
         "en": "Previous air quality",
-        "de": "Vorherige Luftqualitaet"
+        "de": "Vorherige Luftqualität"
       }
     }
   ],
