@@ -1,0 +1,50 @@
+{
+  "id": "filter_life_below_threshold",
+  "title": {
+    "en": "Filter life drops below threshold",
+    "de": "Filterlebensdauer faellt unter Schwellwert"
+  },
+  "titleFormatted": {
+    "en": "Filter life drops below [[threshold]]%",
+    "de": "Filterlebensdauer faellt unter [[threshold]]%"
+  },
+  "tokens": [
+    {
+      "name": "filter_life",
+      "type": "number",
+      "title": {
+        "en": "Filter life",
+        "de": "Filterlebensdauer"
+      }
+    },
+    {
+      "name": "previous_filter_life",
+      "type": "number",
+      "title": {
+        "en": "Previous filter life",
+        "de": "Vorherige Filterlebensdauer"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+    },
+    {
+      "type": "range",
+      "name": "threshold",
+      "title": {
+        "en": "Threshold",
+        "de": "Schwellwert"
+      },
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "label": "%",
+      "labelMultiplier": 1,
+      "labelDecimals": 0
+    }
+  ]
+}

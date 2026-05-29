@@ -3,9 +3,11 @@ import VeSync from "../tsvesync/VeSync";
 import VeSyncApp from "../app";
 import BasicTowerFan from "../tsvesync/lib/BasicTowerFan";
 import DeviceModes from "../tsvesync/enum/DeviceModes";
+import { getErrorMessage } from "./utils/error";
+import HomeyDeviceBase from "./HomeyDeviceBase";
 
 
-export default class TowerFanDeviceBase extends Homey.Device {
+export default class TowerFanDeviceBase extends HomeyDeviceBase {
     device!: BasicTowerFan;
     private updateInterval!: NodeJS.Timer;
 
@@ -71,6 +73,9 @@ export default class TowerFanDeviceBase extends Homey.Device {
             case 'auto':
                 await this.device.setTowerFanMode(DeviceModes.Auto).catch(this.error)
                 break;
+            case 'eco':
+                await this.device.setTowerFanMode(DeviceModes.Eco).catch(this.error)
+                break;
             case 'advancedSleep':
                 await this.device.setTowerFanMode(DeviceModes.AdvancedSleep).catch(this.error)
                 break;
@@ -82,36 +87,41 @@ export default class TowerFanDeviceBase extends Homey.Device {
     }
 
     public async getDevice(): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            let veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
-            if (veSync === null || !veSync.isLoggedIn()) {
-                await this.setUnavailable(this.homey.__("devices.failed_login"));
-                return reject("Failed to login. Please use the repair function.");
+        const veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
+        if (veSync === null || !veSync.isLoggedIn()) {
+            await this.setUnavailable(this.homey.__("devices.failed_login"));
+            throw new Error("Failed to login. Please use the repair function.");
+        }
+
+        const device = veSync.getStoredDevice().find((storedDevice) => {
+            return storedDevice?.device?.uuid === this.getData().id;
+        });
+
+        if (!(device instanceof BasicTowerFan)) {
+            this.error("Device is undefined or is not a VeSyncTowerFan");
+            await this.setUnavailable(this.homey.__("devices.not_found"));
+            throw new Error("Device is undefined or is not a VeSyncTowerFan");
+        }
+
+        this.device = device;
+        const status = await this.device.getTowerFanStatus().catch(async (reason: unknown) => {
+            const message = getErrorMessage(reason);
+            if (message === "device offline") {
+                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+            } else {
+                await this.setUnavailable(message).catch(this.error);
+                this.error(reason);
             }
-            let device = veSync.getStoredDevice().find(d => d.device.uuid === this.getData().id);
-            if (device === undefined || !(device instanceof BasicTowerFan)) {
-                this.error("Device is undefined or is not a VeSyncTowerFan");
-                await this.setUnavailable(this.homey.__("devices.not_found"));
-                return reject("Device is undefined or is not a VeSyncTowerFan");
-            }
-            this.device = device as BasicTowerFan;
-            const status = await this.device.getTowerFanStatus().catch(async (reason: Error) => {
-                if (reason.message === "device offline") {
-                    await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-                } else {
-                    await this.setUnavailable(reason.message).catch(this.error);
-                    this.error(reason);
-                }
-                return null;
-            });
-            if (!status || status.msg !== "request success") {
-                this.error("Failed to get device status.");
-                await this.setUnavailable(this.homey.__("devices.offline"))
-                return reject("Cannot get device status. Device is " + status?.msg);
-            }
-            await this.setAvailable().catch(this.error);
-            return resolve();
-        })
+            return null;
+        });
+
+        if (!status || status.msg !== "request success") {
+            this.error("Failed to get device status.");
+            await this.setUnavailable(this.homey.__("devices.offline"));
+            throw new Error("Cannot get device status. Device is " + (status?.msg ?? "unknown"));
+        }
+
+        await this.setAvailable().catch(this.error);
     }
 
     async updateDevice(): Promise<void> {
@@ -121,11 +131,12 @@ export default class TowerFanDeviceBase extends Homey.Device {
         }
 
         // Get the latest device status
-        const status = await this.device.getTowerFanStatus().catch(async (reason: Error) => {
-            if (reason.message === "device offline") {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+        const status = await this.device.getTowerFanStatus().catch(async (reason: unknown) => {
+            const message = getErrorMessage(reason);
+            if (message === "device offline") {
+                await this.markDeviceOffline();
             } else {
-                await this.setUnavailable(reason.message).catch(this.error);
+                await this.setUnavailable(message).catch(this.error);
                 this.error(reason);
             }
             return null;
@@ -135,7 +146,7 @@ export default class TowerFanDeviceBase extends Homey.Device {
         if (!status || status.msg !== "request success") {
             this.error("Failed to get device status.");
             if (this.getAvailable()) {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+                await this.markDeviceOffline();
             }
             return;
         }
@@ -143,35 +154,22 @@ export default class TowerFanDeviceBase extends Homey.Device {
         // Set the device as available
         if (!this.getAvailable()) {
             await this.setAvailable().catch(this.error);
+            await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
         }
-
-        // Helper function to update capability
-        const updateCapability = async (capability: string, value: any) => {
-            if (this.hasCapability(capability)) {
-                await this.setCapabilityValue(capability, value).catch(this.error);
-            }
-        };
 
         // Fan speed updates
         const fanSpeedLevel = status.result.result.fanSpeedLevel ?? 0;
-        await updateCapability('fanSpeed0to3', fanSpeedLevel);
-        await updateCapability('fanSpeed0to4', fanSpeedLevel);
-        await updateCapability('fanSpeed0to5', fanSpeedLevel);
-        await updateCapability('fanSpeed0to9', fanSpeedLevel);
-        await updateCapability('fanSpeed0to12', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to3', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to4', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to5', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to9', fanSpeedLevel);
+        await this.setCapabilityIfPresent('fanSpeed0to12', fanSpeedLevel);
 
         // Other status updates
-        await updateCapability('measure_temperature', status.result.result.temperature);
-        await updateCapability('onoff', Boolean(status.result.result.powerSwitch));
-        await updateCapability('oscillation_toggle', Boolean(status.result.result.oscillationState));
-        await updateCapability('display_toggle', Boolean(status.result.result.screenState));
-        await updateCapability('mute_toggle', Boolean(status.result.result.muteState));
+        await this.setCapabilityIfPresent('measure_temperature', status.result.result.temperature);
+        await this.setCapabilityIfPresent('onoff', Boolean(status.result.result.powerSwitch));
+        await this.setCapabilityIfPresent('oscillation_toggle', Boolean(status.result.result.oscillationState));
+        await this.setCapabilityIfPresent('display_toggle', Boolean(status.result.result.screenState));
+        await this.setCapabilityIfPresent('mute_toggle', Boolean(status.result.result.muteState));
     }
-
-
-    async checkForCapability(capability: string) {
-        if (!this.hasCapability(capability))
-            await this.addCapability(capability).catch(this.error);
-    }
-
 }

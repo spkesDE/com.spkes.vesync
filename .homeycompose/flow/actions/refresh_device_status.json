@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Refresh device status",
+    "de": "Gerätestatus aktualisieren"
+  },
+  "titleFormatted": {
+    "en": "Refresh status of [[device]]",
+    "de": "Aktualisiere Status von [[device]]"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+    }
+  ]
+}

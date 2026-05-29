@@ -113,14 +113,4 @@ export default class BasicAirFryer extends BasicDevice {
         };
     }
 
-    private numberValue(...values: any[]): number {
-        for (const value of values) {
-            if (typeof value === 'number' && !Number.isNaN(value)) return value;
-            if (typeof value === 'string' && value.trim() !== '') {
-                const parsed = Number(value);
-                if (!Number.isNaN(parsed)) return parsed;
-            }
-        }
-        return 0;
-    }
 }

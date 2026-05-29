@@ -1,0 +1,36 @@
+{
+  "id": "purifier_mode_changed",
+  "title": {
+    "en": "Purifier mode changed",
+    "de": "Luftreiniger-Modus geaendert"
+  },
+  "titleFormatted": {
+    "en": "Purifier mode changed to [[mode]]",
+    "de": "Luftreiniger-Modus wechselte zu [[mode]]"
+  },
+  "tokens": [
+    {
+      "name": "mode",
+      "type": "string",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      }
+    },
+    {
+      "name": "previous_mode",
+      "type": "string",
+      "title": {
+        "en": "Previous mode",
+        "de": "Vorheriger Modus"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+    }
+  ]
+}

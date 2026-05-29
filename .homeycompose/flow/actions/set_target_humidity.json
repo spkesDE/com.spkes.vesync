@@ -1,0 +1,31 @@
+{
+  "title": {
+    "en": "Set target humidity",
+    "de": "Zielfeuchtigkeit setzen"
+  },
+  "titleFormatted": {
+    "en": "Set target humidity to [[humidity]]%",
+    "de": "Setze Zielfeuchtigkeit auf [[humidity]]%"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis1000s|oasis450s|sprouthumidifier"
+    },
+    {
+      "type": "range",
+      "name": "humidity",
+      "title": {
+        "en": "Humidity",
+        "de": "Feuchtigkeit"
+      },
+      "min": 30,
+      "max": 80,
+      "step": 1,
+      "label": "%",
+      "labelMultiplier": 1,
+      "labelDecimals": 0
+    }
+  ]
+}

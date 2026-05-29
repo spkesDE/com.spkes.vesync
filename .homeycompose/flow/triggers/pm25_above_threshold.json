@@ -1,0 +1,64 @@
+{
+  "id": "pm25_above_threshold",
+  "title": {
+    "en": "PM2.5 rises above threshold",
+    "de": "PM2.5 steigt ueber Schwellwert"
+  },
+  "titleFormatted": {
+    "en": "PM2.5 rises above [[threshold]]",
+    "de": "PM2.5 steigt ueber [[threshold]]"
+  },
+  "tokens": [
+    {
+      "name": "pm25",
+      "type": "number",
+      "title": {
+        "en": "PM2.5",
+        "de": "PM2.5"
+      }
+    },
+    {
+      "name": "previous_pm25",
+      "type": "number",
+      "title": {
+        "en": "Previous PM2.5",
+        "de": "Vorheriges PM2.5"
+      }
+    },
+    {
+      "name": "quality",
+      "type": "string",
+      "title": {
+        "en": "Air quality",
+        "de": "Luftqualitaet"
+      }
+    },
+    {
+      "name": "previous_quality",
+      "type": "string",
+      "title": {
+        "en": "Previous air quality",
+        "de": "Vorherige Luftqualitaet"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+    },
+    {
+      "type": "range",
+      "name": "threshold",
+      "title": {
+        "en": "Threshold",
+        "de": "Schwellwert"
+      },
+      "min": 1,
+      "max": 500,
+      "step": 1,
+      "labelDecimals": 0
+    }
+  ]
+}

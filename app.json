@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.spkes.vesync",
-  "version": "1.0.20",
+  "version": "1.0.22",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
@@ -58,6 +58,58 @@
   "flow": {
     "triggers": [
       {
+        "id": "air_quality_changed",
+        "title": {
+          "en": "Air quality changed",
+          "de": "Luftqualitaet geaendert"
+        },
+        "titleFormatted": {
+          "en": "Air quality changed to [[quality]]",
+          "de": "Luftqualitaet wechselte zu [[quality]]"
+        },
+        "tokens": [
+          {
+            "name": "pm25",
+            "type": "number",
+            "title": {
+              "en": "PM2.5",
+              "de": "PM2.5"
+            }
+          },
+          {
+            "name": "previous_pm25",
+            "type": "number",
+            "title": {
+              "en": "Previous PM2.5",
+              "de": "Vorheriges PM2.5"
+            }
+          },
+          {
+            "name": "quality",
+            "type": "string",
+            "title": {
+              "en": "Air quality",
+              "de": "Luftqualitaet"
+            }
+          },
+          {
+            "name": "previous_quality",
+            "type": "string",
+            "title": {
+              "en": "Previous air quality",
+              "de": "Vorherige Luftqualitaet"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          }
+        ]
+      },
+      {
         "id": "airfryer_pull_out",
         "title": {
           "en": "Basket pulled out",
@@ -72,6 +124,84 @@
         ]
       },
       {
+        "id": "device_offline",
+        "title": {
+          "en": "Device went offline",
+          "de": "Gerät ging offline"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "device_online",
+        "title": {
+          "en": "Device came online",
+          "de": "Gerät kam online"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "filter_life_below_threshold",
+        "title": {
+          "en": "Filter life drops below threshold",
+          "de": "Filterlebensdauer faellt unter Schwellwert"
+        },
+        "titleFormatted": {
+          "en": "Filter life drops below [[threshold]]%",
+          "de": "Filterlebensdauer faellt unter [[threshold]]%"
+        },
+        "tokens": [
+          {
+            "name": "filter_life",
+            "type": "number",
+            "title": {
+              "en": "Filter life",
+              "de": "Filterlebensdauer"
+            }
+          },
+          {
+            "name": "previous_filter_life",
+            "type": "number",
+            "title": {
+              "en": "Previous filter life",
+              "de": "Vorherige Filterlebensdauer"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          },
+          {
+            "type": "range",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold",
+              "de": "Schwellwert"
+            },
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "label": "%",
+            "labelMultiplier": 1,
+            "labelDecimals": 0
+          }
+        ]
+      },
+      {
         "id": "filter_life_low",
         "title": {
           "en": "Filter life low",
@@ -81,7 +211,179 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=core200s|core300s|core400s|core600s|lv131s|vital100s|vital200s"
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "humidifier_mode_changed",
+        "title": {
+          "en": "Humidifier mode changed",
+          "de": "Luftbefeuchter-Modus geaendert"
+        },
+        "titleFormatted": {
+          "en": "Humidifier mode changed to [[mode]]",
+          "de": "Luftbefeuchter-Modus wechselte zu [[mode]]"
+        },
+        "tokens": [
+          {
+            "name": "mode",
+            "type": "string",
+            "title": {
+              "en": "Mode",
+              "de": "Modus"
+            }
+          },
+          {
+            "name": "previous_mode",
+            "type": "string",
+            "title": {
+              "en": "Previous mode",
+              "de": "Vorheriger Modus"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
+          }
+        ]
+      },
+      {
+        "id": "pm25_above_threshold",
+        "title": {
+          "en": "PM2.5 rises above threshold",
+          "de": "PM2.5 steigt ueber Schwellwert"
+        },
+        "titleFormatted": {
+          "en": "PM2.5 rises above [[threshold]]",
+          "de": "PM2.5 steigt ueber [[threshold]]"
+        },
+        "tokens": [
+          {
+            "name": "pm25",
+            "type": "number",
+            "title": {
+              "en": "PM2.5",
+              "de": "PM2.5"
+            }
+          },
+          {
+            "name": "previous_pm25",
+            "type": "number",
+            "title": {
+              "en": "Previous PM2.5",
+              "de": "Vorheriges PM2.5"
+            }
+          },
+          {
+            "name": "quality",
+            "type": "string",
+            "title": {
+              "en": "Air quality",
+              "de": "Luftqualitaet"
+            }
+          },
+          {
+            "name": "previous_quality",
+            "type": "string",
+            "title": {
+              "en": "Previous air quality",
+              "de": "Vorherige Luftqualitaet"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          },
+          {
+            "type": "range",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold",
+              "de": "Schwellwert"
+            },
+            "min": 1,
+            "max": 500,
+            "step": 1,
+            "labelDecimals": 0
+          }
+        ]
+      },
+      {
+        "id": "purifier_mode_changed",
+        "title": {
+          "en": "Purifier mode changed",
+          "de": "Luftreiniger-Modus geaendert"
+        },
+        "titleFormatted": {
+          "en": "Purifier mode changed to [[mode]]",
+          "de": "Luftreiniger-Modus wechselte zu [[mode]]"
+        },
+        "tokens": [
+          {
+            "name": "mode",
+            "type": "string",
+            "title": {
+              "en": "Mode",
+              "de": "Modus"
+            }
+          },
+          {
+            "name": "previous_mode",
+            "type": "string",
+            "title": {
+              "en": "Previous mode",
+              "de": "Vorheriger Modus"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s"
+          }
+        ]
+      },
+      {
+        "id": "target_humidity_reached",
+        "title": {
+          "en": "Target humidity reached",
+          "de": "Zielfeuchtigkeit erreicht"
+        },
+        "titleFormatted": {
+          "en": "Humidity reached [[target_humidity]]%",
+          "de": "Feuchtigkeit erreichte [[target_humidity]]%"
+        },
+        "tokens": [
+          {
+            "name": "humidity",
+            "type": "number",
+            "title": {
+              "en": "Humidity",
+              "de": "Feuchtigkeit"
+            }
+          },
+          {
+            "name": "target_humidity",
+            "type": "number",
+            "title": {
+              "en": "Target humidity",
+              "de": "Zielfeuchtigkeit"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
           }
         ]
       },
@@ -95,7 +397,21 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=lv600s|dual200s|classic200s|classic300s|oasis450s|oasis1000s"
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
+          }
+        ]
+      },
+      {
+        "id": "water_tank_refilled",
+        "title": {
+          "en": "Water tank refilled",
+          "de": "Wassertank nachgefuellt"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis450s|oasis1000s|sprouthumidifier"
           }
         ]
       }
@@ -477,6 +793,56 @@
           }
         ],
         "id": "nightlight_slider"
+      },
+      {
+        "title": {
+          "en": "Refresh device status",
+          "de": "Gerätestatus aktualisieren"
+        },
+        "titleFormatted": {
+          "en": "Refresh status of [[device]]",
+          "de": "Aktualisiere Status von [[device]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+          }
+        ],
+        "id": "refresh_device_status"
+      },
+      {
+        "title": {
+          "en": "Set target humidity",
+          "de": "Zielfeuchtigkeit setzen"
+        },
+        "titleFormatted": {
+          "en": "Set target humidity to [[humidity]]%",
+          "de": "Setze Zielfeuchtigkeit auf [[humidity]]%"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=classic200s|classic300s|dual200s|dual200spro|lv600s|oasis1000s|oasis450s|sprouthumidifier"
+          },
+          {
+            "type": "range",
+            "name": "humidity",
+            "title": {
+              "en": "Humidity",
+              "de": "Feuchtigkeit"
+            },
+            "min": 30,
+            "max": 80,
+            "step": 1,
+            "label": "%",
+            "labelMultiplier": 1,
+            "labelDecimals": 0
+          }
+        ],
+        "id": "set_target_humidity"
       },
       {
         "title": {
@@ -1392,6 +1758,178 @@
             "type": "device",
             "name": "device",
             "filter": "driver_id=oasis450s"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModePedestalFan",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=pedestalfan"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "advancedSleep",
+                "title": {
+                  "en": "Advanced Sleep",
+                  "de": "Erweitertes Schlafen"
+                }
+              },
+              {
+                "id": "eco",
+                "title": {
+                  "en": "Eco",
+                  "de": "Eco"
+                }
+              },
+              {
+                "id": "turbo",
+                "title": {
+                  "en": "Turbo",
+                  "de": "Turbo"
+                }
+              },
+              {
+                "id": "normal",
+                "title": {
+                  "en": "Normal",
+                  "de": "Normal"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeSproutAir",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sproutair"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "off",
+                "label": {
+                  "en": "Off",
+                  "de": "Aus"
+                }
+              },
+              {
+                "id": "auto",
+                "label": {
+                  "en": "Auto Mode",
+                  "de": "Auto Modus"
+                }
+              },
+              {
+                "id": "sleep",
+                "label": {
+                  "en": "Sleep Mode",
+                  "de": "Schlaf Modus"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual Mode",
+                  "de": "Manualler Modus"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "setModeSproutHumidifier",
+        "title": {
+          "en": "Set mode",
+          "de": "Setzte modus"
+        },
+        "titleFormatted": {
+          "en": "Set mode [[mode]]",
+          "de": "Setzte modus [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sprouthumidifier"
           },
           {
             "type": "dropdown",
@@ -2941,7 +3479,275 @@
     },
     {
       "name": {
-        "en": "Vital 100s (Experimental)"
+        "en": "Pedestal Fan (Experimental)"
+      },
+      "class": "fan",
+      "capabilities": [
+        "measure_temperature",
+        "onoff",
+        "display_toggle",
+        "pedestalFanCapability",
+        "oscillation_toggle",
+        "fanSpeed0to12",
+        "mute_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/pedestalfan/assets/images/small.png",
+        "large": "/drivers/pedestalfan/assets/images/large.png",
+        "xlarge": "/drivers/pedestalfan/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "pedestalfan"
+    },
+    {
+      "name": {
+        "en": "Sprout Air (Experimental)"
+      },
+      "class": "airpurifier",
+      "capabilities": [
+        "sproutAirCapability",
+        "fanSpeed0to3",
+        "onoff",
+        "measure_pm25",
+        "alarm_pm25",
+        "display_toggle",
+        "nightlight_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/sproutair/assets/images/small.png",
+        "large": "/drivers/sproutair/assets/images/large.png",
+        "xlarge": "/drivers/sproutair/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "sproutair"
+    },
+    {
+      "name": {
+        "en": "Sprout Humidifier (Experimental)"
+      },
+      "class": "humidifier",
+      "capabilities": [
+        "sproutHumidifierCapability",
+        "onoff",
+        "measure_humidity",
+        "alarm_water_lacks",
+        "fanSpeed0to2",
+        "display_toggle",
+        "nightlight_toggle"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/sprouthumidifier/assets/images/small.png",
+        "large": "/drivers/sprouthumidifier/assets/images/large.png",
+        "xlarge": "/drivers/sprouthumidifier/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "sprouthumidifier",
+      "settings": [
+        {
+          "id": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Target Humidity",
+            "de": "Zielfeuchtigkeit"
+          },
+          "value": 45,
+          "min": 30,
+          "max": 80,
+          "units": {
+            "en": "%"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Vital 100s"
       },
       "class": "airpurifier",
       "capabilities": [
@@ -3843,6 +4649,22 @@
       "uiComponent": "slider",
       "icon": "/assets/capability_icons/heating_level.svg"
     },
+    "fanSpeed0to2": {
+      "type": "number",
+      "title": {
+        "en": "Fan Level",
+        "de": "Luefter Geschwindigkeit"
+      },
+      "min": 0,
+      "max": 2,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "slider",
+      "icon": "/assets/capability_icons/heating_level.svg"
+    },
     "fanSpeed0to3": {
       "type": "number",
       "title": {
@@ -4192,6 +5014,55 @@
       "uiComponent": "button",
       "icon": "/assets/capability_icons/oscilate.svg"
     },
+    "pedestalFanCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "advancedSleep",
+          "title": {
+            "en": "Advanced Sleep",
+            "de": "Erweitertes Schlafen"
+          }
+        },
+        {
+          "id": "eco",
+          "title": {
+            "en": "Eco",
+            "de": "Eco"
+          }
+        },
+        {
+          "id": "turbo",
+          "title": {
+            "en": "Turbo",
+            "de": "Turbo"
+          }
+        },
+        {
+          "id": "normal",
+          "title": {
+            "en": "Normal",
+            "de": "Normal"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
     "sensor_air_quality": {
       "type": "string",
       "title": {
@@ -4203,6 +5074,90 @@
       "uiQuickAction": false,
       "uiComponent": "sensor",
       "icon": "/assets/capability_icons/air_quality.svg"
+    },
+    "sproutAirCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Schlaf Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
+    },
+    "sproutHumidifierCapability": {
+      "type": "enum",
+      "title": {
+        "en": "Mode",
+        "de": "Modus"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto Mode",
+            "de": "Auto Modus"
+          }
+        },
+        {
+          "id": "sleep",
+          "title": {
+            "en": "Sleep Mode",
+            "de": "Sleep Modus"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual Mode",
+            "de": "Manueller Modus"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "icon": "/assets/icon.svg"
     },
     "vital100sCapability": {
       "type": "enum",
