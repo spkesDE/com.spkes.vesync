@@ -265,5 +265,8 @@
   },
   "1.0.23": {
     "en": "Added Sprout Air, Sprout Humidifier, Levoit Pedestal Fan support. Bug fixes"
+  },
+  "1.0.24": {
+    "en": "Bug fixes"
   }
 }
