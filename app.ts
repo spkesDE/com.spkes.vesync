@@ -75,6 +75,8 @@ export default class VeSyncApp extends Homey.App {
             args.device.triggerCapabilityListener("fanSpeed0to5", Number(args.level) ?? 1));
         this.homey.flow.getActionCard("fan_speed_0_9").registerRunListener((args) =>
             args.device.triggerCapabilityListener("fanSpeed0to9", Number(args.level) ?? 1));
+        this.homey.flow.getActionCard("fan_speed_0_12").registerRunListener((args) =>
+            args.device.triggerCapabilityListener("fanSpeed0to12", Number(args.level) ?? 1));
         this.homey.flow.getActionCard("warm_fan_speed_0_3").registerRunListener((args) =>
             args.device.triggerCapabilityListener("warmFanSpeed0to3", Number(args.level) ?? 0));
 

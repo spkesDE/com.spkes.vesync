@@ -1,0 +1,14 @@
+{
+  "id": "vertical_oscillation_bottom",
+  "type": "number",
+  "label": {
+    "en": "Vertical bottom",
+    "de": "Vertikal unten"
+  },
+  "value": 120,
+  "min": 0,
+  "max": 120,
+  "units": {
+    "en": "°"
+  }
+}

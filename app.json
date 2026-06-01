@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.spkes.vesync",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
@@ -61,11 +61,11 @@
         "id": "air_quality_changed",
         "title": {
           "en": "Air quality changed",
-          "de": "Luftqualitaet geaendert"
+          "de": "Luftqualität geändert"
         },
         "titleFormatted": {
-          "en": "Air quality changed to [[quality]]",
-          "de": "Luftqualitaet wechselte zu [[quality]]"
+          "en": "Air quality changed",
+          "de": "Luftqualität wechselte"
         },
         "tokens": [
           {
@@ -124,6 +124,30 @@
         ]
       },
       {
+        "id": "child_lock_changed",
+        "title": {
+          "en": "Child lock changed",
+          "de": "Kindersicherung geändert"
+        },
+        "tokens": [
+          {
+            "name": "child_lock",
+            "type": "boolean",
+            "title": {
+              "en": "Child lock",
+              "de": "Kindersicherung"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s|pedestalfan"
+          }
+        ]
+      },
+      {
         "id": "device_offline",
         "title": {
           "en": "Device went offline",
@@ -155,11 +179,11 @@
         "id": "filter_life_below_threshold",
         "title": {
           "en": "Filter life drops below threshold",
-          "de": "Filterlebensdauer faellt unter Schwellwert"
+          "de": "Filterlebensdauer fällt unter Schwellwert"
         },
         "titleFormatted": {
           "en": "Filter life drops below [[threshold]]%",
-          "de": "Filterlebensdauer faellt unter [[threshold]]%"
+          "de": "Filterlebensdauer fällt unter [[threshold]]%"
         },
         "tokens": [
           {
@@ -219,11 +243,11 @@
         "id": "humidifier_mode_changed",
         "title": {
           "en": "Humidifier mode changed",
-          "de": "Luftbefeuchter-Modus geaendert"
+          "de": "Luftbefeuchter-Modus geändert"
         },
         "titleFormatted": {
-          "en": "Humidifier mode changed to [[mode]]",
-          "de": "Luftbefeuchter-Modus wechselte zu [[mode]]"
+          "en": "Humidifier mode changed",
+          "de": "Luftbefeuchter-Modus wechselte"
         },
         "tokens": [
           {
@@ -252,14 +276,60 @@
         ]
       },
       {
+        "id": "pedestal_fan_calibration_completed",
+        "title": {
+          "en": "Calibration completed",
+          "de": "Kalibrierung abgeschlossen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=pedestalfan"
+          }
+        ]
+      },
+      {
+        "id": "pedestal_fan_calibration_progress_changed",
+        "title": {
+          "en": "Calibration progress changed",
+          "de": "Kalibrierungsfortschritt geändert"
+        },
+        "tokens": [
+          {
+            "name": "progress",
+            "type": "number",
+            "title": {
+              "en": "Progress",
+              "de": "Fortschritt"
+            }
+          },
+          {
+            "name": "previous_progress",
+            "type": "number",
+            "title": {
+              "en": "Previous progress",
+              "de": "Vorheriger Fortschritt"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=pedestalfan"
+          }
+        ]
+      },
+      {
         "id": "pm25_above_threshold",
         "title": {
           "en": "PM2.5 rises above threshold",
-          "de": "PM2.5 steigt ueber Schwellwert"
+          "de": "PM2.5 steigt über Schwellwert"
         },
         "titleFormatted": {
           "en": "PM2.5 rises above [[threshold]]",
-          "de": "PM2.5 steigt ueber [[threshold]]"
+          "de": "PM2.5 steigt über [[threshold]]"
         },
         "tokens": [
           {
@@ -283,7 +353,7 @@
             "type": "string",
             "title": {
               "en": "Air quality",
-              "de": "Luftqualitaet"
+              "de": "Luftqualität"
             }
           },
           {
@@ -291,7 +361,7 @@
             "type": "string",
             "title": {
               "en": "Previous air quality",
-              "de": "Vorherige Luftqualitaet"
+              "de": "Vorherige Luftqualität"
             }
           }
         ],
@@ -319,11 +389,11 @@
         "id": "purifier_mode_changed",
         "title": {
           "en": "Purifier mode changed",
-          "de": "Luftreiniger-Modus geaendert"
+          "de": "Luftreiniger-Modus geändert"
         },
         "titleFormatted": {
-          "en": "Purifier mode changed to [[mode]]",
-          "de": "Luftreiniger-Modus wechselte zu [[mode]]"
+          "en": "Purifier mode changed",
+          "de": "Luftreiniger-Modus wechselte"
         },
         "tokens": [
           {
@@ -358,8 +428,8 @@
           "de": "Zielfeuchtigkeit erreicht"
         },
         "titleFormatted": {
-          "en": "Humidity reached [[target_humidity]]%",
-          "de": "Feuchtigkeit erreichte [[target_humidity]]%"
+          "en": "Humidity reached",
+          "de": "Feuchtigkeit erreichte"
         },
         "tokens": [
           {
@@ -405,7 +475,7 @@
         "id": "water_tank_refilled",
         "title": {
           "en": "Water tank refilled",
-          "de": "Wassertank nachgefuellt"
+          "de": "Wassertank nachgefüllt"
         },
         "args": [
           {
@@ -453,6 +523,118 @@
           }
         ],
         "id": "display_toggle"
+      },
+      {
+        "title": {
+          "en": "Set fan level",
+          "de": "Lüftergeschwindigkeit"
+        },
+        "titleFormatted": {
+          "en": "Set fan level to [[level]]",
+          "de": "Setzte Lüftergeschwindigkeit zu [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=f422s|pedestalfan"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "de": "Lüftergeschwindigkeit"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Fan Speed 1",
+                  "de": "Geschwindigkeit 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Fan Speed 2",
+                  "de": "Geschwindigkeit 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Fan Speed 3",
+                  "de": "Geschwindigkeit 3"
+                }
+              },
+              {
+                "id": "4",
+                "title": {
+                  "en": "Fan Speed 4",
+                  "de": "Geschwindigkeit 4"
+                }
+              },
+              {
+                "id": "5",
+                "title": {
+                  "en": "Fan Speed 5",
+                  "de": "Geschwindigkeit 5"
+                }
+              },
+              {
+                "id": "6",
+                "title": {
+                  "en": "Fan Speed 6",
+                  "de": "Geschwindigkeit 6"
+                }
+              },
+              {
+                "id": "7",
+                "title": {
+                  "en": "Fan Speed 7",
+                  "de": "Geschwindigkeit 7"
+                }
+              },
+              {
+                "id": "8",
+                "title": {
+                  "en": "Fan Speed 8",
+                  "de": "Geschwindigkeit 8"
+                }
+              },
+              {
+                "id": "9",
+                "title": {
+                  "en": "Fan Speed 9",
+                  "de": "Geschwindigkeit 9"
+                }
+              },
+              {
+                "id": "10",
+                "title": {
+                  "en": "Fan Speed 10",
+                  "de": "Geschwindigkeit 10"
+                }
+              },
+              {
+                "id": "11",
+                "title": {
+                  "en": "Fan Speed 11",
+                  "de": "Geschwindigkeit 11"
+                }
+              },
+              {
+                "id": "12",
+                "title": {
+                  "en": "Fan Speed 12",
+                  "de": "Geschwindigkeit 12"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed_0_12"
       },
       {
         "title": {
@@ -800,8 +982,8 @@
           "de": "Gerätestatus aktualisieren"
         },
         "titleFormatted": {
-          "en": "Refresh status of [[device]]",
-          "de": "Aktualisiere Status von [[device]]"
+          "en": "Refresh status",
+          "de": "Aktualisiere Status"
         },
         "args": [
           {
@@ -1857,6 +2039,32 @@
                 }
               }
             ]
+          }
+        ]
+      },
+      {
+        "id": "setPedestalFanVerticalOscillation",
+        "title": {
+          "en": "Set vertical oscillation",
+          "de": "Vertikales Schwenken setzen"
+        },
+        "titleFormatted": {
+          "en": "Set vertical oscillation to [[enabled]]",
+          "de": "Setze vertikales Schwenken auf [[enabled]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=pedestalfan"
+          },
+          {
+            "type": "checkbox",
+            "name": "enabled",
+            "title": {
+              "en": "On/Off",
+              "de": "An/Aus"
+            }
           }
         ]
       },
@@ -3488,6 +3696,9 @@
         "display_toggle",
         "pedestalFanCapability",
         "oscillation_toggle",
+        "pedestalFanVerticalOscillation",
+        "pedestalFanChildLock",
+        "measure_pedestal_fan_oscillation_calibration_progress",
         "fanSpeed0to12",
         "mute_toggle"
       ],
@@ -3559,7 +3770,65 @@
           "template": "add_devices"
         }
       ],
-      "id": "pedestalfan"
+      "id": "pedestalfan",
+      "settings": [
+        {
+          "id": "horizontal_oscillation_left",
+          "type": "number",
+          "label": {
+            "en": "Horizontal left",
+            "de": "Horizontal links"
+          },
+          "value": 0,
+          "min": 0,
+          "max": 90,
+          "units": {
+            "en": "°"
+          }
+        },
+        {
+          "id": "horizontal_oscillation_right",
+          "type": "number",
+          "label": {
+            "en": "Horizontal right",
+            "de": "Horizontal rechts"
+          },
+          "value": 90,
+          "min": 0,
+          "max": 90,
+          "units": {
+            "en": "°"
+          }
+        },
+        {
+          "id": "vertical_oscillation_top",
+          "type": "number",
+          "label": {
+            "en": "Vertical top",
+            "de": "Vertikal oben"
+          },
+          "value": 0,
+          "min": 0,
+          "max": 120,
+          "units": {
+            "en": "°"
+          }
+        },
+        {
+          "id": "vertical_oscillation_bottom",
+          "type": "number",
+          "label": {
+            "en": "Vertical bottom",
+            "de": "Vertikal unten"
+          },
+          "value": 120,
+          "min": 0,
+          "max": 120,
+          "units": {
+            "en": "°"
+          }
+        }
+      ]
     },
     {
       "name": {
@@ -4894,6 +5163,19 @@
       "uiComponent": "sensor",
       "icon": "/assets/capability_icons/filter_life.svg"
     },
+    "measure_pedestal_fan_oscillation_calibration_progress": {
+      "type": "number",
+      "title": {
+        "en": "Oscillation calibration",
+        "de": "Schwenk-Kalibrierung"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": "%",
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/calibrate-svgrepo-com.svg"
+    },
     "mute_toggle": {
       "type": "boolean",
       "title": {
@@ -5062,6 +5344,30 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "icon": "/assets/icon.svg"
+    },
+    "pedestalFanChildLock": {
+      "type": "boolean",
+      "title": {
+        "en": "Child lock",
+        "de": "Kindersicherung"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/lock-alt-svgrepo-com.svg"
+    },
+    "pedestalFanVerticalOscillation": {
+      "type": "boolean",
+      "title": {
+        "en": "Vertical oscillation",
+        "de": "Vertikales Schwenken"
+      },
+      "getable": true,
+      "setable": true,
+      "uiQuickAction": false,
+      "uiComponent": "button",
+      "icon": "/assets/capability_icons/oscilate.svg"
     },
     "sensor_air_quality": {
       "type": "string",

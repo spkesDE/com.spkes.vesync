@@ -1,9 +1,8 @@
-import Homey from "homey";
 import VeSync from "../tsvesync/VeSync";
 import VeSyncApp from "../app";
 import BasicPurifier from "../tsvesync/lib/BasicPurifier";
 import DeviceModes from "../tsvesync/enum/DeviceModes";
-import { getErrorMessage } from "./utils/error";
+import {getErrorMessage} from "./utils/error";
 import HomeyDeviceBase from "./HomeyDeviceBase";
 
 export default class PurifierDeviceBase extends HomeyDeviceBase {
@@ -13,6 +12,7 @@ export default class PurifierDeviceBase extends HomeyDeviceBase {
     private lastKnownPm25: number | null = null;
     private lastKnownAirQuality: string | null = null;
     private lastKnownFilterLife: number | null = null;
+    private lastKnownChildLock: boolean | null = null;
 
     async onInit() {
         const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
@@ -176,6 +176,14 @@ export default class PurifierDeviceBase extends HomeyDeviceBase {
         // Other status updates
         await this.setCapabilityIfPresent('display_toggle', Boolean(status.result.result.display));
         await this.setCapabilityIfPresent('nightlight_toggle', status.result.result.night_light === "on");
+
+        const childLock = Boolean(status.result.result.child_lock);
+        if (this.lastKnownChildLock !== null && this.lastKnownChildLock !== childLock) {
+            await this.homey.flow.getDeviceTriggerCard("child_lock_changed").trigger(this, {
+                child_lock: childLock,
+            }).catch(this.error);
+        }
+        this.lastKnownChildLock = childLock;
 
         const currentFlowMode = this.getFlowMode();
         if (currentFlowMode !== null) {

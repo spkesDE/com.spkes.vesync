@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Oscillation calibration",
+    "de": "Schwenk-Kalibrierung"
+  },
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "units": "%",
+  "uiComponent": "sensor",
+  "icon": "/assets/capability_icons/calibrate-svgrepo-com.svg"
+}

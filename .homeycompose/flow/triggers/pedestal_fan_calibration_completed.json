@@ -1,0 +1,14 @@
+{
+  "id": "pedestal_fan_calibration_completed",
+  "title": {
+    "en": "Calibration completed",
+    "de": "Kalibrierung abgeschlossen"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=pedestalfan"
+    }
+  ]
+}

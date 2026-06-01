@@ -56,6 +56,27 @@
           ]
         }
       ]
+    },
+    {
+      "id": "setPedestalFanVerticalOscillation",
+      "title": {
+        "en": "Set vertical oscillation",
+        "de": "Vertikales Schwenken setzen"
+      },
+      "titleFormatted": {
+        "en": "Set vertical oscillation to [[enabled]]",
+        "de": "Setze vertikales Schwenken auf [[enabled]]"
+      },
+      "args": [
+        {
+          "type": "checkbox",
+          "name": "enabled",
+          "title": {
+            "en": "On/Off",
+            "de": "An/Aus"
+          }
+        }
+      ]
     }
   ]
 }

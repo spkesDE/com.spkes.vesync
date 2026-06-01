@@ -2,11 +2,11 @@
   "id": "purifier_mode_changed",
   "title": {
     "en": "Purifier mode changed",
-    "de": "Luftreiniger-Modus geaendert"
+    "de": "Luftreiniger-Modus geändert"
   },
   "titleFormatted": {
-    "en": "Purifier mode changed to [[mode]]",
-    "de": "Luftreiniger-Modus wechselte zu [[mode]]"
+    "en": "Purifier mode changed",
+    "de": "Luftreiniger-Modus wechselte"
   },
   "tokens": [
     {

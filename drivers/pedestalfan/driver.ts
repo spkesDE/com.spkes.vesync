@@ -12,6 +12,10 @@ class PedestalFanDriver extends Homey.Driver {
         this.log('PedestalFan Driver has been initialized');
         this.homey.flow.getActionCard("setModePedestalFan").registerRunListener(async (args) =>
             args.device.triggerCapabilityListener("pedestalFanCapability", args.mode));
+        this.homey.flow.getActionCard("setPedestalFanVerticalOscillation").registerRunListener(async (args) => {
+            await args.device.triggerCapabilityListener("pedestalFanVerticalOscillation", Boolean(args.enabled));
+            return true;
+        });
     }
 
     /**

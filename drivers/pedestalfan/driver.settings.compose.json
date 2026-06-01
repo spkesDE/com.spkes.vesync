@@ -1,0 +1,22 @@
+[
+  {
+    "$extends": [
+      "pedestal_fan_horizontal_oscillation_left"
+    ]
+  },
+  {
+    "$extends": [
+      "pedestal_fan_horizontal_oscillation_right"
+    ]
+  },
+  {
+    "$extends": [
+      "pedestal_fan_vertical_oscillation_top"
+    ]
+  },
+  {
+    "$extends": [
+      "pedestal_fan_vertical_oscillation_bottom"
+    ]
+  }
+]

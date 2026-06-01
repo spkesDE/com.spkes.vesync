@@ -1,0 +1,32 @@
+{
+  "id": "pedestal_fan_calibration_progress_changed",
+  "title": {
+    "en": "Calibration progress changed",
+    "de": "Kalibrierungsfortschritt geändert"
+  },
+  "tokens": [
+    {
+      "name": "progress",
+      "type": "number",
+      "title": {
+        "en": "Progress",
+        "de": "Fortschritt"
+      }
+    },
+    {
+      "name": "previous_progress",
+      "type": "number",
+      "title": {
+        "en": "Previous progress",
+        "de": "Vorheriger Fortschritt"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=pedestalfan"
+    }
+  ]
+}

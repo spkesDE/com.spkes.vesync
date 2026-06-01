@@ -1,0 +1,12 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Vertical oscillation",
+    "de": "Vertikales Schwenken"
+  },
+  "getable": true,
+  "setable": true,
+  "uiQuickAction": false,
+  "uiComponent": "button",
+  "icon": "/assets/capability_icons/oscilate.svg"
+}

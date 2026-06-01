@@ -4,8 +4,8 @@
     "de": "Gerätestatus aktualisieren"
   },
   "titleFormatted": {
-    "en": "Refresh status of [[device]]",
-    "de": "Aktualisiere Status von [[device]]"
+    "en": "Refresh status",
+    "de": "Aktualisiere Status"
   },
   "args": [
     {

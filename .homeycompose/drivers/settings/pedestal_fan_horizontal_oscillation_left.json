@@ -1,0 +1,14 @@
+{
+  "id": "horizontal_oscillation_left",
+  "type": "number",
+  "label": {
+    "en": "Horizontal left",
+    "de": "Horizontal links"
+  },
+  "value": 0,
+  "min": 0,
+  "max": 90,
+  "units": {
+    "en": "°"
+  }
+}
