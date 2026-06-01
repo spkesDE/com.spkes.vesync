@@ -9,6 +9,9 @@
     "display_toggle",
     "pedestalFanCapability",
     "oscillation_toggle",
+    "pedestalFanVerticalOscillation",
+    "pedestalFanChildLock",
+    "measure_pedestal_fan_oscillation_calibration_progress",
     "fanSpeed0to12",
     "mute_toggle"
   ],

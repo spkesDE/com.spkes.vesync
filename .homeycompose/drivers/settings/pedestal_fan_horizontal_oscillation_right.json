@@ -1,0 +1,14 @@
+{
+  "id": "horizontal_oscillation_right",
+  "type": "number",
+  "label": {
+    "en": "Horizontal right",
+    "de": "Horizontal rechts"
+  },
+  "value": 90,
+  "min": 0,
+  "max": 90,
+  "units": {
+    "en": "°"
+  }
+}

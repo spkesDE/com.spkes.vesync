@@ -1,0 +1,14 @@
+{
+  "id": "vertical_oscillation_top",
+  "type": "number",
+  "label": {
+    "en": "Vertical top",
+    "de": "Vertikal oben"
+  },
+  "value": 0,
+  "min": 0,
+  "max": 120,
+  "units": {
+    "en": "°"
+  }
+}

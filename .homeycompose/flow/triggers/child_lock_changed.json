@@ -1,0 +1,24 @@
+{
+  "id": "child_lock_changed",
+  "title": {
+    "en": "Child lock changed",
+    "de": "Kindersicherung geändert"
+  },
+  "tokens": [
+    {
+      "name": "child_lock",
+      "type": "boolean",
+      "title": {
+        "en": "Child lock",
+        "de": "Kindersicherung"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=core200s|core300s|core400s|core600s|everestAir|lv131s|sproutair|vital100s|vital200s|pedestalfan"
+    }
+  ]
+}

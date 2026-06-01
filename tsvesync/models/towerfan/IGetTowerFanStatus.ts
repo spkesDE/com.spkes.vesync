@@ -15,6 +15,7 @@ export interface IGetTowerFanStatus {
     sleepPreference: {
         sleepPreferenceType: string;
         oscillationSwitch: number;
+        oscillationState?: number;
         initFanSpeedLevel: number;
         fallAsleepRemain: number;
         autoChangeFanLevelSwitch: number;
