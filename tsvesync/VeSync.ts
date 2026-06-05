@@ -19,6 +19,9 @@ export interface IUnsupportedDeviceInfo {
 
 export default class VeSync {
 
+    private static readonly ACCOUNT_LOCKED_CODE = -11247129;
+    private static readonly ACCOUNT_LOCK_BUFFER_IN_SEC = 60;
+
     static debugMode: boolean = true;
     private static ignoredDeviceTypes = ['CAF-R901-AEU/AUK'];
     username: string = "";
@@ -34,11 +37,15 @@ export default class VeSync {
     private loggedUnsupportedDeviceTypes: Set<string> = new Set();
     private loggedIn: boolean = false;
     private typeManager!: DeviceTypeManager;
+    private loginLockedUntil = 0;
+    private loginLockedUsername = "";
 
     public async login(username: string, password: string, isHashedPassword = false): Promise<boolean> {
         if (!username || !password) {
             throw new Error("Username and password must be specified");
         }
+
+        this.throwIfLoginIsTemporarilyLocked(username);
 
         this.username = username;
         this.password = isHashedPassword ? password : this.hashPassword(password);
@@ -58,7 +65,8 @@ export default class VeSync {
             throw new Error("Login failed: no response from server");
         }
         if (response.code !== 0) {
-            throw new Error(`Login failed: ${response.msg || "Unknown error"}`);
+            this.rememberAccountLock(username, response);
+            throw new Error(`Login failed: ${this.describeLoginFailure(response)}`);
         }
 
         try {
@@ -213,6 +221,8 @@ export default class VeSync {
             this.region = resp.result.currentRegion;
             this.countryCode = resp.result.countryCode;
             this.loggedIn = true;
+            this.loginLockedUntil = 0;
+            this.loginLockedUsername = "";
 
             this.typeManager = new DeviceTypeManager();
             await this.typeManager.loadDevices();
@@ -235,5 +245,54 @@ export default class VeSync {
         }
 
         throw new Error(`Login failed: ${msg}`);
+    }
+
+    private describeLoginFailure(response: { code?: number; msg?: string; result?: Partial<AuthByPWDOrOTMModel> }): string {
+        const msg = response.msg || "Unknown error";
+
+        if (response.code !== VeSync.ACCOUNT_LOCKED_CODE) {
+            return msg;
+        }
+
+        const lockTimeInSec = this.getBufferedAccountLockTimeInSec(response);
+        if (lockTimeInSec === null) {
+            return `${msg}. Please wait before trying again.`;
+        }
+
+        const lockTimeInMin = Math.ceil(lockTimeInSec / 60);
+        return `${msg}. Please wait about ${lockTimeInMin} minute${lockTimeInMin === 1 ? "" : "s"} before trying again.`;
+    }
+
+    private rememberAccountLock(username: string, response: { code?: number; result?: Partial<AuthByPWDOrOTMModel> }): void {
+        if (response.code !== VeSync.ACCOUNT_LOCKED_CODE) {
+            return;
+        }
+
+        const lockTimeInSec = this.getBufferedAccountLockTimeInSec(response);
+        if (lockTimeInSec === null) {
+            return;
+        }
+
+        this.loginLockedUsername = username;
+        this.loginLockedUntil = Date.now() + lockTimeInSec * 1000;
+    }
+
+    private throwIfLoginIsTemporarilyLocked(username: string): void {
+        if (this.loginLockedUsername !== username || Date.now() >= this.loginLockedUntil) {
+            return;
+        }
+
+        const remainingSeconds = Math.ceil((this.loginLockedUntil - Date.now()) / 1000);
+        const remainingMinutes = Math.ceil(remainingSeconds / 60);
+        throw new Error(`Login failed: the account has been locked. Please wait about ${remainingMinutes} minute${remainingMinutes === 1 ? "" : "s"} before trying again.`);
+    }
+
+    private getBufferedAccountLockTimeInSec(response: { result?: Partial<AuthByPWDOrOTMModel> }): number | null {
+        const lockTimeInSec = response.result?.accountLockTimeInSec;
+        if (typeof lockTimeInSec !== "number" || !Number.isFinite(lockTimeInSec) || lockTimeInSec <= 0) {
+            return null;
+        }
+
+        return lockTimeInSec + VeSync.ACCOUNT_LOCK_BUFFER_IN_SEC;
     }
 }

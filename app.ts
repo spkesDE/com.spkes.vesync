@@ -6,6 +6,7 @@ import axios from "axios";
 import BasicPurifier from "./tsvesync/lib/BasicPurifier";
 import BasicHumidifier from "./tsvesync/lib/BasicHumidifier";
 import ApiHelper from "./tsvesync/lib/ApiHelper";
+import {getErrorMessage} from "./lib/utils/error";
 
 export default class VeSyncApp extends Homey.App {
     veSync: VeSync = new VeSync();
@@ -51,8 +52,8 @@ export default class VeSyncApp extends Homey.App {
             return;
         }
         await this.veSync.login(this.username, this.password, true).catch(
-            (error: Error) => {
-                this.error(`Could not login with username ${this.username} - Reason: ${error.message}`);
+            (error: unknown) => {
+                this.error(`Could not login with username ${this.username} - Reason: ${getErrorMessage(error)}`);
             }
         );
         this.log('VeSync has been initialized');

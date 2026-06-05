@@ -212,9 +212,11 @@ export default class ApiHelper {
             }).then((response) => {
                 resolve(response.data)
             }).catch((error) => {
-                if(error instanceof AxiosError || error.isAxiosError)
-                    reject(error.cause)
-                reject(error)
+                if (error instanceof AxiosError || error.isAxiosError) {
+                    reject(error.cause ?? error);
+                    return;
+                }
+                reject(error);
             });
         });
     }
