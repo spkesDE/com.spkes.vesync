@@ -122,11 +122,7 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
             throw new Error("Failed to login. Please use the repair function.");
         }
 
-        const data = this.getData() as { id: string; uuid?: string };
-        const physicalUuid = data.uuid ?? data.id;
-        const device = veSync.getStoredDevice().find((storedDevice) => {
-            return storedDevice?.device?.uuid === physicalUuid;
-        });
+        const device = this.findStoredVeSyncDevice(veSync.getStoredDevice());
 
         if (!(device instanceof BasicAirFryer)) {
             this.error("Device is undefined or is not a VeSync Air Fryer");

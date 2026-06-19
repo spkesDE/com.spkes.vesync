@@ -1,6 +1,30 @@
 import Homey from "homey";
+import type BasicDevice from "../tsvesync/lib/BasicDevice";
+
+type StoredVeSyncDeviceData = {
+    id?: string;
+    uuid?: string;
+    cid?: string;
+    macID?: string;
+    macId?: string;
+};
 
 export default class HomeyDeviceBase extends Homey.Device {
+    protected findStoredVeSyncDevice(devices: BasicDevice[]): BasicDevice | undefined {
+        const data = this.getData() as StoredVeSyncDeviceData;
+        const physicalUuid = data.uuid ?? data.id;
+        const macID = data.macID ?? data.macId;
+
+        return devices.find((storedDevice) => {
+            const device = storedDevice?.device;
+            if (!device) return false;
+            if (physicalUuid && device.uuid !== physicalUuid) return false;
+            if (data.cid && device.cid !== data.cid) return false;
+            if (macID && device.macID !== macID) return false;
+            return Boolean(physicalUuid || data.cid || macID);
+        });
+    }
+
     protected async checkForCapability(capability: string): Promise<void> {
         if (!this.hasCapability(capability)) {
             await this.addCapability(capability).catch(this.error);

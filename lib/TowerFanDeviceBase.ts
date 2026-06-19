@@ -93,9 +93,7 @@ export default class TowerFanDeviceBase extends HomeyDeviceBase {
             throw new Error("Failed to login. Please use the repair function.");
         }
 
-        const device = veSync.getStoredDevice().find((storedDevice) => {
-            return storedDevice?.device?.uuid === this.getData().id;
-        });
+        const device = this.findStoredVeSyncDevice(veSync.getStoredDevice());
 
         if (!(device instanceof BasicTowerFan)) {
             this.error("Device is undefined or is not a VeSyncTowerFan");
