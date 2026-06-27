@@ -72,12 +72,19 @@ class LV600SDevice extends HumidifierDeviceBase {
             this.error("LV600S is not connected");
             return;
         }
+        const status = this.device.status;
         if (value.startsWith("fan_speed_")) {
             this.log("Mode: " + value);
             let level = Number(value.replace("fan_speed_", ""));
-            if (this.device.status.mode === "sleep")
-                await this.device.setHumidityMode(DeviceModes.Humidity).catch(this.error);
-            this.device.setLevel(level).catch(this.error);
+            await this.runCommandWithOptimisticCapabilities([
+                {capability: 'onoff', value: level > 0},
+                ...this.getOptimisticFanSpeedUpdates(level),
+            ], async () => {
+                if (status.mode === "sleep") {
+                    this.assertCommandSucceeded(await this.device.setHumidityMode(DeviceModes.Humidity));
+                }
+                return this.device.setLevel(level);
+            });
             return;
         }
         if (value.startsWith("warm_fan_speed_")) {
@@ -87,9 +94,12 @@ class LV600SDevice extends HumidifierDeviceBase {
         }
         if (value === "auto") {
             this.log("Mode: " + value);
-            if (!this.device.status.enabled)
-                await this.device.setSwitch(true).catch(this.error);
-            this.device.setHumidityMode(DeviceModes.Humidity).catch(this.error);
+            await this.runCommandWithOptimisticCapability('onoff', true, async () => {
+                if (!status.enabled) {
+                    this.assertCommandSucceeded(await this.device.setSwitch(true));
+                }
+                return this.device.setHumidityMode(DeviceModes.Humidity);
+            });
             return;
         }
         await super.setMode(value);
@@ -98,7 +108,7 @@ class LV600SDevice extends HumidifierDeviceBase {
     async updateDevice(): Promise<void> {
         await super.updateDevice();
         if (this.device.status && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
+            await this.setCapabilityIfPresent('onoff', this.device.status.enabled);
             if (this.hasCapability("lv600sCapability")) {
                 if (this.device.status.mode === "manual")
                     this.setCapabilityValue('lv600sCapability', "manual").catch(this.error);

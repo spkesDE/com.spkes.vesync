@@ -46,36 +46,55 @@ export default class HumidifierDeviceBase extends HomeyDeviceBase {
     async setMode(value: string) {
         this.log("Mode: " + value);
         if (value === "on") {
-            this.device?.setSwitch(true).catch(this.error);
+            await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setSwitch(true));
             return;
         }
         if (value === "off") {
-            this.device?.setSwitch(false).catch(this.error);
+            await this.runCommandWithOptimisticCapability('onoff', false, () => this.device.setSwitch(false));
             return;
         }
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
-            if (this.device.status?.mode !== DeviceModes.Manual)
-                await this.device.setHumidityMode(DeviceModes.Manual).catch(this.error);
-            this.device?.setLevel(level).catch(this.error);
+            await this.runCommandWithOptimisticCapabilities([
+                {capability: 'onoff', value: level > 0},
+                ...this.getOptimisticFanSpeedUpdates(level),
+            ], async () => {
+                if (this.device.status?.mode !== DeviceModes.Manual) {
+                    this.assertCommandSucceeded(await this.device.setHumidityMode(DeviceModes.Manual));
+                }
+                return this.device.setLevel(level);
+            });
             return;
         }
         if (value === "auto") {
-            if (!this.device.status?.enabled)
-                await this.device?.setSwitch(true).catch(this.error);
-            this.device?.setHumidityMode(DeviceModes.Auto).catch(this.error);
+            await this.runCommandWithOptimisticCapability('onoff', true, async () => {
+                if (!this.device.status?.enabled) {
+                    this.assertCommandSucceeded(await this.device.setSwitch(true));
+                }
+                return this.device.setHumidityMode(DeviceModes.Auto);
+            });
             return;
         }
         if (value === "manual") {
-            if (this.device.status?.mode !== DeviceModes.Manual)
-                await this.device.setHumidityMode(DeviceModes.Manual).catch(this.error);
-            this.device?.setLevel(this.device.status?.mist_level ?? 1).catch(this.error);
+            const fanSpeed = this.device.status?.mist_level ?? 1;
+            await this.runCommandWithOptimisticCapabilities([
+                {capability: 'onoff', value: true},
+                ...this.getOptimisticFanSpeedUpdates(fanSpeed),
+            ], async () => {
+                if (this.device.status?.mode !== DeviceModes.Manual) {
+                    this.assertCommandSucceeded(await this.device.setHumidityMode(DeviceModes.Manual));
+                }
+                return this.device.setLevel(fanSpeed);
+            });
             return;
         }
         if (value === "sleep") {
-            if (!this.device?.status?.enabled)
-                await this.device?.setSwitch(true).catch(this.error);
-            this.device?.setHumidityMode(DeviceModes.Sleep).catch(this.error);
+            await this.runCommandWithOptimisticCapability('onoff', true, async () => {
+                if (!this.device?.status?.enabled) {
+                    this.assertCommandSucceeded(await this.device.setSwitch(true));
+                }
+                return this.device.setHumidityMode(DeviceModes.Sleep);
+            });
             return;
         }
         this.error("Unknown Mode: " + value);

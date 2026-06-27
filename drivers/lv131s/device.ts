@@ -65,7 +65,7 @@ class LV131SDevice extends PurifierDeviceBase {
     async updateDevice(): Promise<void> {
         await super.updateDevice();
         if (this.device.status && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.status.mode != "off").catch(this.error);
+            await this.setCapabilityIfPresent('onoff', this.device.status.mode != "off");
             if (this.hasCapability("lv131sCapability")) {
                 if (this.device.status.mode === "manual")
                     this.setCapabilityValue('lv131sCapability', "manual").catch(this.error);

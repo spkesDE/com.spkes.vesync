@@ -47,7 +47,7 @@ class Core200S extends PurifierDeviceBase {
     async updateDevice(): Promise<void> {
         await super.updateDevice().catch(this.error);
         if (this.device.status && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
+            await this.setCapabilityIfPresent('onoff', this.device.status.enabled);
             if (this.hasCapability("core200sCapability")) {
                 if (this.device.status.mode === "manual")
                     this.setCapabilityValue("core200sCapability", "manual").catch(this.error);
