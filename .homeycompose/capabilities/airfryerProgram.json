@@ -16,7 +16,14 @@
       "id": "airfry",
       "title": {
         "en": "Air Fry",
-        "de": "Heißluftfrittieren"
+        "de": "Heissluftfrittieren"
+      }
+    },
+    {
+      "id": "broil",
+      "title": {
+        "en": "Broil",
+        "de": "Gratinieren"
       }
     },
     {
@@ -44,7 +51,7 @@
       "id": "reheat",
       "title": {
         "en": "Reheat",
-        "de": "Aufwärmen"
+        "de": "Aufwaermen"
       }
     },
     {
@@ -59,6 +66,48 @@
       "title": {
         "en": "Proof",
         "de": "Gehen lassen"
+      }
+    },
+    {
+      "id": "steak",
+      "title": {
+        "en": "Steak",
+        "de": "Steak"
+      }
+    },
+    {
+      "id": "seafood",
+      "title": {
+        "en": "Seafood",
+        "de": "Meeresfruechte"
+      }
+    },
+    {
+      "id": "veggies",
+      "title": {
+        "en": "Veggies",
+        "de": "Gemuese"
+      }
+    },
+    {
+      "id": "french_fries",
+      "title": {
+        "en": "French Fries",
+        "de": "Pommes"
+      }
+    },
+    {
+      "id": "frozen",
+      "title": {
+        "en": "Frozen",
+        "de": "Gefrorenes"
+      }
+    },
+    {
+      "id": "chicken",
+      "title": {
+        "en": "Chicken",
+        "de": "Huhn"
       }
     },
     {

@@ -8,7 +8,7 @@
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=cafdc111saeu"
+      "filter": "driver_id=cafdc111saeu|cafp583s"
     }
   ]
 }

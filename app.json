@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.spkes.vesync",
-  "version": "1.0.23",
+  "version": "1.0.25",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "brandColor": "#11c8bd",
@@ -110,6 +110,114 @@
         ]
       },
       {
+        "id": "airfryer_cook_status_changed",
+        "title": {
+          "en": "Cooking status changed",
+          "de": "Kochstatus geaendert"
+        },
+        "titleFormatted": {
+          "en": "Cooking status changed",
+          "de": "Kochstatus geaendert"
+        },
+        "tokens": [
+          {
+            "name": "status",
+            "type": "string",
+            "title": {
+              "en": "Status",
+              "de": "Status"
+            }
+          },
+          {
+            "name": "previous_status",
+            "type": "string",
+            "title": {
+              "en": "Previous status",
+              "de": "Vorheriger Status"
+            }
+          },
+          {
+            "name": "program",
+            "type": "string",
+            "title": {
+              "en": "Program",
+              "de": "Programm"
+            }
+          },
+          {
+            "name": "remaining_time",
+            "type": "number",
+            "title": {
+              "en": "Remaining time",
+              "de": "Restzeit"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|cafp583s"
+          }
+        ]
+      },
+      {
+        "id": "airfryer_cooking_completed",
+        "title": {
+          "en": "Cooking completed",
+          "de": "Kochen beendet"
+        },
+        "tokens": [
+          {
+            "name": "program",
+            "type": "string",
+            "title": {
+              "en": "Program",
+              "de": "Programm"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|cafp583s"
+          }
+        ]
+      },
+      {
+        "id": "airfryer_cooking_started",
+        "title": {
+          "en": "Cooking started",
+          "de": "Kochen gestartet"
+        },
+        "tokens": [
+          {
+            "name": "program",
+            "type": "string",
+            "title": {
+              "en": "Program",
+              "de": "Programm"
+            }
+          },
+          {
+            "name": "remaining_time",
+            "type": "number",
+            "title": {
+              "en": "Remaining time",
+              "de": "Restzeit"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafdc111saeu|cafp583s"
+          }
+        ]
+      },
+      {
         "id": "airfryer_pull_out",
         "title": {
           "en": "Basket pulled out",
@@ -119,7 +227,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=cafdc111saeu"
+            "filter": "driver_id=cafdc111saeu|cafp583s"
           }
         ]
       },
@@ -157,7 +265,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+            "filter": "driver_id=cafdc111saeu|cafp583s|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
           }
         ]
       },
@@ -171,7 +279,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=cafdc111saeu|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
+            "filter": "driver_id=cafdc111saeu|cafp583s|classic200s|classic300s|core200s|core300s|core400s|core600s|dual200s|dual200spro|everestAir|f422s|lv131s|lv600s|oasis1000s|oasis450s|pedestalfan|sproutair|sprouthumidifier|vital100s|vital200s"
           }
         ]
       },
@@ -1191,6 +1299,169 @@
             "type": "device",
             "name": "device",
             "filter": "driver_id=cafdc111saeu"
+          },
+          {
+            "type": "dropdown",
+            "name": "unit",
+            "title": {
+              "en": "Unit"
+            },
+            "values": [
+              {
+                "id": "c",
+                "label": {
+                  "en": "Celsius",
+                  "de": "Celsius"
+                }
+              },
+              {
+                "id": "f",
+                "label": {
+                  "en": "Fahrenheit",
+                  "de": "Fahrenheit"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "startPresetCAFP583S",
+        "title": {
+          "en": "Start preset",
+          "de": "Preset starten"
+        },
+        "titleFormatted": {
+          "en": "Start [[preset]]",
+          "de": "Starte [[preset]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafp583s"
+          },
+          {
+            "type": "dropdown",
+            "name": "preset",
+            "title": {
+              "en": "Preset"
+            },
+            "values": [
+              {
+                "id": "airfry",
+                "label": {
+                  "en": "Air Fry",
+                  "de": "Heissluftfrittieren"
+                }
+              },
+              {
+                "id": "broil",
+                "label": {
+                  "en": "Broil",
+                  "de": "Gratinieren"
+                }
+              },
+              {
+                "id": "roast",
+                "label": {
+                  "en": "Roast",
+                  "de": "Braten"
+                }
+              },
+              {
+                "id": "bake",
+                "label": {
+                  "en": "Bake",
+                  "de": "Backen"
+                }
+              },
+              {
+                "id": "reheat",
+                "label": {
+                  "en": "Reheat",
+                  "de": "Aufwaermen"
+                }
+              },
+              {
+                "id": "steak",
+                "label": {
+                  "en": "Steak",
+                  "de": "Steak"
+                }
+              },
+              {
+                "id": "seafood",
+                "label": {
+                  "en": "Seafood",
+                  "de": "Meeresfruechte"
+                }
+              },
+              {
+                "id": "veggies",
+                "label": {
+                  "en": "Veggies",
+                  "de": "Gemuese"
+                }
+              },
+              {
+                "id": "french_fries",
+                "label": {
+                  "en": "French Fries",
+                  "de": "Pommes"
+                }
+              },
+              {
+                "id": "frozen",
+                "label": {
+                  "en": "Frozen",
+                  "de": "Gefrorenes"
+                }
+              },
+              {
+                "id": "chicken",
+                "label": {
+                  "en": "Chicken",
+                  "de": "Huhn"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stopCookCAFP583S",
+        "title": {
+          "en": "Stop cooking",
+          "de": "Kochen stoppen"
+        },
+        "titleFormatted": {
+          "en": "Stop cooking",
+          "de": "Kochen stoppen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafp583s"
+          }
+        ]
+      },
+      {
+        "id": "setTempUnitCAFP583S",
+        "title": {
+          "en": "Set temperature unit",
+          "de": "Temperatureinheit setzen"
+        },
+        "titleFormatted": {
+          "en": "Set temperature unit to [[unit]]",
+          "de": "Setze Temperatureinheit auf [[unit]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=cafp583s"
           },
           {
             "type": "dropdown",
@@ -2397,6 +2668,100 @@
         }
       ],
       "id": "cafdc111saeu"
+    },
+    {
+      "name": {
+        "en": "Cosori Dual Blaze Air Fryer (Experimental)",
+        "de": "Cosori Dual Blaze Heissluftfritteuse (Experimentell)"
+      },
+      "class": "airfryer",
+      "capabilities": [
+        "onoff",
+        "airfryerProgram",
+        "measure_airfryer_remaining_time",
+        "airfryerCookStatus",
+        "measure_airfryer_hold_time",
+        "measure_airfryer_cook_set_time",
+        "target_temperature",
+        "measure_temperature",
+        "measure_airfryer_current_remaining_time"
+      ],
+      "capabilitiesOptions": {
+        "target_temperature": {
+          "min": 80,
+          "max": 232,
+          "step": 1
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/cafp583s/assets/images/small.png",
+        "large": "/drivers/cafp583s/assets/images/large.png",
+        "xlarge": "/drivers/cafp583s/assets/images/xlarge.png"
+      },
+      "repair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address",
+              "de": "E-Mail adresse"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com",
+              "de": "max@mueller.de"
+            },
+            "passwordLabel": {
+              "en": "Password",
+              "de": "Passwort"
+            },
+            "passwordPlaceholder": {
+              "en": "Password",
+              "de": "Passwort"
+            }
+          }
+        }
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "icon.svg",
+            "usernameLabel": {
+              "en": "E-mail address"
+            },
+            "usernamePlaceholder": {
+              "en": "john@doe.com"
+            },
+            "passwordLabel": {
+              "en": "Password"
+            },
+            "passwordPlaceholder": {
+              "en": "Password"
+            }
+          }
+        },
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "cafp583s"
     },
     {
       "name": {
@@ -4342,7 +4707,14 @@
           "id": "airfry",
           "title": {
             "en": "Air Fry",
-            "de": "Heißluftfrittieren"
+            "de": "Heissluftfrittieren"
+          }
+        },
+        {
+          "id": "broil",
+          "title": {
+            "en": "Broil",
+            "de": "Gratinieren"
           }
         },
         {
@@ -4370,7 +4742,7 @@
           "id": "reheat",
           "title": {
             "en": "Reheat",
-            "de": "Aufwärmen"
+            "de": "Aufwaermen"
           }
         },
         {
@@ -4385,6 +4757,48 @@
           "title": {
             "en": "Proof",
             "de": "Gehen lassen"
+          }
+        },
+        {
+          "id": "steak",
+          "title": {
+            "en": "Steak",
+            "de": "Steak"
+          }
+        },
+        {
+          "id": "seafood",
+          "title": {
+            "en": "Seafood",
+            "de": "Meeresfruechte"
+          }
+        },
+        {
+          "id": "veggies",
+          "title": {
+            "en": "Veggies",
+            "de": "Gemuese"
+          }
+        },
+        {
+          "id": "french_fries",
+          "title": {
+            "en": "French Fries",
+            "de": "Pommes"
+          }
+        },
+        {
+          "id": "frozen",
+          "title": {
+            "en": "Frozen",
+            "de": "Gefrorenes"
+          }
+        },
+        {
+          "id": "chicken",
+          "title": {
+            "en": "Chicken",
+            "de": "Huhn"
           }
         },
         {

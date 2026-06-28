@@ -1,0 +1,72 @@
+{
+  "actions": [
+    {
+      "id": "startPresetCAFP583S",
+      "title": {
+        "en": "Start preset",
+        "de": "Preset starten"
+      },
+      "titleFormatted": {
+        "en": "Start [[preset]]",
+        "de": "Starte [[preset]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "preset",
+          "title": {
+            "en": "Preset"
+          },
+          "values": [
+            {"id": "airfry", "label": {"en": "Air Fry", "de": "Heissluftfrittieren"}},
+            {"id": "broil", "label": {"en": "Broil", "de": "Gratinieren"}},
+            {"id": "roast", "label": {"en": "Roast", "de": "Braten"}},
+            {"id": "bake", "label": {"en": "Bake", "de": "Backen"}},
+            {"id": "reheat", "label": {"en": "Reheat", "de": "Aufwaermen"}},
+            {"id": "steak", "label": {"en": "Steak", "de": "Steak"}},
+            {"id": "seafood", "label": {"en": "Seafood", "de": "Meeresfruechte"}},
+            {"id": "veggies", "label": {"en": "Veggies", "de": "Gemuese"}},
+            {"id": "french_fries", "label": {"en": "French Fries", "de": "Pommes"}},
+            {"id": "frozen", "label": {"en": "Frozen", "de": "Gefrorenes"}},
+            {"id": "chicken", "label": {"en": "Chicken", "de": "Huhn"}}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stopCookCAFP583S",
+      "title": {
+        "en": "Stop cooking",
+        "de": "Kochen stoppen"
+      },
+      "titleFormatted": {
+        "en": "Stop cooking",
+        "de": "Kochen stoppen"
+      }
+    },
+    {
+      "id": "setTempUnitCAFP583S",
+      "title": {
+        "en": "Set temperature unit",
+        "de": "Temperatureinheit setzen"
+      },
+      "titleFormatted": {
+        "en": "Set temperature unit to [[unit]]",
+        "de": "Setze Temperatureinheit auf [[unit]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "unit",
+          "title": {
+            "en": "Unit"
+          },
+          "values": [
+            {"id": "c", "label": {"en": "Celsius", "de": "Celsius"}},
+            {"id": "f", "label": {"en": "Fahrenheit", "de": "Fahrenheit"}}
+          ]
+        }
+      ]
+    }
+  ]
+}

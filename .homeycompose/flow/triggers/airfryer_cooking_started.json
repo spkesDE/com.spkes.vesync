@@ -1,0 +1,32 @@
+{
+  "id": "airfryer_cooking_started",
+  "title": {
+    "en": "Cooking started",
+    "de": "Kochen gestartet"
+  },
+  "tokens": [
+    {
+      "name": "program",
+      "type": "string",
+      "title": {
+        "en": "Program",
+        "de": "Programm"
+      }
+    },
+    {
+      "name": "remaining_time",
+      "type": "number",
+      "title": {
+        "en": "Remaining time",
+        "de": "Restzeit"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=cafdc111saeu|cafp583s"
+    }
+  ]
+}
