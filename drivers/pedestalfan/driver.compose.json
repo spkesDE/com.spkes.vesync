@@ -1,6 +1,6 @@
 {
   "name": {
-    "en": "Pedestal Fan (Experimental)"
+    "en": "Pedestal Fan"
   },
   "class": "fan",
   "capabilities": [
