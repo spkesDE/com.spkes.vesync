@@ -61,7 +61,7 @@ class Oasis1000S extends HumidifierDeviceBase {
     async updateDevice(): Promise<void> {
         await super.updateDevice();
         if (this.device.status && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
+            await this.setCapabilityIfPresent('onoff', this.device.status.enabled);
             if (this.hasCapability("oasis1000sCapability")) {
                 if (this.device.status.mode === "manual")
                     this.setCapabilityValue("oasis1000sCapability", "manual").catch(this.error);

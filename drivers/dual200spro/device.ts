@@ -46,7 +46,7 @@ class Dual200SPro extends HumidifierDeviceBase {
     async updateDevice(): Promise<void> {
         await super.updateDevice();
         if (this.device.status && this.getAvailable()) {
-            this.setCapabilityValue('onoff', this.device.status.enabled).catch(this.error);
+            await this.setCapabilityIfPresent('onoff', this.device.status.enabled);
             if (this.hasCapability("dual200sProCapability")) {
                 if (this.device.status.mode === "manual")
                     this.setCapabilityValue('dual200sProCapability', "manual").catch(this.error);

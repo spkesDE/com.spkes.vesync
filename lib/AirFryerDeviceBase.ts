@@ -8,9 +8,10 @@ import {IAirFryerStatusItem} from "../tsvesync/models/airfryer/IGetAirFryerMulti
 import { getErrorMessage } from "./utils/error";
 import HomeyDeviceBase from "./HomeyDeviceBase";
 
-type AirFryerProgramId = 'off' | 'airfry' | 'bake' | 'roast' | 'grill' | 'reheat' | 'dry' | 'proof' | 'mixed';
+type AirFryerProgramId = 'off' | 'airfry' | 'broil' | 'bake' | 'roast' | 'grill' | 'reheat' | 'dry' | 'proof' | 'steak' | 'seafood' | 'veggies' | 'french_fries' | 'frozen' | 'chicken' | 'mixed';
 type AirFryerCookStatusId = 'standby' | 'ready' | 'awaiting_input' | 'pull_out' | 'cooking' | 'paused' | 'completed' | 'unknown';
-const DEFAULT_PROGRAM: Exclude<AirFryerProgramId, 'off' | 'mixed'> = 'airfry';
+type CookProgramId = Exclude<AirFryerProgramId, 'off' | 'mixed'>;
+const DEFAULT_PROGRAM: CookProgramId = 'airfry';
 
 export default class AirFryerDeviceBase extends HomeyDeviceBase {
     device!: BasicAirFryer;
@@ -49,11 +50,12 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
                 }
 
                 if (value === 'off' || value === 'mixed') {
-                    await this.updateCapability('airfryerProgram', DEFAULT_PROGRAM);
+                    await this.updateCapability('airfryerProgram', this.getDefaultProgram());
                     return;
                 }
 
                 const program = this.normalizeProgram(value);
+                this.assertProgramSupported(program);
                 await this.applyProgramDefaults(program);
             });
         }
@@ -93,25 +95,29 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
 
     public async startPreset(programId: AirFryerProgramId): Promise<void> {
         await this.ensurePresetsLoaded();
-        const program = this.normalizeProgram(programId);
+        const program = this.normalizeFlowProgram(programId);
+        this.assertProgramSupported(program);
         const tempUnit = this.device.status?.tempUnit ?? 'c';
         const payload = this.buildStartPayload(program, tempUnit);
-        await this.device.startMultiCook(payload).catch(this.error);
+        await this.runCommandWithOptimisticCapabilities([
+            {capability: 'onoff', value: true},
+            {capability: 'airfryerProgram', value: program},
+        ], () => this.device.startMultiCook(payload));
         await this.updateDevice();
     }
 
     public async stopCooking(): Promise<void> {
-        await this.device.endCook(this.getChamber()).catch(this.error);
+        this.assertCommandSucceeded(await this.device.endCook(this.getChamber()));
         const stopped = await this.waitForStandby(10000);
         if (!stopped) {
-            await this.device.endCook(4).catch(this.error);
+            this.assertCommandSucceeded(await this.device.endCook(4));
             await this.waitForStandby();
         }
         await this.updateDevice();
     }
 
     public async setPreferredTempUnit(unit: 'c' | 'f'): Promise<void> {
-        await this.device.setTempUnit(unit).catch(this.error);
+        this.assertCommandSucceeded(await this.device.setTempUnit(unit));
         await this.updateDevice();
     }
 
@@ -122,11 +128,7 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
             throw new Error("Failed to login. Please use the repair function.");
         }
 
-        const data = this.getData() as { id: string; uuid?: string };
-        const physicalUuid = data.uuid ?? data.id;
-        const device = veSync.getStoredDevice().find((storedDevice) => {
-            return storedDevice?.device?.uuid === physicalUuid;
-        });
+        const device = this.findStoredVeSyncDevice(veSync.getStoredDevice());
 
         if (!(device instanceof BasicAirFryer)) {
             this.error("Device is undefined or is not a VeSync Air Fryer");
@@ -212,6 +214,8 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         await this.updateCapability('measure_temperature', cookTemp);
         await this.updateCapability('measure_airfryer_current_remaining_time', currentRemainingTime);
 
+        await this.triggerCookStatusFlows(previousCookStatus, liveCookStatus, program, remainingMinutes);
+
         if (previousCookStatus !== 'pull_out' && liveCookStatus === 'pull_out') {
             await this.homey.flow.getDeviceTriggerCard('airfryer_pull_out').trigger(this).catch(this.error);
         }
@@ -223,7 +227,7 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
 
     private async ensureDefaultCapabilityValues(): Promise<void> {
         if (this.hasCapability('airfryerProgram') && this.getCapabilityValue('airfryerProgram') == null) {
-            await this.setCapabilityValue('airfryerProgram', DEFAULT_PROGRAM).catch(this.error);
+            await this.setCapabilityValue('airfryerProgram', this.getDefaultProgram()).catch(this.error);
         }
 
         if (this.hasCapability('measure_airfryer_remaining_time') && this.getCapabilityValue('measure_airfryer_remaining_time') == null) {
@@ -235,15 +239,15 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         }
 
         if (this.hasCapability('measure_airfryer_cook_set_time') && this.getCapabilityValue('measure_airfryer_cook_set_time') == null) {
-            await this.setCapabilityValue('measure_airfryer_cook_set_time', this.getPresetCookSetTimeMinutes(DEFAULT_PROGRAM)).catch(this.error);
+            await this.setCapabilityValue('measure_airfryer_cook_set_time', this.getPresetCookSetTimeMinutes(this.getDefaultProgram())).catch(this.error);
         }
 
         if (this.hasCapability('target_temperature') && this.getCapabilityValue('target_temperature') == null) {
-            await this.setCapabilityValue('target_temperature', this.getPresetCookTemp(DEFAULT_PROGRAM)).catch(this.error);
+            await this.setCapabilityValue('target_temperature', this.getPresetCookTemp(this.getDefaultProgram())).catch(this.error);
         }
 
         if (this.hasCapability('measure_temperature') && this.getCapabilityValue('measure_temperature') == null) {
-            await this.setCapabilityValue('measure_temperature', this.getPresetCookTemp(DEFAULT_PROGRAM)).catch(this.error);
+            await this.setCapabilityValue('measure_temperature', this.getPresetCookTemp(this.getDefaultProgram())).catch(this.error);
         }
 
         if (this.hasCapability('measure_airfryer_current_remaining_time') && this.getCapabilityValue('measure_airfryer_current_remaining_time') == null) {
@@ -282,7 +286,7 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         return false;
     }
 
-    private buildStartPayload(programId: Exclude<AirFryerProgramId, 'off' | 'mixed'>, tempUnit: string): IStartMultiCookPayload {
+    private buildStartPayload(programId: CookProgramId, tempUnit: string): IStartMultiCookPayload {
         const mode = this.programIdToMode(programId);
         const chamber = this.getChamber();
         const config = this.device.buildCookConfig(mode, chamber);
@@ -321,14 +325,14 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         await this.startPreset(program);
     }
 
-    private async applyProgramDefaults(programId: Exclude<AirFryerProgramId, 'off' | 'mixed'>): Promise<void> {
+    private async applyProgramDefaults(programId: CookProgramId): Promise<void> {
         await this.updateCapability('airfryerProgram', programId);
         await this.updateCapability('measure_airfryer_cook_set_time', this.getPresetCookSetTimeMinutes(programId));
         await this.updateCapability('target_temperature', this.getPresetCookTemp(programId));
         await this.updateCapability('measure_temperature', this.getPresetCookTemp(programId));
     }
 
-    private getSelectedProgram(): Exclude<AirFryerProgramId, 'off' | 'mixed'> {
+    private getSelectedProgram(): CookProgramId {
         const value = this.getCapabilityValue('airfryerProgram') as AirFryerProgramId | null;
         return this.normalizeProgram(value ?? DEFAULT_PROGRAM);
     }
@@ -356,7 +360,7 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         return Math.round(value);
     }
 
-    private getPreset(programId: Exclude<AirFryerProgramId, 'off' | 'mixed'>): IAirFryerPreset {
+    private getPreset(programId: CookProgramId): IAirFryerPreset {
         const preset = this.device.getPreset(this.programIdToMode(programId));
         if (!preset) {
             throw new Error(`Preset not found for program: ${programId}`);
@@ -365,17 +369,29 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         return preset;
     }
 
-    private getPresetCookSetTimeMinutes(programId: Exclude<AirFryerProgramId, 'off' | 'mixed'>): number {
+    private getPresetCookSetTimeMinutes(programId: CookProgramId): number {
         return Math.ceil(this.getPreset(programId).cookSetTime / 60);
     }
 
-    private getPresetCookTemp(programId: Exclude<AirFryerProgramId, 'off' | 'mixed'>): number {
+    private getPresetCookTemp(programId: CookProgramId): number {
         return this.getPreset(programId).cookTemp;
     }
 
-    private normalizeProgram(programId: AirFryerProgramId): Exclude<AirFryerProgramId, 'off' | 'mixed'> {
+    private normalizeProgram(programId: AirFryerProgramId): CookProgramId {
         if (programId === 'off' || programId === 'mixed') {
-            return DEFAULT_PROGRAM;
+            return this.getDefaultProgram();
+        }
+
+        if (!this.isProgramSupported(programId)) {
+            return this.getDefaultProgram();
+        }
+
+        return programId;
+    }
+
+    private normalizeFlowProgram(programId: AirFryerProgramId): CookProgramId {
+        if (programId === 'off' || programId === 'mixed') {
+            return this.getDefaultProgram();
         }
 
         return programId;
@@ -408,6 +424,9 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
             case 'pullout':
                 return 'pull_out';
             case 'cooking':
+            case 'heating':
+            case 'preheating':
+            case 'keeping':
                 return 'cooking';
             case 'pause':
             case 'paused':
@@ -416,6 +435,7 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
             case 'finish':
             case 'finished':
             case 'completed':
+            case 'cookend':
                 return 'completed';
             default:
                 return 'unknown';
@@ -443,6 +463,37 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         return chamberStatus ? Math.ceil((chamberStatus.holdTime ?? 0) / 60) : 0;
     }
 
+    private async triggerCookStatusFlows(
+        previousCookStatus: AirFryerCookStatusId,
+        liveCookStatus: AirFryerCookStatusId,
+        program: AirFryerProgramId,
+        remainingMinutes: number,
+    ): Promise<void> {
+        if (previousCookStatus === liveCookStatus) {
+            return;
+        }
+
+        await this.homey.flow.getDeviceTriggerCard('airfryer_cook_status_changed').trigger(this, {
+            status: liveCookStatus,
+            previous_status: previousCookStatus,
+            program,
+            remaining_time: remainingMinutes,
+        }).catch(this.error);
+
+        if (liveCookStatus === 'cooking') {
+            await this.homey.flow.getDeviceTriggerCard('airfryer_cooking_started').trigger(this, {
+                program,
+                remaining_time: remainingMinutes,
+            }).catch(this.error);
+        }
+
+        if (liveCookStatus === 'completed') {
+            await this.homey.flow.getDeviceTriggerCard('airfryer_cooking_completed').trigger(this, {
+                program,
+            }).catch(this.error);
+        }
+    }
+
     private getChamber(): number {
         const data = this.getData() as { chamber?: number | string };
         return Number(data.chamber ?? 1);
@@ -452,10 +503,12 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         return statusList.find((item) => item.chamber === this.getChamber());
     }
 
-    private programIdToMode(programId: Exclude<AirFryerProgramId, 'off' | 'mixed'>): string {
+    private programIdToMode(programId: CookProgramId): string {
         switch (programId) {
             case 'airfry':
                 return 'AirFry';
+            case 'broil':
+                return 'Broil';
             case 'bake':
                 return 'Bake';
             case 'roast':
@@ -468,13 +521,27 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
                 return 'Dry';
             case 'proof':
                 return 'Proof';
+            case 'steak':
+                return 'Steak';
+            case 'seafood':
+                return 'Seafood';
+            case 'veggies':
+                return 'Veggies';
+            case 'french_fries':
+                return 'FrenchFries';
+            case 'frozen':
+                return 'Frozen';
+            case 'chicken':
+                return 'Chicken';
         }
     }
 
     private modeToProgramId(mode: string): AirFryerProgramId {
-        switch (mode.toLowerCase()) {
+        switch (mode.toLowerCase().replace(/[\s_-]/g, '')) {
             case 'airfry':
                 return 'airfry';
+            case 'broil':
+                return 'broil';
             case 'bake':
                 return 'bake';
             case 'roast':
@@ -487,8 +554,34 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
                 return 'dry';
             case 'proof':
                 return 'proof';
+            case 'steak':
+                return 'steak';
+            case 'seafood':
+                return 'seafood';
+            case 'veggies':
+                return 'veggies';
+            case 'frenchfries':
+                return 'french_fries';
+            case 'frozen':
+                return 'frozen';
+            case 'chicken':
+                return 'chicken';
             default:
                 return 'mixed';
+        }
+    }
+
+    private getDefaultProgram(): CookProgramId {
+        return this.modeToProgramId(this.device.getDefaultMode()) as CookProgramId;
+    }
+
+    private isProgramSupported(programId: CookProgramId): boolean {
+        return this.device.hasRecipeMode(this.programIdToMode(programId));
+    }
+
+    private assertProgramSupported(programId: CookProgramId): void {
+        if (!this.isProgramSupported(programId)) {
+            throw new Error(`Program not supported by this fryer: ${programId}`);
         }
     }
 }

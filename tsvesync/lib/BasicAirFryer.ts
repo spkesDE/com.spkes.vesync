@@ -7,10 +7,12 @@ import {IAirFryerRecipeMeta} from "../models/airfryer/IAirFryerRecipeMeta";
 
 type AirFryerClass = typeof BasicAirFryer & {
     recipeMeta: Record<string, IAirFryerRecipeMeta>;
+    defaultMode?: string;
 };
 
 export default class BasicAirFryer extends BasicDevice {
     static recipeMeta: Record<string, IAirFryerRecipeMeta> = {};
+    static defaultMode = 'AirFry';
 
     status: IGetAirFryerMultiStatus | null = null;
     presetRecipes: IAirFryerPreset[] = [];
@@ -53,7 +55,21 @@ export default class BasicAirFryer extends BasicDevice {
     }
 
     public getPreset(mode: string): IAirFryerPreset | undefined {
-        return this.presetRecipes.find((preset) => preset.mode.toLowerCase() === mode.toLowerCase());
+        const normalizedMode = this.normalizeModeKey(mode);
+        return this.presetRecipes.find((preset) => this.normalizeModeKey(preset.mode) === normalizedMode);
+    }
+
+    public getSupportedModes(): string[] {
+        return Object.keys((this.constructor as AirFryerClass).recipeMeta);
+    }
+
+    public getDefaultMode(): string {
+        const airFryerClass = this.constructor as AirFryerClass;
+        return airFryerClass.defaultMode ?? this.getSupportedModes()[0] ?? BasicAirFryer.defaultMode;
+    }
+
+    public hasRecipeMode(mode: string): boolean {
+        return this.getRecipeMeta(mode) !== undefined;
     }
 
     public buildCookConfig(mode: string, chamber: number): IAirFryerCookConfig {
@@ -81,8 +97,13 @@ export default class BasicAirFryer extends BasicDevice {
 
     protected getRecipeMeta(mode: string): IAirFryerRecipeMeta | undefined {
         const recipeMeta = (this.constructor as AirFryerClass).recipeMeta;
-        const matchedKey = Object.keys(recipeMeta).find((key) => key.toLowerCase() === mode.toLowerCase());
+        const normalizedMode = this.normalizeModeKey(mode);
+        const matchedKey = Object.keys(recipeMeta).find((key) => this.normalizeModeKey(key) === normalizedMode);
         return matchedKey ? recipeMeta[matchedKey] : undefined;
+    }
+
+    protected normalizeModeKey(mode: string): string {
+        return mode.toLowerCase().replace(/[\s_-]/g, '');
     }
 
     protected normalizeAirFryerStatus(rawStatus: any): IGetAirFryerMultiStatus {

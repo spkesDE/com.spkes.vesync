@@ -1,0 +1,24 @@
+{
+  "id": "airfryer_cooking_completed",
+  "title": {
+    "en": "Cooking completed",
+    "de": "Kochen beendet"
+  },
+  "tokens": [
+    {
+      "name": "program",
+      "type": "string",
+      "title": {
+        "en": "Program",
+        "de": "Programm"
+      }
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=cafdc111saeu|cafp583s"
+    }
+  ]
+}

@@ -25,7 +25,6 @@ export default class TowerFanDeviceBase extends HomeyDeviceBase {
         this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
 
         if (this.hasCapability("onoff")) this.registerCapabilityListener("onoff", async (value) => {
-            if (!value) await this.setCapabilityValue("onoff", false);
             await this.setMode(value ? "on" : "off");
         });
 
@@ -52,32 +51,35 @@ export default class TowerFanDeviceBase extends HomeyDeviceBase {
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
             if (level > 0) {
-                await this.device.setLevel(level).catch(this.error);
+                await this.runCommandWithOptimisticCapabilities([
+                    {capability: 'onoff', value: true},
+                    ...this.getOptimisticFanSpeedUpdates(level),
+                ], () => this.device.setLevel(level));
             } else await this.setMode("off");
             void this.updateDevice();
             return;
         }
         switch (value) {
             case "on":
-                await this.device.setSwitch(true).catch(this.error)
+                await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setSwitch(true));
                 break;
             case "off":
-                await this.device.setSwitch(false).catch(this.error)
+                await this.runCommandWithOptimisticCapability('onoff', false, () => this.device.setSwitch(false));
                 break;
             case 'turbo':
-                await this.device.setTowerFanMode(DeviceModes.Turbo).catch(this.error)
+                await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setTowerFanMode(DeviceModes.Turbo));
                 break;
             case 'normal':
-                await this.device.setTowerFanMode(DeviceModes.Normal).catch(this.error)
+                await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setTowerFanMode(DeviceModes.Normal));
                 break;
             case 'auto':
-                await this.device.setTowerFanMode(DeviceModes.Auto).catch(this.error)
+                await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setTowerFanMode(DeviceModes.Auto));
                 break;
             case 'eco':
-                await this.device.setTowerFanMode(DeviceModes.Eco).catch(this.error)
+                await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setTowerFanMode(DeviceModes.Eco));
                 break;
             case 'advancedSleep':
-                await this.device.setTowerFanMode(DeviceModes.AdvancedSleep).catch(this.error)
+                await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setTowerFanMode(DeviceModes.AdvancedSleep));
                 break;
             default:
                 this.error("Unknown mode: " + value);
@@ -93,9 +95,7 @@ export default class TowerFanDeviceBase extends HomeyDeviceBase {
             throw new Error("Failed to login. Please use the repair function.");
         }
 
-        const device = veSync.getStoredDevice().find((storedDevice) => {
-            return storedDevice?.device?.uuid === this.getData().id;
-        });
+        const device = this.findStoredVeSyncDevice(veSync.getStoredDevice());
 
         if (!(device instanceof BasicTowerFan)) {
             this.error("Device is undefined or is not a VeSyncTowerFan");

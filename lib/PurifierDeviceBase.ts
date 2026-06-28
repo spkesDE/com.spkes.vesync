@@ -47,33 +47,40 @@ export default class PurifierDeviceBase extends HomeyDeviceBase {
     async setMode(value: string) {
         this.log("Mode: " + value);
         if (value === "on") {
-            this.device.setSwitch(true).catch(this.error);
+            await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setSwitch(true));
             return;
         }
         if (value === "off") {
-            this.device.setSwitch(false).catch(this.error);
+            await this.runCommandWithOptimisticCapability('onoff', false, () => this.device.setSwitch(false));
             return;
         }
         if (value.startsWith("fan_speed_")) {
             let level = Number(value.replace("fan_speed_", ""));
-            this.device.setLevel(level).catch(this.error);
+            await this.runCommandWithOptimisticCapabilities([
+                {capability: 'onoff', value: level > 0},
+                ...this.getOptimisticFanSpeedUpdates(level),
+            ], () => this.device.setLevel(level));
             return;
         }
         if (value === "manual") {
             const level = this.device.status?.level ?? 1;
-            this.device.setLevel(level > 0 ? level : 1).catch(this.error);
+            const fanSpeed = level > 0 ? level : 1;
+            await this.runCommandWithOptimisticCapabilities([
+                {capability: 'onoff', value: true},
+                ...this.getOptimisticFanSpeedUpdates(fanSpeed),
+            ], () => this.device.setLevel(fanSpeed));
             return;
         }
         if (value === "auto") {
-            await this.device.setPurifierMode(DeviceModes.Auto).catch(this.error)
+            await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setPurifierMode(DeviceModes.Auto));
             return;
         }
         if (value === "sleep") {
-            await this.device.setPurifierMode(DeviceModes.Sleep).catch(this.error)
+            await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setPurifierMode(DeviceModes.Sleep));
             return;
         }
         if (value === "pet") {
-            await this.device.setPurifierMode(DeviceModes.Pet).catch(this.error)
+            await this.runCommandWithOptimisticCapability('onoff', true, () => this.device.setPurifierMode(DeviceModes.Pet));
             return;
         }
         this.error("Unknown Mode: " + value);
@@ -86,9 +93,7 @@ export default class PurifierDeviceBase extends HomeyDeviceBase {
             throw new Error("Failed to login. Please use the repair function.");
         }
 
-        const device = veSync.getStoredDevice().find((storedDevice) => {
-            return storedDevice?.device?.uuid === this.getData().id;
-        });
+        const device = this.findStoredVeSyncDevice(veSync.getStoredDevice());
 
         if (!(device instanceof BasicPurifier)) {
             this.error("Device is undefined or is not a VeSyncPurifier");
