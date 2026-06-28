@@ -271,5 +271,8 @@
   },
   "1.0.25": {
     "en": "harden login and patch CVEs"
+  },
+  "1.0.26": {
+    "en": "Experimental Dual Blaze Support & Bug fixes"
   }
 }
