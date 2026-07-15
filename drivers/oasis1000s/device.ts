@@ -15,14 +15,17 @@ class Oasis1000S extends HumidifierDeviceBase {
      * onInit is called when the device is initialized.
      */
     async onInit() {
-        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
+        await Promise.all(this.capabilitiesAddition.map((capability) => this.checkForCapability(capability)));
+        const hadNightlightCapability = this.hasCapability("nightlight_toggle");
         await super.onInit();
         if (this.supportsNightlight()) {
             await this.checkForCapability("nightlight_toggle");
-            this.registerCapabilityListener("nightlight_toggle", async (value) => {
-                await this.device.setNightLightBrightness(value ? 50 : 0).catch(this.error);
-                this.log(`Night Light: ${value}`);
-            });
+            if (!hadNightlightCapability) {
+                this.registerCapabilityListener("nightlight_toggle", async (value) => {
+                    await this.device.setNightLightBrightness(value ? 50 : 0).catch(this.error);
+                    this.log(`Night Light: ${value}`);
+                });
+            }
         }
         this.registerCapabilityListener("onoff", async (value) => {
             if (!value) await this.setCapabilityValue("oasis1000sCapability", "off");

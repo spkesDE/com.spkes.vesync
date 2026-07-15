@@ -13,7 +13,7 @@ class Core300S extends PurifierDeviceBase {
     ]
 
     async onInit() {
-        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
+        await Promise.all(this.capabilitiesAddition.map((capability) => this.checkForCapability(capability)));
         await super.onInit();
         this.registerCapabilityListener("onoff", async (value) => {
             if (!value) await this.setCapabilityValue("core300sCapability", "off");

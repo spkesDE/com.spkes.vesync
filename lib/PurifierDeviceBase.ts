@@ -15,6 +15,8 @@ export default class PurifierDeviceBase extends HomeyDeviceBase {
     private lastKnownChildLock: boolean | null = null;
 
     async onInit() {
+        this.registerCapabilityListeners();
+
         const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
             this.log(reason);
             return false;
@@ -25,6 +27,10 @@ export default class PurifierDeviceBase extends HomeyDeviceBase {
         }
 
         await this.updateDevice().catch(this.error);
+        this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
+    }
+
+    private registerCapabilityListeners(): void {
         if (this.hasCapability("display_toggle"))
             this.registerCapabilityListener("display_toggle", async (value) => {
                 await this.device.setDisplay(value).catch(this.error);
@@ -35,7 +41,6 @@ export default class PurifierDeviceBase extends HomeyDeviceBase {
                 await this.device.setNightLight(value ? "on" : "off").catch(this.error);
                 this.log(`Night Light: ${value}`);
             });
-        this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
     }
 
     async onDeleted() {
