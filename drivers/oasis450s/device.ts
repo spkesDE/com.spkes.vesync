@@ -16,6 +16,7 @@ class Oasis450S extends HumidifierDeviceBase {
     device!: Oasis450SDevice
 
     async onInit() {
+        await Promise.all(this.capabilitiesAddition.map((capability) => this.checkForCapability(capability)));
         await super.onInit();
 
         this.registerCapabilityListener("onoff", async (value) => {
@@ -40,8 +41,6 @@ class Oasis450S extends HumidifierDeviceBase {
         this.registerCapabilityListener("warmFanSpeed0to3", async (value) => {
             await this.setMode("warm_fan_speed_" + value);
         })
-
-        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c))
 
         this.log('Oasis450S has been initialized');
     }

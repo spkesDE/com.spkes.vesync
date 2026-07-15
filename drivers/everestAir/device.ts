@@ -13,7 +13,7 @@ class EverestAir extends PurifierDeviceBase {
     ]
 
     async onInit() {
-        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
+        await Promise.all(this.capabilitiesAddition.map((capability) => this.checkForCapability(capability)));
         await super.onInit();
 
         this.registerCapabilityListener("onoff", async (value) => {

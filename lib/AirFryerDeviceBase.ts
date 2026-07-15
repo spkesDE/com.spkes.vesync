@@ -19,6 +19,8 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
     private awaitingInputSince: number | null = null;
 
     async onInit() {
+        this.registerCapabilityListeners();
+
         const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
             this.log(reason);
             return false;
@@ -32,6 +34,10 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         await this.ensureDefaultCapabilityValues();
         await this.updateDevice().catch(this.error);
 
+        this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
+    }
+
+    private registerCapabilityListeners(): void {
         if (this.hasCapability('onoff')) {
             this.registerCapabilityListener('onoff', async (value) => {
                 if (!value) {
@@ -83,8 +89,6 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
                 }
             });
         }
-
-        this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
     }
 
     async onDeleted() {

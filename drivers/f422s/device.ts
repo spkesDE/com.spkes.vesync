@@ -14,7 +14,7 @@ class F422S extends TowerFanDeviceBase {
     ]
 
     async onInit() {
-        this.capabilitiesAddition.forEach((c) => this.checkForCapability(c));
+        await Promise.all(this.capabilitiesAddition.map((capability) => this.checkForCapability(capability)));
         await super.onInit();
 
         // f422sCapability handler

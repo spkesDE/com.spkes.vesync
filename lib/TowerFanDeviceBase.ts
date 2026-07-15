@@ -12,6 +12,8 @@ export default class TowerFanDeviceBase extends HomeyDeviceBase {
     private updateInterval!: NodeJS.Timer;
 
     async onInit() {
+        this.registerCapabilityListeners();
+
         const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
             this.log(reason);
             return false;
@@ -23,7 +25,9 @@ export default class TowerFanDeviceBase extends HomeyDeviceBase {
 
         await this.updateDevice().catch(this.error);
         this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
+    }
 
+    private registerCapabilityListeners(): void {
         if (this.hasCapability("onoff")) this.registerCapabilityListener("onoff", async (value) => {
             await this.setMode(value ? "on" : "off");
         });
