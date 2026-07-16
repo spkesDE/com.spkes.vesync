@@ -283,5 +283,8 @@
   },
   "1.0.29": {
     "en": "Added LAP-C401S-WAEA to Core400s"
+  },
+  "1.0.30": {
+    "en": "Fix nightlight flows and air quality capability"
   }
 }
