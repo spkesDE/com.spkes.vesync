@@ -274,5 +274,8 @@
   },
   "1.0.26": {
     "en": "Experimental Dual Blaze Support & Bug fixes"
+  },
+  "1.0.27": {
+    "en": "Bug Fix: register capability listeners reliably"
   }
 }
