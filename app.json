@@ -5790,7 +5790,7 @@
         "de": "Luftqualität"
       },
       "getable": true,
-      "setable": true,
+      "setable": false,
       "uiQuickAction": false,
       "uiComponent": "sensor",
       "icon": "/assets/capability_icons/air_quality.svg"

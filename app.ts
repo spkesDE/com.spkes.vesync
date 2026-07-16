@@ -134,15 +134,17 @@ export default class VeSyncApp extends Homey.App {
         /**************/
         /* Nightlight */
         /**************/
-        this.homey.flow.getActionCard("nightlight").registerRunListener((args) => {
-            let device = args.device.device as BasicPurifier;
-            device.setNightLight(args.level);
-            args.device.setCapabilityValue("nightlight_toggle", args.level !== "off");
+        this.homey.flow.getActionCard("nightlight").registerRunListener(async (args) => {
+            const device = args.device.device as BasicPurifier;
+            await device.setNightLight(args.level);
+            await args.device.setCapabilityValue("nightlight_toggle", args.level !== "off");
+            return true;
         });
-        this.homey.flow.getActionCard("nightlight_slider").registerRunListener((args) => {
-            let device = args.device.device as BasicHumidifier;
-            device.setNightLightBrightness(args.brightness);
-            args.device.setCapabilityValue("nightlight_toggle", args.brightness > 0);
+        this.homey.flow.getActionCard("nightlight_slider").registerRunListener(async (args) => {
+            const device = args.device.device as BasicHumidifier;
+            await device.setNightLightBrightness(args.brightness);
+            await args.device.setCapabilityValue("nightlight_toggle", args.brightness > 0);
+            return true;
         });
     }
 }
