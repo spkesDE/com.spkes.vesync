@@ -5,7 +5,7 @@ import IApiResponse from "../../models/IApiResponse";
 
 
 export default class Core400S extends BasicPurifier {
-    static deviceModels = ['Core400S', 'LAP-C401S-WJP', 'LAP-C401S-WUSR', 'LAP-C401S-WAAA', 'LAP-C402S-WAU'];
+    static deviceModels = ['Core400S', 'LAP-C401S-WJP', 'LAP-C401S-WUSR', 'LAP-C401S-WAAA', 'LAP-C402S-WAU', 'LAP-C401S-WAEA'];
     static methods = ['getPurifierStatus', 'setSwitch', 'setNightLight', 'setLevel', 'setPurifierMode', 'setDisplay', 'setChildLock', 'setIndicatorLight'];
     static modes = [DeviceModes.Auto, DeviceModes.Manual, DeviceModes.Sleep, DeviceModes.Off];
     static levels = [1, 2, 3, 4];
