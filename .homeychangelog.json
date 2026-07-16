@@ -280,5 +280,8 @@
   },
   "1.0.28": {
     "en": "Added LAP-C402S-WAU to Core400s"
+  },
+  "1.0.29": {
+    "en": "Added LAP-C401S-WAEA to Core400s"
   }
 }
