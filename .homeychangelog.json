@@ -277,5 +277,8 @@
   },
   "1.0.27": {
     "en": "Bug Fix: register capability listeners reliably"
+  },
+  "1.0.28": {
+    "en": "Added LAP-C402S-WAU to Core400s"
   }
 }
