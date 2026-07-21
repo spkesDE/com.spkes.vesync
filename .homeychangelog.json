@@ -286,5 +286,8 @@
   },
   "1.0.30": {
     "en": "Fix nightlight flows and air quality capability"
+  },
+  "1.0.31": {
+    "en": "Fix device reconnection lifecycle"
   }
 }
