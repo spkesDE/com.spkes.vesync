@@ -1,4 +1,3 @@
-import Homey from "homey";
 import VeSync from "../tsvesync/VeSync";
 import VeSyncApp from "../app";
 import BasicHumidifier from "../tsvesync/lib/BasicHumidifier";
@@ -8,25 +7,16 @@ import HomeyDeviceBase from "./HomeyDeviceBase";
 
 export default class HumidifierDeviceBase extends HomeyDeviceBase {
     device!: BasicHumidifier;
-    private updateInterval!: NodeJS.Timer;
     private lastKnownFlowMode: string | null = null;
     private lastKnownWaterLacks: boolean | null = null;
     private lastKnownHumidity: number | null = null;
 
     async onInit() {
         this.registerCapabilityListeners();
-
-        const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
-            this.log(reason);
-            return false;
-        });
-
-        if (!deviceReady) {
-            return;
-        }
-
-        await this.updateDevice().catch(this.error);
-        this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
+        await this.startDevicePolling(
+            () => this.getDevice(false),
+            () => this.updateDevice(),
+        );
     }
 
     private registerCapabilityListeners(): void {
@@ -40,12 +30,6 @@ export default class HumidifierDeviceBase extends HomeyDeviceBase {
                 await this.device.setNightLightBrightness(value ? 50 : 0).catch(this.error);
                 this.log(`Night Light: ${value}`);
             });
-    }
-
-    async onDeleted() {
-        if (this.updateInterval) {
-            this.homey.clearInterval(this.updateInterval);
-        }
     }
 
     async setMode(value: string) {
@@ -105,7 +89,7 @@ export default class HumidifierDeviceBase extends HomeyDeviceBase {
         this.error("Unknown Mode: " + value);
     }
 
-    public async getDevice(): Promise<void> {
+    public async getDevice(setAvailableOnSuccess = true): Promise<void> {
         const veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
         if (veSync === null || !veSync.isLoggedIn()) {
             await this.setUnavailable(this.homey.__("devices.failed_login"));
@@ -123,22 +107,22 @@ export default class HumidifierDeviceBase extends HomeyDeviceBase {
         this.device = device;
         const status = await this.device.getHumidifierStatus().catch(async (reason: unknown) => {
             const message = getErrorMessage(reason);
-            if (message === "device offline") {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-            } else {
-                await this.setUnavailable(message).catch(this.error);
-                this.error(reason);
-            }
+            await this.handleDeviceStatusFailure(message);
             return null;
         });
 
-        if (!status || status.msg !== "request success") {
-            this.error("Failed to get device status.");
-            await this.setUnavailable(this.homey.__("devices.offline"));
-            throw new Error("Cannot get device status. Device is " + (status?.msg ?? "unknown"));
+        if (!status) {
+            throw this.handledDeviceStatusError("Cannot get device status. Device status request failed");
         }
 
-        await this.setAvailable().catch(this.error);
+        if (status.msg !== "request success") {
+            await this.handleDeviceStatusFailure(status.msg);
+            throw this.handledDeviceStatusError("Cannot get device status. Device is " + status.msg);
+        }
+
+        if (setAvailableOnSuccess) {
+            await this.setAvailable();
+        }
     }
 
     async updateDevice(): Promise<void> {
@@ -150,28 +134,22 @@ export default class HumidifierDeviceBase extends HomeyDeviceBase {
         // Get the latest device status
         const status = await this.device.getHumidifierStatus().catch(async (reason: unknown) => {
             const message = getErrorMessage(reason);
-            if (message === "device offline") {
-                await this.markDeviceOffline();
-            } else {
-                await this.setUnavailable(message).catch(this.error);
-                this.error(reason);
-            }
+            await this.handleDeviceStatusFailure(message, true);
             return null;
         });
 
         // If the status fetch failed, exit early
-        if (!status || status.msg !== "request success") {
-            if (this.getAvailable()) {
-                await this.markDeviceOffline();
-            }
+        if (!status) {
+            return;
+        }
+
+        if (status.msg !== "request success") {
+            await this.handleDeviceStatusFailure(status.msg, true);
             return;
         }
 
         // Set the device as available
-        if (!this.getAvailable()) {
-            await this.setAvailable().catch(this.error);
-            await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
-        }
+        await this.markDeviceOnline();
 
         // Update capabilities based on status
         // Fan speed updates

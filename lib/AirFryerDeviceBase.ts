@@ -1,4 +1,3 @@
-import Homey from "homey";
 import VeSync from "../tsvesync/VeSync";
 import VeSyncApp from "../app";
 import BasicAirFryer from "../tsvesync/lib/BasicAirFryer";
@@ -15,26 +14,18 @@ const DEFAULT_PROGRAM: CookProgramId = 'airfry';
 
 export default class AirFryerDeviceBase extends HomeyDeviceBase {
     device!: BasicAirFryer;
-    private updateInterval!: NodeJS.Timer;
     private awaitingInputSince: number | null = null;
 
     async onInit() {
         this.registerCapabilityListeners();
-
-        const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
-            this.log(reason);
-            return false;
-        });
-
-        if (!deviceReady) {
-            return;
-        }
-
-        await this.ensurePresetsLoaded();
-        await this.ensureDefaultCapabilityValues();
-        await this.updateDevice().catch(this.error);
-
-        this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
+        await this.startDevicePolling(
+            async () => {
+                await this.getDevice(false);
+                await this.ensurePresetsLoaded();
+                await this.ensureDefaultCapabilityValues();
+            },
+            () => this.updateDevice(),
+        );
     }
 
     private registerCapabilityListeners(): void {
@@ -91,12 +82,6 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         }
     }
 
-    async onDeleted() {
-        if (this.updateInterval) {
-            this.homey.clearInterval(this.updateInterval);
-        }
-    }
-
     public async startPreset(programId: AirFryerProgramId): Promise<void> {
         await this.ensurePresetsLoaded();
         const program = this.normalizeFlowProgram(programId);
@@ -125,7 +110,7 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         await this.updateDevice();
     }
 
-    public async getDevice(): Promise<void> {
+    public async getDevice(setAvailableOnSuccess = true): Promise<void> {
         const veSync: VeSync = (this.homey.app as VeSyncApp).veSync;
         if (veSync === null || !veSync.isLoggedIn()) {
             await this.setUnavailable(this.homey.__("devices.failed_login"));
@@ -143,47 +128,41 @@ export default class AirFryerDeviceBase extends HomeyDeviceBase {
         this.device = device;
         const status = await this.device.getAirFryerStatus().catch(async (reason: unknown) => {
             const message = getErrorMessage(reason);
-            if (message === "device offline") {
-                await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
-            } else {
-                await this.setUnavailable(message).catch(this.error);
-                this.error(reason);
-            }
+            await this.handleDeviceStatusFailure(message);
             return null;
         });
 
-        if (!status || status.msg !== "request success") {
-            this.error("Failed to get device status.");
-            await this.setUnavailable(this.homey.__("devices.offline"));
-            throw new Error("Cannot get device status. Device is " + (status?.msg ?? "unknown"));
+        if (!status) {
+            throw this.handledDeviceStatusError("Cannot get device status. Device status request failed");
         }
 
-        await this.setAvailable().catch(this.error);
+        if (status.msg !== "request success") {
+            await this.handleDeviceStatusFailure(status.msg);
+            throw this.handledDeviceStatusError("Cannot get device status. Device is " + status.msg);
+        }
+
+        if (setAvailableOnSuccess) {
+            await this.setAvailable();
+        }
     }
 
     async updateDevice(): Promise<void> {
         const status = await this.device.getAirFryerStatus().catch(async (reason: unknown) => {
             const message = getErrorMessage(reason);
-            if (message === "device offline") {
-                await this.markDeviceOffline();
-            } else {
-                await this.setUnavailable(message).catch(this.error);
-                this.error(reason);
-            }
+            await this.handleDeviceStatusFailure(message, true);
             return null;
         });
 
-        if (!status || status.msg !== "request success") {
-            if (this.getAvailable()) {
-                await this.markDeviceOffline();
-            }
+        if (!status) {
             return;
         }
 
-        if (!this.getAvailable()) {
-            await this.setAvailable().catch(this.error);
-            await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
+        if (status.msg !== "request success") {
+            await this.handleDeviceStatusFailure(status.msg, true);
+            return;
         }
+
+        await this.markDeviceOnline();
 
         const airFryerStatus = status.result.result;
         const chamberStatus = this.getChamberStatus(airFryerStatus.statusList);
