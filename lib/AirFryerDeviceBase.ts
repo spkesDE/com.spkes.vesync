@@ -16,25 +16,26 @@ const DEFAULT_PROGRAM: CookProgramId = 'airfry';
 export default class AirFryerDeviceBase extends HomeyDeviceBase {
     device!: BasicAirFryer;
     private updateInterval!: NodeJS.Timer;
+    private deviceStateInitialized = false;
     private awaitingInputSince: number | null = null;
 
     async onInit() {
         this.registerCapabilityListeners();
 
-        const deviceReady = await this.getDevice().then(() => true).catch((reason) => {
-            this.log(reason);
-            return false;
-        });
+        await this.refreshDevice().catch((reason) => this.log(reason));
 
-        if (!deviceReady) {
-            return;
+        this.updateInterval = this.homey.setInterval(async () => this.refreshDevice().catch(this.error), 1000 * 60);
+    }
+
+    private async refreshDevice(): Promise<void> {
+        if (!this.deviceStateInitialized) {
+            await this.getDevice();
+            await this.ensurePresetsLoaded();
+            await this.ensureDefaultCapabilityValues();
+            this.deviceStateInitialized = true;
         }
 
-        await this.ensurePresetsLoaded();
-        await this.ensureDefaultCapabilityValues();
-        await this.updateDevice().catch(this.error);
-
-        this.updateInterval = this.homey.setInterval(async () => this.updateDevice().catch(this.error), 1000 * 60);
+        await this.updateDevice();
     }
 
     private registerCapabilityListeners(): void {
