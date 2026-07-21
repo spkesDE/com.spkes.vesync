@@ -22,6 +22,8 @@ type StoredVeSyncDeviceData = {
     macId?: string;
 };
 
+class HandledDeviceStatusError extends Error {}
+
 export default class HomeyDeviceBase extends Homey.Device {
     private deviceUpdateInterval?: NodeJS.Timer;
     private deviceInitializationComplete = false;
@@ -52,9 +54,9 @@ export default class HomeyDeviceBase extends Homey.Device {
         update: () => Promise<void>,
         intervalMs = 1000 * 60,
     ): Promise<void> {
-        await this.runDeviceUpdate(initialize, update).catch(this.error);
+        await this.runDeviceUpdate(initialize, update).catch((error) => this.logUnhandledDeviceUpdateError(error));
         this.deviceUpdateInterval = this.homey.setInterval(
-            async () => this.runDeviceUpdate(initialize, update).catch(this.error),
+            async () => this.runDeviceUpdate(initialize, update).catch((error) => this.logUnhandledDeviceUpdateError(error)),
             intervalMs,
         );
     }
@@ -234,8 +236,18 @@ export default class HomeyDeviceBase extends Homey.Device {
         }
     }
 
+    protected handledDeviceStatusError(message: string): Error {
+        return new HandledDeviceStatusError(message);
+    }
+
     private isDeviceOfflineStatus(message: string): boolean {
         return message.trim().toLowerCase() === "device offline";
+    }
+
+    private logUnhandledDeviceUpdateError(error: unknown): void {
+        if (!(error instanceof HandledDeviceStatusError)) {
+            this.error(error);
+        }
     }
 
     private async runDeviceUpdate(

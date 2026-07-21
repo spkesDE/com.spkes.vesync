@@ -25,7 +25,10 @@ export default class F422S extends BasicTowerFan {
 
     async getTowerFanStatus(): Promise<IApiResponse<IGetTowerFanStatus>> {
         const result = await super.getTowerFanStatus();
-        if (result.result.result.temperature) result.result.result.temperature = this.convertTemperature(result.result.result.temperature);
+        if (result.msg !== 'request success') return result;
+
+        const status = result.result?.result;
+        if (status?.temperature) status.temperature = this.convertTemperature(status.temperature);
         return result;
     }
 

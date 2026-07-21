@@ -99,12 +99,12 @@ export default class TowerFanDeviceBase extends HomeyDeviceBase {
         });
 
         if (!status) {
-            throw new Error("Cannot get device status. Device status request failed");
+            throw this.handledDeviceStatusError("Cannot get device status. Device status request failed");
         }
 
         if (status.msg !== "request success") {
             await this.handleDeviceStatusFailure(status.msg);
-            throw new Error("Cannot get device status. Device is " + status.msg);
+            throw this.handledDeviceStatusError("Cannot get device status. Device is " + status.msg);
         }
 
         if (setAvailableOnSuccess) {
