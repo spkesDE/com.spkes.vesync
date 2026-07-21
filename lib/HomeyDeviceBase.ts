@@ -23,6 +23,10 @@ type StoredVeSyncDeviceData = {
 };
 
 export default class HomeyDeviceBase extends Homey.Device {
+    private deviceUpdateInterval?: NodeJS.Timer;
+    private deviceInitializationComplete = false;
+    private deviceUpdateInProgress = false;
+
     /**
      * Tracks capabilities that were just changed locally while VeSync catches up.
      * Some VeSync command responses only confirm acceptance and do not contain the
@@ -37,6 +41,30 @@ export default class HomeyDeviceBase extends Homey.Device {
         'fanSpeed0to9',
         'fanSpeed0to12',
     ];
+
+    /**
+     * Starts status polling and retries initialization until it succeeds. This
+     * lets devices that are offline during app startup recover without an app
+     * restart. Subsequent ticks only run the regular status update.
+     */
+    protected async startDevicePolling(
+        initialize: () => Promise<void>,
+        update: () => Promise<void>,
+        intervalMs = 1000 * 60,
+    ): Promise<void> {
+        await this.runDeviceUpdate(initialize, update).catch(this.error);
+        this.deviceUpdateInterval = this.homey.setInterval(
+            async () => this.runDeviceUpdate(initialize, update).catch(this.error),
+            intervalMs,
+        );
+    }
+
+    async onDeleted(): Promise<void> {
+        if (this.deviceUpdateInterval) {
+            this.homey.clearInterval(this.deviceUpdateInterval);
+            this.deviceUpdateInterval = undefined;
+        }
+    }
 
     protected findStoredVeSyncDevice(devices: BasicDevice[]): BasicDevice | undefined {
         const data = this.getData() as StoredVeSyncDeviceData;
@@ -173,11 +201,61 @@ export default class HomeyDeviceBase extends Homey.Device {
         return typeof value === "string" || typeof value === "number" || typeof value === "boolean";
     }
 
-    protected async markDeviceOffline(): Promise<void> {
+    protected async markDeviceOffline(reason = this.homey.__("devices.offline")): Promise<void> {
         const wasAvailable = this.getAvailable();
-        await this.setUnavailable(this.homey.__("devices.offline")).catch(this.error);
+        await this.setUnavailable(reason);
         if (wasAvailable) {
             await this.homey.flow.getDeviceTriggerCard("device_offline").trigger(this).catch(this.error);
+        }
+    }
+
+    protected async markDeviceOnline(): Promise<void> {
+        if (this.getAvailable()) {
+            return;
+        }
+
+        await this.setAvailable();
+        await this.homey.flow.getDeviceTriggerCard("device_online").trigger(this).catch(this.error);
+    }
+
+    protected async handleDeviceStatusFailure(message: string, triggerOfflineFlow = false): Promise<void> {
+        const normalizedMessage = message.trim() || "Unknown device status error";
+        const offlineMessage = this.homey.__("devices.offline");
+        const unavailableReason = this.isDeviceOfflineStatus(normalizedMessage)
+            ? offlineMessage
+            : `${this.homey.__("devices.offline_reason")} (${normalizedMessage}).`;
+
+        this.error(`Device status failed: ${normalizedMessage}`);
+
+        if (triggerOfflineFlow) {
+            await this.markDeviceOffline(unavailableReason);
+        } else {
+            await this.setUnavailable(unavailableReason);
+        }
+    }
+
+    private isDeviceOfflineStatus(message: string): boolean {
+        return message.trim().toLowerCase() === "device offline";
+    }
+
+    private async runDeviceUpdate(
+        initialize: () => Promise<void>,
+        update: () => Promise<void>,
+    ): Promise<void> {
+        if (this.deviceUpdateInProgress) {
+            return;
+        }
+
+        this.deviceUpdateInProgress = true;
+        try {
+            if (!this.deviceInitializationComplete) {
+                await initialize();
+                this.deviceInitializationComplete = true;
+            }
+
+            await update();
+        } finally {
+            this.deviceUpdateInProgress = false;
         }
     }
 }
