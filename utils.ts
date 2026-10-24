@@ -9,10 +9,10 @@ export class Utils {
         if (!app.veSync.isLoggedIn()) {
             result = await app.veSync.login(data.username, data.password, false).catch(
                 (error: unknown) => {
-                    throw new Error(`Could not login with username ${data.username} - Reason: ${getErrorMessage(error)}`);
+                    throw new Error(`Could not login - Reason: ${getErrorMessage(error)}`);
                 }
             );
-            if (!result) throw new Error(`Could not login with username ${data.username}`);
+            if (!result) throw new Error(`Could not login`);
             driver.homey.settings.set('username', data.username);
             driver.homey.settings.set('password', app.veSync.password); //Save Hashed password
         }

@@ -7,6 +7,7 @@ import BasicPurifier from "./tsvesync/lib/BasicPurifier";
 import BasicHumidifier from "./tsvesync/lib/BasicHumidifier";
 import ApiHelper from "./tsvesync/lib/ApiHelper";
 import {getErrorMessage} from "./lib/utils/error";
+import {ApiCalls} from "./tsvesync/enum/ApiCalls";
 
 export default class VeSyncApp extends Homey.App {
     veSync: VeSync = new VeSync();
@@ -31,7 +32,14 @@ export default class VeSyncApp extends Homey.App {
                 if (retryCount == 3) return 1000 * 10;
                 return retryCount * 1000;
             },
-            retryCondition: () => true
+            retryCondition: (error) => {
+                // Never retry login calls: repeated failed attempts can get the VeSync account locked
+                const url = error.config?.url ?? "";
+                if (url.includes(ApiCalls.LOGIN_authByPWDOrOTM) || url.includes(ApiCalls.LOGIN_TOKEN_EXCHANGE)) return false;
+                // Retry network errors/timeouts, rate limiting and server errors, but not other client errors
+                const status = error.response?.status;
+                return status === undefined || status === 429 || status >= 500;
+            }
         });
         await this.startVeSync();
     }
@@ -53,7 +61,7 @@ export default class VeSyncApp extends Homey.App {
         }
         await this.veSync.login(this.username, this.password, true).catch(
             (error: unknown) => {
-                this.error(`Could not login with username ${this.username} - Reason: ${getErrorMessage(error)}`);
+                this.error(`Could not login - Reason: ${getErrorMessage(error)}`);
             }
         );
         this.log('VeSync has been initialized');
@@ -86,7 +94,7 @@ export default class VeSyncApp extends Homey.App {
         /**************/
         this.homey.flow.getActionCard("create_diagnostic_report").registerRunListener(async () => {
             if (this.veSync.isLoggedIn()) {
-                await this.veSync.getDevices().catch((error: Error) => this.error(error));
+                await this.veSync.getDevices().catch((error: unknown) => this.error(getErrorMessage(error)));
             }
             this.log("VeSync diagnostic report:\n" + this.veSync.getDiagnosticReport());
             return true;

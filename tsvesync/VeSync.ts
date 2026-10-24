@@ -6,6 +6,7 @@ import {IDevice} from "./models/IDevice";
 import DeviceTypeManager from "./DeviceTypeManager";
 import BasicDevice from "./lib/BasicDevice";
 import {AuthByPWDOrOTMModel} from "./models/AuthByPWDOrOTMModel";
+import {getErrorMessage} from "../lib/utils/error";
 
 export interface IUnsupportedDeviceInfo {
     deviceType: string;
@@ -22,7 +23,7 @@ export default class VeSync {
     private static readonly ACCOUNT_LOCKED_CODE = -11247129;
     private static readonly ACCOUNT_LOCK_BUFFER_IN_SEC = 60;
 
-    static debugMode: boolean = true;
+    static debugMode: boolean = false;
     private static ignoredDeviceTypes = ['CAF-R901-AEU/AUK'];
     username: string = "";
     region = 'US';
@@ -59,7 +60,9 @@ export default class VeSync {
             'post',
             authBody,
             {}
-        ).catch(console.error);
+        ).catch((error: unknown) => {
+            console.error("Login request failed: " + getErrorMessage(error));
+        });
 
         if (!response) {
             throw new Error("Login failed: no response from server");
@@ -77,7 +80,7 @@ export default class VeSync {
             console.error("Login failed: authorizeCode not found in response");
             return false;
         } catch (e) {
-            console.error(e);
+            console.error("Login failed: " + getErrorMessage(e));
             return false;
         }
     }
@@ -88,9 +91,11 @@ export default class VeSync {
 
     public async getDevices(): Promise<BasicDevice[]> {
         if (this.token === "") return [];
-        this.devices = [];
-        let response = await ApiHelper.callApi<any>(this, ApiCalls.DEVICES, 'post', ApiHelper.requestBody(this, BodyTypes.DEVICE_LIST)).catch(console.error);
-        this.processDevices(response.result.list);
+        const response = await ApiHelper.callApi<any>(this, ApiCalls.DEVICES, 'post', ApiHelper.requestBody(this, BodyTypes.DEVICE_LIST));
+        if (!Array.isArray(response?.result?.list)) {
+            throw new Error(`Could not load device list: ${response?.msg || "Invalid response from server"}`);
+        }
+        this.devices = this.processDevices(response.result.list);
         return this.devices;
     }
 
@@ -152,14 +157,16 @@ export default class VeSync {
         return crypto.createHash('md5').update(password).digest('hex');
     }
 
-    private processDevices(list: any) {
+    private processDevices(list: any[]): BasicDevice[] {
         this.unsupportedDevices.clear();
-        for (let deviceRaw of list as any) {
+        const devices: BasicDevice[] = [];
+        for (let deviceRaw of list) {
             let device = this.getDeviceObject(deviceRaw as IDevice);
             if (device === undefined) continue;
-            this.devices.push(device);
+            devices.push(device);
         }
-        if (VeSync.debugMode) console.debug("Total Devices processed: " + this.devices.length)
+        if (VeSync.debugMode) console.debug("Total Devices processed: " + devices.length)
+        return devices;
     }
 
     private getDeviceObject(deviceRaw: IDevice): BasicDevice | undefined {
@@ -210,7 +217,9 @@ export default class VeSync {
             'post',
             loginBody,
             {}
-        ).catch(console.error);
+        ).catch((error: unknown) => {
+            console.error("Token exchange request failed: " + getErrorMessage(error));
+        });
 
         if (!resp) throw new Error("Error receiving response to login request");
 
@@ -226,7 +235,9 @@ export default class VeSync {
 
             this.typeManager = new DeviceTypeManager();
             await this.typeManager.loadDevices();
-            await this.getDevices();
+            await this.getDevices().catch((error: unknown) => {
+                console.error("Logged in, but loading devices failed: " + getErrorMessage(error));
+            });
 
             return true;
         }

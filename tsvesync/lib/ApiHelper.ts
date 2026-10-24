@@ -36,6 +36,10 @@ export default class ApiHelper {
         "cid",
         "mobileID",
         "mobileId",
+        "uuid",
+        "nickName",
+        "avatarIcon",
+        "deviceName",
     ];
 
     static requestBody(api: VeSync, type: BodyTypes): {} {
@@ -212,13 +216,21 @@ export default class ApiHelper {
             }).then((response) => {
                 resolve(response.data)
             }).catch((error) => {
-                if (error instanceof AxiosError || error.isAxiosError) {
-                    reject(error.cause ?? error);
-                    return;
-                }
-                reject(error);
+                reject(this.toSafeError(error));
             });
         });
+    }
+
+    //Axios errors carry the request config (body with credentials, auth headers), so never pass them on
+    private static toSafeError(error: any): Error {
+        if (!(error instanceof AxiosError || error?.isAxiosError)) return error;
+
+        const status = error.response?.status;
+        const reason = status ? `HTTP ${status}` : (error.code ?? error.cause?.code ?? error.message ?? 'Unknown error');
+        const safeError: Error & { code?: string, status?: number } = new Error(`VeSync API request failed: ${reason}`);
+        safeError.code = error.code;
+        safeError.status = status;
+        return safeError;
     }
 
     //Header for the API with accountId
