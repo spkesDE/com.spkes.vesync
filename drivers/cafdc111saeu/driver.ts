@@ -58,7 +58,7 @@ class CAFDC111SAEUDriver extends Homey.Driver {
 
     async onRepair(session: any, device: any) {
         session.setHandler("login", async (data: any) => {
-            const result = await Utils.handleLogin(this, data);
+            const result = await Utils.handleRepairLogin(this, data);
             if (result) await device.getDevice();
             return result;
         });

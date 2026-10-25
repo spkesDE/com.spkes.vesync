@@ -268,9 +268,13 @@ export default class HomeyDeviceBase extends Homey.Device {
     protected async handleDeviceStatusFailure(message: string, triggerOfflineFlow = false): Promise<void> {
         const normalizedMessage = message.trim() || "Unknown device status error";
         const offlineMessage = this.homey.__("devices.offline");
-        const unavailableReason = this.isDeviceOfflineStatus(normalizedMessage)
-            ? offlineMessage
-            : `${this.homey.__("devices.offline_reason")} (${normalizedMessage}).`;
+        // Logging in again with the stored credentials failed, only a repair helps now
+        const loggedOut = (this.homey.app as { veSync?: VeSync }).veSync?.isLoggedIn() === false;
+        const unavailableReason = loggedOut
+            ? this.homey.__("devices.failed_login")
+            : this.isDeviceOfflineStatus(normalizedMessage)
+                ? offlineMessage
+                : `${this.homey.__("devices.offline_reason")} (${normalizedMessage}).`;
 
         this.error(`Device status failed: ${normalizedMessage}`);
 

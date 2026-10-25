@@ -18,10 +18,14 @@ export interface IUnsupportedDeviceInfo {
     deviceRegion: string;
 }
 
+/** VeSync rejected the credentials (as opposed to a network or server problem). */
+export class VeSyncLoginError extends Error {}
+
 export default class VeSync {
 
     private static readonly ACCOUNT_LOCKED_CODE = -11247129;
     private static readonly ACCOUNT_LOCK_BUFFER_IN_SEC = 60;
+    private static readonly REAUTHENTICATION_COOLDOWN_MS = 1000 * 60 * 5;
 
     static debugMode: boolean = false;
     private static ignoredDeviceTypes = ['CAF-R901-AEU/AUK'];
@@ -42,6 +46,8 @@ export default class VeSync {
     private loginLockedUsername = "";
     private lastDeviceRefresh = 0;
     private deviceRefresh: Promise<BasicDevice[]> | null = null;
+    private lastReauthentication = 0;
+    private reauthenticating = false;
 
     public async login(username: string, password: string, isHashedPassword = false): Promise<boolean> {
         if (!username || !password) {
@@ -50,10 +56,55 @@ export default class VeSync {
 
         this.throwIfLoginIsTemporarilyLocked(username);
 
+        // Keep the current credentials if the new ones are rejected, so an
+        // active session and later re-logins keep working
+        const previousUsername = this.username;
+        const previousPassword = this.password;
         this.username = username;
         this.password = isHashedPassword ? password : this.hashPassword(password);
         this.loginTries = 0; // Reset login attempts on new login
 
+        const restoreCredentials = () => {
+            this.username = previousUsername;
+            this.password = previousPassword;
+        };
+        try {
+            const success = await this.authenticate(username);
+            if (!success) restoreCredentials();
+            return success;
+        } catch (error) {
+            restoreCredentials();
+            throw error;
+        }
+    }
+
+    /**
+     * Logs in again with the stored credentials after VeSync rejected the
+     * token. Attempts are limited to one per few minutes so a persistent
+     * error cannot lock the account. If VeSync rejects the credentials, the
+     * session is marked as logged out so the devices ask for a repair.
+     */
+    public async reauthenticate(): Promise<boolean> {
+        if (!this.loggedIn || this.reauthenticating) return false;
+        if (Date.now() - this.lastReauthentication < VeSync.REAUTHENTICATION_COOLDOWN_MS) return false;
+
+        this.reauthenticating = true;
+        this.lastReauthentication = Date.now();
+        console.warn("VeSync rejected the session token. Logging in again...");
+        try {
+            const success = await this.login(this.username, this.password, true);
+            if (!success) console.error("Logging in again failed");
+            return success;
+        } catch (error) {
+            console.error("Logging in again failed: " + getErrorMessage(error));
+            if (error instanceof VeSyncLoginError) this.loggedIn = false;
+            return false;
+        } finally {
+            this.reauthenticating = false;
+        }
+    }
+
+    private async authenticate(username: string): Promise<boolean> {
         // Step 1: request auth code
         const authBody = ApiHelper.requestBody(this, BodyTypes.LOGIN);
         let response = await ApiHelper.callApi<AuthByPWDOrOTMModel>(
@@ -71,7 +122,7 @@ export default class VeSync {
         }
         if (response.code !== 0) {
             this.rememberAccountLock(username, response);
-            throw new Error(`Login failed: ${this.describeLoginFailure(response)}`);
+            throw new VeSyncLoginError(`Login failed: ${this.describeLoginFailure(response)}`);
         }
 
         try {
