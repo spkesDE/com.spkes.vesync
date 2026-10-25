@@ -60,7 +60,7 @@ class Oasis1000SDriver extends Homey.Driver {
     // noinspection JSUnusedGlobalSymbols
     async onRepair(session: any, device: any) {
         session.setHandler("login", async (data:any) => {
-            let result = await Utils.handleLogin(this, data);
+            let result = await Utils.handleRepairLogin(this, data);
             if(result) await device.getDevice();
             return result;
         });

@@ -6,6 +6,7 @@ import {IDevice} from "./models/IDevice";
 import DeviceTypeManager from "./DeviceTypeManager";
 import BasicDevice from "./lib/BasicDevice";
 import {AuthByPWDOrOTMModel} from "./models/AuthByPWDOrOTMModel";
+import {getErrorMessage} from "../lib/utils/error";
 
 export interface IUnsupportedDeviceInfo {
     deviceType: string;
@@ -17,12 +18,16 @@ export interface IUnsupportedDeviceInfo {
     deviceRegion: string;
 }
 
+/** VeSync rejected the credentials (as opposed to a network or server problem). */
+export class VeSyncLoginError extends Error {}
+
 export default class VeSync {
 
     private static readonly ACCOUNT_LOCKED_CODE = -11247129;
     private static readonly ACCOUNT_LOCK_BUFFER_IN_SEC = 60;
+    private static readonly REAUTHENTICATION_COOLDOWN_MS = 1000 * 60 * 5;
 
-    static debugMode: boolean = true;
+    static debugMode: boolean = false;
     private static ignoredDeviceTypes = ['CAF-R901-AEU/AUK'];
     username: string = "";
     region = 'US';
@@ -39,6 +44,10 @@ export default class VeSync {
     private typeManager!: DeviceTypeManager;
     private loginLockedUntil = 0;
     private loginLockedUsername = "";
+    private lastDeviceRefresh = 0;
+    private deviceRefresh: Promise<BasicDevice[]> | null = null;
+    private lastReauthentication = 0;
+    private reauthenticating = false;
 
     public async login(username: string, password: string, isHashedPassword = false): Promise<boolean> {
         if (!username || !password) {
@@ -47,10 +56,55 @@ export default class VeSync {
 
         this.throwIfLoginIsTemporarilyLocked(username);
 
+        // Keep the current credentials if the new ones are rejected, so an
+        // active session and later re-logins keep working
+        const previousUsername = this.username;
+        const previousPassword = this.password;
         this.username = username;
         this.password = isHashedPassword ? password : this.hashPassword(password);
         this.loginTries = 0; // Reset login attempts on new login
 
+        const restoreCredentials = () => {
+            this.username = previousUsername;
+            this.password = previousPassword;
+        };
+        try {
+            const success = await this.authenticate(username);
+            if (!success) restoreCredentials();
+            return success;
+        } catch (error) {
+            restoreCredentials();
+            throw error;
+        }
+    }
+
+    /**
+     * Logs in again with the stored credentials after VeSync rejected the
+     * token. Attempts are limited to one per few minutes so a persistent
+     * error cannot lock the account. If VeSync rejects the credentials, the
+     * session is marked as logged out so the devices ask for a repair.
+     */
+    public async reauthenticate(): Promise<boolean> {
+        if (!this.loggedIn || this.reauthenticating) return false;
+        if (Date.now() - this.lastReauthentication < VeSync.REAUTHENTICATION_COOLDOWN_MS) return false;
+
+        this.reauthenticating = true;
+        this.lastReauthentication = Date.now();
+        console.warn("VeSync rejected the session token. Logging in again...");
+        try {
+            const success = await this.login(this.username, this.password, true);
+            if (!success) console.error("Logging in again failed");
+            return success;
+        } catch (error) {
+            console.error("Logging in again failed: " + getErrorMessage(error));
+            if (error instanceof VeSyncLoginError) this.loggedIn = false;
+            return false;
+        } finally {
+            this.reauthenticating = false;
+        }
+    }
+
+    private async authenticate(username: string): Promise<boolean> {
         // Step 1: request auth code
         const authBody = ApiHelper.requestBody(this, BodyTypes.LOGIN);
         let response = await ApiHelper.callApi<AuthByPWDOrOTMModel>(
@@ -59,14 +113,16 @@ export default class VeSync {
             'post',
             authBody,
             {}
-        ).catch(console.error);
+        ).catch((error: unknown) => {
+            console.error("Login request failed: " + getErrorMessage(error));
+        });
 
         if (!response) {
             throw new Error("Login failed: no response from server");
         }
         if (response.code !== 0) {
             this.rememberAccountLock(username, response);
-            throw new Error(`Login failed: ${this.describeLoginFailure(response)}`);
+            throw new VeSyncLoginError(`Login failed: ${this.describeLoginFailure(response)}`);
         }
 
         try {
@@ -77,7 +133,7 @@ export default class VeSync {
             console.error("Login failed: authorizeCode not found in response");
             return false;
         } catch (e) {
-            console.error(e);
+            console.error("Login failed: " + getErrorMessage(e));
             return false;
         }
     }
@@ -88,10 +144,28 @@ export default class VeSync {
 
     public async getDevices(): Promise<BasicDevice[]> {
         if (this.token === "") return [];
-        this.devices = [];
-        let response = await ApiHelper.callApi<any>(this, ApiCalls.DEVICES, 'post', ApiHelper.requestBody(this, BodyTypes.DEVICE_LIST)).catch(console.error);
-        this.processDevices(response.result.list);
+        const response = await ApiHelper.callApi<any>(this, ApiCalls.DEVICES, 'post', ApiHelper.requestBody(this, BodyTypes.DEVICE_LIST));
+        if (!Array.isArray(response?.result?.list)) {
+            throw new Error(`Could not load device list: ${response?.msg || "Invalid response from server"}`);
+        }
+        this.devices = this.processDevices(response.result.list);
+        this.lastDeviceRefresh = Date.now();
         return this.devices;
+    }
+
+    /**
+     * Reloads the device list unless it was loaded within maxAgeMs. Concurrent
+     * callers share one request, so many Homey devices looking for a missing
+     * VeSync device only cause a single API call.
+     */
+    public async refreshDevices(maxAgeMs = 1000 * 60): Promise<BasicDevice[]> {
+        if (Date.now() - this.lastDeviceRefresh < maxAgeMs) return this.devices;
+        if (!this.deviceRefresh) {
+            this.deviceRefresh = this.getDevices().finally(() => {
+                this.deviceRefresh = null;
+            });
+        }
+        return this.deviceRefresh;
     }
 
     public isLoggedIn(): boolean {
@@ -152,14 +226,16 @@ export default class VeSync {
         return crypto.createHash('md5').update(password).digest('hex');
     }
 
-    private processDevices(list: any) {
+    private processDevices(list: any[]): BasicDevice[] {
         this.unsupportedDevices.clear();
-        for (let deviceRaw of list as any) {
+        const devices: BasicDevice[] = [];
+        for (let deviceRaw of list) {
             let device = this.getDeviceObject(deviceRaw as IDevice);
             if (device === undefined) continue;
-            this.devices.push(device);
+            devices.push(device);
         }
-        if (VeSync.debugMode) console.debug("Total Devices processed: " + this.devices.length)
+        if (VeSync.debugMode) console.debug("Total Devices processed: " + devices.length)
+        return devices;
     }
 
     private getDeviceObject(deviceRaw: IDevice): BasicDevice | undefined {
@@ -210,7 +286,9 @@ export default class VeSync {
             'post',
             loginBody,
             {}
-        ).catch(console.error);
+        ).catch((error: unknown) => {
+            console.error("Token exchange request failed: " + getErrorMessage(error));
+        });
 
         if (!resp) throw new Error("Error receiving response to login request");
 
@@ -226,7 +304,9 @@ export default class VeSync {
 
             this.typeManager = new DeviceTypeManager();
             await this.typeManager.loadDevices();
-            await this.getDevices();
+            await this.getDevices().catch((error: unknown) => {
+                console.error("Logged in, but loading devices failed: " + getErrorMessage(error));
+            });
 
             return true;
         }

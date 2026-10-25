@@ -18,6 +18,7 @@ export default class ApiHelper {
     static USER_TYPE = '1'
     static BYPASS_APP_V = "VeSync " + this.APP_VERSION;
     static TERMINAL_ID = "";
+    static TOKEN_ERROR_CODE = -11001000;
     static SENSITIVE_KEYS = [
         "password",
         "email",
@@ -36,6 +37,10 @@ export default class ApiHelper {
         "cid",
         "mobileID",
         "mobileId",
+        "uuid",
+        "nickName",
+        "avatarIcon",
+        "deviceName",
     ];
 
     static requestBody(api: VeSync, type: BodyTypes): {} {
@@ -212,13 +217,21 @@ export default class ApiHelper {
             }).then((response) => {
                 resolve(response.data)
             }).catch((error) => {
-                if (error instanceof AxiosError || error.isAxiosError) {
-                    reject(error.cause ?? error);
-                    return;
-                }
-                reject(error);
+                reject(this.toSafeError(error));
             });
         });
+    }
+
+    //Axios errors carry the request config (body with credentials, auth headers), so never pass them on
+    private static toSafeError(error: any): Error {
+        if (!(error instanceof AxiosError || error?.isAxiosError)) return error;
+
+        const status = error.response?.status;
+        const reason = status ? `HTTP ${status}` : (error.code ?? error.cause?.code ?? error.message ?? 'Unknown error');
+        const safeError: Error & { code?: string, status?: number } = new Error(`VeSync API request failed: ${reason}`);
+        safeError.code = error.code;
+        safeError.status = status;
+        return safeError;
     }
 
     //Header for the API with accountId
@@ -254,6 +267,31 @@ export default class ApiHelper {
     }
 
     static async callApi<T>(api: VeSync, path: string, method: string, requestBody: {}, header: {} = this.buildHeaders(api)): Promise<IApiResponse<T> | any> {
+        const tokenUsed = api.getToken();
+        const usesAuthHeader = 'tk' in header;
+        const usesAuthBody = 'token' in requestBody;
+        const resp = await this.request<T>(api, path, method, requestBody, header);
+        if (!tokenUsed || !(usesAuthHeader || usesAuthBody) || !this.isTokenRejected(resp)) return resp;
+
+        // Another request may already have logged in again while this one was running
+        const reauthenticated = api.getToken() !== tokenUsed || await api.reauthenticate();
+        if (!reauthenticated) return resp;
+
+        return this.request<T>(
+            api,
+            path,
+            method,
+            usesAuthBody ? {...requestBody, ...this.bodyAuth(api)} : requestBody,
+            usesAuthHeader ? this.buildHeaders(api) : header,
+        );
+    }
+
+    //VeSync answers requests with an expired or invalid token with HTTP 200 and an error code
+    private static isTokenRejected(resp: any): boolean {
+        return resp?.code === this.TOKEN_ERROR_CODE || /token/i.test(resp?.code !== 0 ? resp?.msg ?? "" : "");
+    }
+
+    private static async request<T>(api: VeSync, path: string, method: string, requestBody: {}, header: {}): Promise<IApiResponse<T> | any> {
         let options = {
             method: method.toUpperCase(),
             headers: header
