@@ -68,19 +68,46 @@ export default class HomeyDeviceBase extends Homey.Device {
         }
     }
 
+    /**
+     * Finds the VeSync device that belongs to this Homey device. The identifiers
+     * stored at pairing time are not always stable: VeSync omits macID for some
+     * offline devices, and removing and re-adding a device in the VeSync app
+     * assigns a new uuid and cid while the MAC stays the same. Homey device data
+     * cannot be updated after pairing, so fall back to single identifiers when no
+     * device matches all of them, as long as that fallback is unambiguous.
+     */
     protected findStoredVeSyncDevice(devices: BasicDevice[]): BasicDevice | undefined {
         const data = this.getData() as StoredVeSyncDeviceData;
         const physicalUuid = data.uuid ?? data.id;
         const macID = data.macID ?? data.macId;
+        const candidates = devices.filter((storedDevice) => Boolean(storedDevice?.device));
 
-        return devices.find((storedDevice) => {
-            const device = storedDevice?.device;
-            if (!device) return false;
-            if (physicalUuid && device.uuid !== physicalUuid) return false;
-            if (data.cid && device.cid !== data.cid) return false;
-            if (macID && device.macID !== macID) return false;
-            return Boolean(physicalUuid || data.cid || macID);
+        const exactMatch = candidates.find(({device}) => {
+            if (physicalUuid && device.uuid && device.uuid !== physicalUuid) return false;
+            if (data.cid && device.cid && device.cid !== data.cid) return false;
+            if (macID && device.macID && device.macID !== macID) return false;
+            return Boolean(
+                (physicalUuid && device.uuid === physicalUuid)
+                || (data.cid && device.cid === data.cid)
+                || (macID && device.macID === macID)
+            );
         });
+        if (exactMatch) return exactMatch;
+
+        const fallbacks: Array<[string | undefined, (device: BasicDevice["device"]) => string | undefined]> = [
+            [physicalUuid, (device) => device.uuid],
+            [data.cid, (device) => device.cid],
+            [macID, (device) => device.macID],
+        ];
+        for (const [storedValue, getValue] of fallbacks) {
+            if (!storedValue) continue;
+            const matches = candidates.filter(({device}) => getValue(device) === storedValue);
+            if (matches.length === 1) {
+                this.log("Matched VeSync device by a single identifier; other identifiers changed since pairing");
+                return matches[0];
+            }
+        }
+        return undefined;
     }
 
     protected async checkForCapability(capability: string): Promise<void> {
