@@ -289,5 +289,8 @@
   },
   "1.0.31": {
     "en": "Fix device reconnection lifecycle"
+  },
+  "1.0.32": {
+    "en": "Bug fixes"
   }
 }
