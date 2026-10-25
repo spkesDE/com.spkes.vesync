@@ -83,7 +83,7 @@ export default class PurifierDeviceBase extends HomeyDeviceBase {
             throw new Error("Failed to login. Please use the repair function.");
         }
 
-        const device = this.findStoredVeSyncDevice(veSync.getStoredDevice());
+        const device = await this.findVeSyncDevice(veSync);
 
         if (!(device instanceof BasicPurifier)) {
             this.error("Device is undefined or is not a VeSyncPurifier");

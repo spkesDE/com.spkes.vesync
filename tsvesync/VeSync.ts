@@ -40,6 +40,8 @@ export default class VeSync {
     private typeManager!: DeviceTypeManager;
     private loginLockedUntil = 0;
     private loginLockedUsername = "";
+    private lastDeviceRefresh = 0;
+    private deviceRefresh: Promise<BasicDevice[]> | null = null;
 
     public async login(username: string, password: string, isHashedPassword = false): Promise<boolean> {
         if (!username || !password) {
@@ -96,7 +98,23 @@ export default class VeSync {
             throw new Error(`Could not load device list: ${response?.msg || "Invalid response from server"}`);
         }
         this.devices = this.processDevices(response.result.list);
+        this.lastDeviceRefresh = Date.now();
         return this.devices;
+    }
+
+    /**
+     * Reloads the device list unless it was loaded within maxAgeMs. Concurrent
+     * callers share one request, so many Homey devices looking for a missing
+     * VeSync device only cause a single API call.
+     */
+    public async refreshDevices(maxAgeMs = 1000 * 60): Promise<BasicDevice[]> {
+        if (Date.now() - this.lastDeviceRefresh < maxAgeMs) return this.devices;
+        if (!this.deviceRefresh) {
+            this.deviceRefresh = this.getDevices().finally(() => {
+                this.deviceRefresh = null;
+            });
+        }
+        return this.deviceRefresh;
     }
 
     public isLoggedIn(): boolean {

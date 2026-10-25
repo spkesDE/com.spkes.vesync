@@ -1,5 +1,7 @@
 import Homey from "homey";
 import type BasicDevice from "../tsvesync/lib/BasicDevice";
+import type VeSync from "../tsvesync/VeSync";
+import {getErrorMessage} from "./utils/error";
 
 type CapabilityValue = string | number | boolean;
 type ApiCommandResponse = {
@@ -66,6 +68,22 @@ export default class HomeyDeviceBase extends Homey.Device {
             this.homey.clearInterval(this.deviceUpdateInterval);
             this.deviceUpdateInterval = undefined;
         }
+    }
+
+    /**
+     * Looks the device up in the known device list and reloads the list from
+     * VeSync when it is missing, e.g. because it was re-added in the VeSync app
+     * after the last login.
+     */
+    protected async findVeSyncDevice(veSync: VeSync): Promise<BasicDevice | undefined> {
+        const device = this.findStoredVeSyncDevice(veSync.getStoredDevice());
+        if (device) return device;
+
+        const devices = await veSync.refreshDevices().catch((error: unknown) => {
+            this.error(`Could not reload VeSync devices: ${getErrorMessage(error)}`);
+            return veSync.getStoredDevice();
+        });
+        return this.findStoredVeSyncDevice(devices);
     }
 
     /**

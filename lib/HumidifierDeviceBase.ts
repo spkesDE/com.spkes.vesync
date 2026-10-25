@@ -96,7 +96,7 @@ export default class HumidifierDeviceBase extends HomeyDeviceBase {
             throw new Error("Failed to login. Please use the repair function.");
         }
 
-        const device = this.findStoredVeSyncDevice(veSync.getStoredDevice());
+        const device = await this.findVeSyncDevice(veSync);
 
         if (!(device instanceof BasicHumidifier)) {
             this.error("Device is undefined or is not a VeSyncHumidifier");
