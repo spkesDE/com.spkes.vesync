@@ -277,7 +277,7 @@ export default class VeSync {
             ...loginBody,
             authorizeCode: authCode,
             bizToken: regionChangeToken ?? null,
-            regionChange: regionChangeToken ? "last_region" : null,
+            regionChange: regionChangeToken ? "lastRegion" : null,
         }
 
         const resp = await ApiHelper.callApi<any>(
@@ -315,10 +315,11 @@ export default class VeSync {
         const msg = resp.msg || "Unknown error";
 
         // handle cross-region
+        // The auth code is only valid on the server that issued it, so the retry
+        // must not switch the API region; that happens after a successful login
         if (resp.result?.bizToken && this.loginTries < 3) {
-            this.region = resp.result.currentRegion;
             this.countryCode = resp.result.countryCode;
-            console.warn(`Cross-region login detected. Switching to region: ${this.region}. Retrying login... (Attempt ${this.loginTries + 1}/3)`);
+            console.warn(`Cross-region login detected. Account region: ${resp.result.currentRegion}. Retrying login... (Attempt ${this.loginTries + 1}/3)`);
             // Retry login with the new region token
             this.loginTries++;
             return this._exchangeAuthCode(authCode, resp.result.bizToken);
