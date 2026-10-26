@@ -292,5 +292,8 @@
   },
   "1.0.32": {
     "en": "Bug fixes"
+  },
+  "1.0.33": {
+    "en": "🐛 Fix cross-region login failing with an expired auth code"
   }
 }
