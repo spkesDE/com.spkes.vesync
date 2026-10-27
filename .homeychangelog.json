@@ -298,5 +298,8 @@
   },
   "1.0.34": {
     "en": " Fix login failing with \"login temporary auth code expired\""
+  },
+  "1.0.35": {
+    "en": "🐛 Fix login failing with \"login temporary auth code expired\""
   }
 }
