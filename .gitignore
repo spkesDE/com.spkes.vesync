@@ -5,3 +5,5 @@
 /tsvesync/debug.ts
 AGENTS.md
 /pyvesync-dev/
+*.apkm
+*.apk

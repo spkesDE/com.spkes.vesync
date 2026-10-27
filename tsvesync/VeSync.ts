@@ -1,12 +1,12 @@
 import * as crypto from "crypto";
 import ApiHelper from "./lib/ApiHelper";
-import {ApiCalls} from "./enum/ApiCalls";
-import {BodyTypes} from "./enum/BodyTypes";
-import {IDevice} from "./models/IDevice";
+import { ApiCalls } from "./enum/ApiCalls";
+import { BodyTypes } from "./enum/BodyTypes";
+import { IDevice } from "./models/IDevice";
 import DeviceTypeManager from "./DeviceTypeManager";
 import BasicDevice from "./lib/BasicDevice";
-import {AuthByPWDOrOTMModel} from "./models/AuthByPWDOrOTMModel";
-import {getErrorMessage} from "../lib/utils/error";
+import { AuthByPWDOrOTMModel } from "./models/AuthByPWDOrOTMModel";
+import { getErrorMessage } from "../lib/utils/error";
 
 export interface IUnsupportedDeviceInfo {
     deviceType: string;
@@ -19,7 +19,7 @@ export interface IUnsupportedDeviceInfo {
 }
 
 /** VeSync rejected the credentials (as opposed to a network or server problem). */
-export class VeSyncLoginError extends Error {}
+export class VeSyncLoginError extends Error { }
 
 /** Everything needed to keep using a login after a restart. */
 export interface IVeSyncSession {
@@ -71,6 +71,7 @@ export default class VeSync {
         this.region = session.region;
         this.countryCode = session.countryCode;
         this.loggedIn = true;
+        console.log(`Continuing the stored VeSync session (region: ${this.region})`);
         await this.loadDevicesAfterLogin();
     }
 
@@ -191,11 +192,12 @@ export default class VeSync {
         if (resp?.code !== 0 || !resp.result?.token || !resp.result?.accountID) {
             throw new Error(resp?.msg || "Invalid response from server");
         }
-        await this.completeLogin(resp.result.token, resp.result.accountID, this.region, resp.result.countryCode ?? this.countryCode);
+        await this.completeLogin("legacy login", resp.result.token, resp.result.accountID, this.region, resp.result.countryCode ?? this.countryCode);
         return true;
     }
 
-    private async completeLogin(token: string, accountID: number, region: string, countryCode: string): Promise<void> {
+    private async completeLogin(method: string, token: string, accountID: number, region: string, countryCode: string): Promise<void> {
+        console.log(`Logged in to VeSync via ${method} (region: ${region})`);
         this.token = token;
         this.account_id = accountID;
         this.region = region;
@@ -364,7 +366,7 @@ export default class VeSync {
 
         // If we got a token and account ID, we are logged in
         if (resp.code === 0 && resp.result?.token && resp.result?.accountID) {
-            await this.completeLogin(resp.result.token, resp.result.accountID, resp.result.currentRegion, resp.result.countryCode);
+            await this.completeLogin("auth code exchange", resp.result.token, resp.result.accountID, resp.result.currentRegion, resp.result.countryCode);
             return true;
         }
 
