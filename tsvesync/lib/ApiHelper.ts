@@ -67,6 +67,16 @@ export default class ApiHelper {
                     sourceAppID: appId,
                     traceId: this.getTraceId(),
                 }
+            case BodyTypes.LOGIN_LEGACY:
+                return {
+                    ...this.bodyBase(api),
+                    ...this.bodyDetails(),
+                    email: api.username,
+                    password: api.password,
+                    devToken: '',
+                    userType: this.USER_TYPE,
+                    method: 'login',
+                }
             case BodyTypes.LOGIN_TOKEN_EXCHANGE:
                 return {
                     method: 'loginByAuthorizeCode4Vesync',
@@ -80,7 +90,8 @@ export default class ApiHelper {
                     osInfo: this.PHONE_OS,
                     terminalId: this.getTerminalId(),
                     timeZone: this.DEFAULT_TZ,
-                    token: api.getToken() || '',
+                    // Never send the old session token, it may be the one VeSync just rejected
+                    token: '',
                     traceId: this.getTraceId(),
                 }
             case BodyTypes.ENERGY_YEAR:
@@ -288,7 +299,8 @@ export default class ApiHelper {
 
     //VeSync answers requests with an expired or invalid token with HTTP 200 and an error code
     private static isTokenRejected(resp: any): boolean {
-        return resp?.code === this.TOKEN_ERROR_CODE || /token/i.test(resp?.code !== 0 ? resp?.msg ?? "" : "");
+        // Only the explicit token error, so a valid token is never replaced by a new login
+        return resp?.code === this.TOKEN_ERROR_CODE;
     }
 
     private static async request<T>(api: VeSync, path: string, method: string, requestBody: {}, header: {}): Promise<IApiResponse<T> | any> {

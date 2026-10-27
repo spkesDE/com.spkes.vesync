@@ -5,4 +5,5 @@ export const enum ApiCalls {
     BYPASS_V2 = '/cloud/v2/deviceManaged/bypassV2',
     CONFIGURATIONS = '/cloud/v1/deviceManaged/configurations',
     LOGIN_TOKEN_EXCHANGE = '/user/api/accountManage/v1/loginByAuthorizeCode4Vesync',
+    LOGIN_LEGACY = '/cloud/v1/user/login',
 }

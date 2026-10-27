@@ -21,6 +21,14 @@ export interface IUnsupportedDeviceInfo {
 /** VeSync rejected the credentials (as opposed to a network or server problem). */
 export class VeSyncLoginError extends Error {}
 
+/** Everything needed to keep using a login after a restart. */
+export interface IVeSyncSession {
+    token: string;
+    accountID: number;
+    region: string;
+    countryCode: string;
+}
+
 export default class VeSync {
 
     private static readonly ACCOUNT_LOCKED_CODE = -11247129;
@@ -48,6 +56,32 @@ export default class VeSync {
     private deviceRefresh: Promise<BasicDevice[]> | null = null;
     private lastReauthentication = 0;
     private reauthenticating = false;
+    /** Called with the new session after a login and with null once VeSync rejected the credentials. */
+    onSessionChanged: ((session: IVeSyncSession | null) => void) | null = null;
+
+    /**
+     * Continues a stored session without logging in. The token stays in use
+     * until VeSync rejects it; then the stored credentials are used to log in again.
+     */
+    public async restoreSession(username: string, hashedPassword: string, session: IVeSyncSession): Promise<void> {
+        this.username = username;
+        this.password = hashedPassword;
+        this.token = session.token;
+        this.account_id = session.accountID;
+        this.region = session.region;
+        this.countryCode = session.countryCode;
+        this.loggedIn = true;
+        await this.loadDevicesAfterLogin();
+    }
+
+    public getSession(): IVeSyncSession {
+        return {
+            token: this.token,
+            accountID: this.account_id,
+            region: this.region,
+            countryCode: this.countryCode,
+        };
+    }
 
     public async login(username: string, password: string, isHashedPassword = false): Promise<boolean> {
         if (!username || !password) {
@@ -97,7 +131,10 @@ export default class VeSync {
             return success;
         } catch (error) {
             console.error("Logging in again failed: " + getErrorMessage(error));
-            if (error instanceof VeSyncLoginError) this.loggedIn = false;
+            if (error instanceof VeSyncLoginError) {
+                this.loggedIn = false;
+                this.onSessionChanged?.(null);
+            }
             return false;
         } finally {
             this.reauthenticating = false;
@@ -131,11 +168,44 @@ export default class VeSync {
                 return await this._exchangeAuthCode(result.authorizeCode);
             }
             console.error("Login failed: authorizeCode not found in response");
-            return false;
         } catch (e) {
             console.error("Login failed: " + getErrorMessage(e));
-            return false;
         }
+        // The credentials were accepted, but the token exchange failed
+        return this.legacyLogin().catch((e: unknown) => {
+            console.error("Legacy login failed: " + getErrorMessage(e));
+            return false;
+        });
+    }
+
+    /** Login of the old VeSync app versions, used when the auth code exchange fails. */
+    private async legacyLogin(): Promise<boolean> {
+        console.warn("Token exchange failed. Trying the legacy login...");
+        const resp = await ApiHelper.callApi<any>(
+            this,
+            ApiCalls.LOGIN_LEGACY,
+            'post',
+            ApiHelper.requestBody(this, BodyTypes.LOGIN_LEGACY),
+            {}
+        );
+        if (resp?.code !== 0 || !resp.result?.token || !resp.result?.accountID) {
+            throw new Error(resp?.msg || "Invalid response from server");
+        }
+        await this.completeLogin(resp.result.token, resp.result.accountID, this.region, resp.result.countryCode ?? this.countryCode);
+        return true;
+    }
+
+    private async completeLogin(token: string, accountID: number, region: string, countryCode: string): Promise<void> {
+        this.token = token;
+        this.account_id = accountID;
+        this.region = region;
+        this.countryCode = countryCode;
+        this.loggedIn = true;
+        this.loginLockedUntil = 0;
+        this.loginLockedUsername = "";
+        this.onSessionChanged?.(this.getSession());
+
+        await this.loadDevicesAfterLogin();
     }
 
     public getRegion(): string {
@@ -294,20 +364,7 @@ export default class VeSync {
 
         // If we got a token and account ID, we are logged in
         if (resp.code === 0 && resp.result?.token && resp.result?.accountID) {
-            this.token = resp.result.token;
-            this.account_id = resp.result.accountID;
-            this.region = resp.result.currentRegion;
-            this.countryCode = resp.result.countryCode;
-            this.loggedIn = true;
-            this.loginLockedUntil = 0;
-            this.loginLockedUsername = "";
-
-            this.typeManager = new DeviceTypeManager();
-            await this.typeManager.loadDevices();
-            await this.getDevices().catch((error: unknown) => {
-                console.error("Logged in, but loading devices failed: " + getErrorMessage(error));
-            });
-
+            await this.completeLogin(resp.result.token, resp.result.accountID, resp.result.currentRegion, resp.result.countryCode);
             return true;
         }
 
@@ -315,17 +372,27 @@ export default class VeSync {
         const msg = resp.msg || "Unknown error";
 
         // handle cross-region
-        // The auth code is only valid on the server that issued it, so the retry
-        // must not switch the API region; that happens after a successful login
+        // The retry with the bizToken has to go to the server of the account's region
         if (resp.result?.bizToken && this.loginTries < 3) {
+            this.region = resp.result.currentRegion;
             this.countryCode = resp.result.countryCode;
-            console.warn(`Cross-region login detected. Account region: ${resp.result.currentRegion}. Retrying login... (Attempt ${this.loginTries + 1}/3)`);
+            console.warn(`Cross-region login detected. Switching to region: ${this.region}. Retrying login... (Attempt ${this.loginTries + 1}/3)`);
             // Retry login with the new region token
             this.loginTries++;
             return this._exchangeAuthCode(authCode, resp.result.bizToken);
         }
 
         throw new Error(`Login failed: ${msg}`);
+    }
+
+    private async loadDevicesAfterLogin(): Promise<void> {
+        if (!this.typeManager) {
+            this.typeManager = new DeviceTypeManager();
+            await this.typeManager.loadDevices();
+        }
+        await this.getDevices().catch((error: unknown) => {
+            console.error("Logged in, but loading devices failed: " + getErrorMessage(error));
+        });
     }
 
     private describeLoginFailure(response: { code?: number; msg?: string; result?: Partial<AuthByPWDOrOTMModel> }): string {
