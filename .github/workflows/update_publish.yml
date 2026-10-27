@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: master
           fetch-depth: 0  # needed to push and fetch branches
@@ -30,7 +30,7 @@ jobs:
           git pull --rebase origin master
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
 
@@ -49,10 +49,11 @@ jobs:
           jq ".version = \"${{ steps.extract_version.outputs.new_version }}\"" .homeycompose/app.json > tmp && mv tmp .homeycompose/app.json
 
       - name: Update .homeychangelog.json
+        env:
+          CHANGELOG_TITLE: ${{ github.event.pull_request.title }}
+          VERSION: ${{ steps.extract_version.outputs.new_version }}
         run: |
-          changelog_title="${{ github.event.pull_request.title }}"
-          version="${{ steps.extract_version.outputs.new_version }}"
-          jq --arg version "$version" --arg title "$changelog_title" \
+          jq --arg version "$VERSION" --arg title "$CHANGELOG_TITLE" \
             '. + {($version): {"en": $title}}' .homeychangelog.json > tmp && mv tmp .homeychangelog.json
 
       - name: Commit and push version bump and changelog to master
