@@ -10,4 +10,5 @@ export const enum BodyTypes {
     DEVICE_DETAIL,
     DEVICE_STATUS,
     LOGIN_TOKEN_EXCHANGE,
+    LOGIN_LEGACY,
 }

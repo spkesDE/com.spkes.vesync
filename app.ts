@@ -1,6 +1,6 @@
 import Homey from 'homey';
 import * as crypto from "crypto";
-import VeSync from './tsvesync/VeSync';
+import VeSync, {IVeSyncSession} from './tsvesync/VeSync';
 import axiosRetry from "axios-retry";
 import axios from "axios";
 import BasicPurifier from "./tsvesync/lib/BasicPurifier";
@@ -35,7 +35,7 @@ export default class VeSyncApp extends Homey.App {
             retryCondition: (error) => {
                 // Never retry login calls: repeated failed attempts can get the VeSync account locked
                 const url = error.config?.url ?? "";
-                if (url.includes(ApiCalls.LOGIN_authByPWDOrOTM) || url.includes(ApiCalls.LOGIN_TOKEN_EXCHANGE)) return false;
+                if (url.includes(ApiCalls.LOGIN_authByPWDOrOTM) || url.includes(ApiCalls.LOGIN_TOKEN_EXCHANGE) || url.includes(ApiCalls.LOGIN_LEGACY)) return false;
                 // Retry network errors/timeouts, rate limiting and server errors, but not other client errors
                 const status = error.response?.status;
                 return status === undefined || status === 429 || status >= 500;
@@ -59,6 +59,19 @@ export default class VeSyncApp extends Homey.App {
             this.log('No username or password set');
             return;
         }
+        this.veSync.onSessionChanged = (session) => {
+            if (session) this.homey.settings.set('session', session);
+            else this.homey.settings.unset('session');
+        };
+
+        // Keep using the stored token, a new login only happens once VeSync rejects it
+        const session: IVeSyncSession | null = this.homey.settings.get('session');
+        if (session?.token && session.accountID) {
+            await this.veSync.restoreSession(this.username, this.password, session);
+            this.log('VeSync has been initialized with the stored session');
+            return;
+        }
+
         await this.veSync.login(this.username, this.password, true).catch(
             (error: unknown) => {
                 this.error(`Could not login - Reason: ${getErrorMessage(error)}`);
