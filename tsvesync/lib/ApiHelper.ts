@@ -12,6 +12,8 @@ export default class ApiHelper {
     static DEFAULT_REGION = 'US'
 
     static APP_VERSION = '5.6.60'
+    // VeSync rejects the auth code exchange for unknown app IDs since 2026-10-26, so this must stay fixed
+    static APP_ID = 'eldodkfj'
     static PHONE_BRAND = 'SM N9005'
     static PHONE_OS = 'Android'
     static CLIENT_TYPE = 'vesyncApp'
@@ -44,7 +46,6 @@ export default class ApiHelper {
     ];
 
     static requestBody(api: VeSync, type: BodyTypes): {} {
-        const appId = this.getAppID(8);
         switch (type) {
             case BodyTypes.LOGIN:
                 return {
@@ -63,8 +64,8 @@ export default class ApiHelper {
                     timeZone: this.DEFAULT_TZ,
                     token: '',
                     userCountryCode: api.getUserCountryCode(),
-                    appID: appId,
-                    sourceAppID: appId,
+                    appID: this.APP_ID,
+                    sourceAppID: this.APP_ID,
                     traceId: this.getTraceId(),
                 }
             case BodyTypes.LOGIN_LEGACY:
